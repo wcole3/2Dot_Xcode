@@ -15,10 +15,29 @@
 //forward declarations here
 
 //method to main game loop
+/**
+    Perform the game loop logic
+ 
+    @param globalQuit true if the user wants to quit
+ */
 void playingGame(bool* globalQuit);
 //method to check if user wants to play again
-bool playAgain(SDL_Renderer* renderer, lTexture* splash, bool* globalQuit, float time);
+/**
+    Check if the user wants to play again
+ 
+    @param splash the texture to render
+    @param globalQuit true if the user wants to quit
+    @param time the finishing time
+ 
+    @return true if the user wants to play again
+ */
+bool playAgain(lTexture* splash, bool* globalQuit, float time);
 //method to display the pregame instructions and ask for user to start the game
+/**
+    Render the pregame screen and wait for user ready
+ 
+    @param globalQuit true if the user wants to quit
+ */
 void pregameSetup(bool* globalQuit);
 
 
@@ -135,7 +154,7 @@ void playingGame(bool* globalQuit){
                 player2.reset();
                 player2.setCamera(camera2);
                 countdownTicker.stop();
-                if(playAgain(gWindow.getRenderer(), endgameSplash, globalQuit, finishTime)){
+                if(playAgain(endgameSplash, globalQuit, finishTime)){
                     countdownTicker.start();
                     //clear out splash screen
                     SDL_RenderClear(gWindow.getRenderer());
@@ -151,7 +170,7 @@ void playingGame(bool* globalQuit){
 }
 
 //method to check if the user wants to play again, this got a lot bigger than I intended (TODO chop this up)
-bool playAgain(SDL_Renderer* renderer, lTexture* splashScreen, bool* globalQuit, float time){
+bool playAgain(lTexture* splashScreen, bool* globalQuit, float time){
     //reset the letter textures
     string defaultName[MAX_LETTERS] = {"N", "E", "W"};
     for(int i = 0; i < (sizeof(gLetters)/sizeof(gLetters[0])); ++i){
@@ -248,7 +267,7 @@ bool playAgain(SDL_Renderer* renderer, lTexture* splashScreen, bool* globalQuit,
             }
         }
         //display the chosen splash screen
-        SDL_RenderClear(renderer);
+        SDL_RenderClear(gWindow.getRenderer());
         SDL_Rect currentScreen = {0,0,gWindow.getWidth(), gWindow.getHeight()};
         SDL_Rect textLine = {gWindow.getWidth()/4, gWindow.getHeight() / 7 , gWindow.getWidth() / 2 ,gWindow.getHeight() / 10};
         splashScreen->render(0, 0, NULL, &currentScreen);
@@ -292,7 +311,7 @@ bool playAgain(SDL_Renderer* renderer, lTexture* splashScreen, bool* globalQuit,
                 lUserTime.render(textLine.x, textLine.y + ((LEADERBOARD_LINES + 1) * textLine.h), NULL, &textLine);
             }
         }
-        SDL_RenderPresent(renderer);
+        SDL_RenderPresent(gWindow.getRenderer());
     }
     SDL_StopTextInput();
     lEnterNewNamePrompt.free();

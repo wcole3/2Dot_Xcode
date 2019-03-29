@@ -13,18 +13,69 @@
 //top level decs
 
 //method to display the settings screeen and handle events on the screen
+/**
+    Display the settings screen
+ 
+    @param globalQuit a bool to handle user quit events
+ */
 void displaySettingsScreen(bool* globalQuit);
 //method to set where the highlight should be rendered
+/**
+    Set the location of the highlight box showing current selection
+ 
+    @param box the highlighter box
+    @param x the x offset of the selection
+    @param y the y offset of the selection
+ */
 void setHighlightBox(SDL_Rect* box, int x, int y);
 //method to handle key down events in settings
+/**
+    Handle key press events on screen
+ 
+    @param e the SDL_Event to test
+    @param xOffset the int handling the x position of the selection
+    @param yOffset the int handling the y position of the selection
+    @param goBack true if the user wants to go back to the menu
+    @param globalQuit true if user wants to quit the program
+ */
 void handleKeyPress(SDL_Event e, int* xOffset, int* yOffset, bool* goBack, bool* globalQuit);
 //method to handle mouse motion events
+/**
+    Handle mouse events
+ 
+     @param e the SDL_Event to test
+     @param xOffset the int handling the x position of the selection
+     @param yOffset the int handling the y position of the selection
+     @param goBack true if the user wants to go back to the menu
+     @param globalQuit true if user wants to quit the program
+ */
 void handleMouseEvent(SDL_Event e, int* xOffset, int* yOffset, bool* goBack, bool* globalQuit);
 //method to change the settings of the selected keybind
-void changeSettingHotkey(SDL_Event, int xOffset, int yOffset, bool* globalQuit);
+/**
+    Change the selected setting
+ 
+    @param e the SDL_Event to use to get the new control
+    @param xOffset the int handling the x position of the selection
+    @param yOffset the int handling the y position of the selection
+    @param globalQuit true if user wants to quit the program
+ */
+void changeSettingHotkey(SDL_Event e, int xOffset, int yOffset, bool* globalQuit);
 //method to update the control scheme
+/**
+    Update the current control scheme and rerender the control prompts
+ 
+    @param playerControls the list of controls for the dots
+ */
 void updateControls(string playerControls[]);
 //method to save the control scheme into the settings file
+/**
+    Save the new setting to file
+ 
+    @param file the settings file
+    @param playerControls the player controls to write to file
+ 
+    @return true if save was successful
+ */
 bool saveSettings(string file, string playerControls[]);
 
 

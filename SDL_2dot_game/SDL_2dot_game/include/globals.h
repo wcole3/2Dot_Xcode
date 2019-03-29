@@ -73,11 +73,11 @@ lTexture gLetters[MAX_LETTERS];
 
 //FILE INPUTS
 //need the name of the settings file
-string settingsFile = "init/settings.txt";
+string settingsFile = "assets/settings.txt";
 //all of the player controls
 string playerControls[8];
 //name of the leaderboard file
-string leaderboardFile = "init/leaderboard.txt";
+string leaderboardFile = "assets/leaderboard.txt";
 //number of leaderboard entries
 const int LEADERBOARD_LINES = 5;
 //names of the leaderboard

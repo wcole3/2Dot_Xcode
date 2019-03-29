@@ -14,12 +14,35 @@ using namespace std;
 class lTimer{
 public:
     lTimer();
+    /**
+        Resets the timer and starts it running
+     */
     void start();
+    /**
+        Paused the timer
+     */
     void pause();
+    /**
+        Unpaused the timer
+     */
     void unpause();
+    /**
+        Stop the timer and reset it
+     */
     void stop();
+    /**
+        Get the current time
+     
+        @return the time since start in milliseconds
+     */
     Uint32 getTime();
+    /**
+        @return true if the timer is running
+     */
     bool isStarted(){return started;};
+    /**
+        @return true if the timer is paused
+     */
     bool isPaused(){return paused;};
 private:
     bool started;

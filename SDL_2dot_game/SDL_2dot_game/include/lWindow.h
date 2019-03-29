@@ -18,25 +18,75 @@ public:
     lWindow();
     ~lWindow();
     //method to destroy window
+    /**
+        Destroy window and renderer
+     */
     void free();
     //method to set up window and renderer
+    /**
+        Setup the window and renderer
+     
+        @param screenWidth the width of the window
+        @param screenHeight the height of the window
+        @param title the title of the window
+     
+        @return true if setup has finished successfully
+     */
     bool init(int screenWidth, int screenHeight, string title);
     //method to handle window events
+    /**
+        Handle window events
+     
+        @param e SDL_Event input
+     */
     void handleEvent(SDL_Event& e);
     //method to render the window
+    /**
+        Set the renderer draw color and clear the renderer
+     */
     void render();
     //method to focus on window
+    /**
+        Focus on the window
+     */
     void focus();
     //method to get reference to window renderer
+    /**
+        @return the renderer associated with the window
+     */
     SDL_Renderer* getRenderer(){return mRenderer;};
     //some method to get private variable values
+    /**
+        @return the width of the window
+     */
     int getWidth(){return mWidth;};
+    /**
+        @return the height of the window
+     */
     int getHeight(){return mHeight;};
+    /**
+        @return the window ID
+     */
     int getWindowID(){return mWindowID;};
+    /**
+        @return true if mouse is over window
+     */
     bool hasMouseFocus(){return mMouseFocus;};
+    /**
+        @return true if window has keyboard focus
+     */
     bool hasKeyboardFocus(){return mKeyboardFocus;};
+    /**
+        @return true if the window is minimized
+     */
     bool isMinimized(){return mMinimized;};
+    /**
+        @return true if the window is full screen
+     */
     bool isFullScreen(){return mFullScreen;};
+    /**
+        @return true if the window is shown
+     */
     bool isShown(){return mShown;};
     
 private:

@@ -12,8 +12,23 @@
 #define lMenuMethods_h
 //top level decs
 //method to handle menu key events
+/**
+    Handle key event on the menu screen
+ 
+    @param e the event to handle
+    @param offset the int representing the current selection
+    @param globalQuit true if the user wants to quit
+ 
+ */
 void handleMenuButtonEvents(SDL_Event e, int* offset, bool* globalQuit);
 //method to handle menu mouse events
+/**
+    Handle mouse events on the menu screen
+ 
+     @param e the event to handle
+     @param offset the int representing the current selection
+     @param globalQuit true if the user wants to quit
+ */
 void handleMenuMouseEvents(SDL_Event e, int* offset, bool* globalQuit);
 //method to load the settings page
 

@@ -16,16 +16,53 @@
 
 //forward declarations
 //method to setup SDL, IMG, and TTF in additon to other class objects
+/**
+    Sets up SDL, IMG, TTF,and all window and texture objects
+ 
+    @return true if everything is setup properly
+ */
 bool init();
 //Load the media, textures, and any sound files
+/**
+    Loads all texture objects and setup files
+ 
+    @return true if everything is loaded correctly
+ */
 bool loadMedia();
 //method to load settings from a txt file for the player object
+/**
+    Load the settings from the settings.txt file
+ 
+    @param player1 the first dot texture
+    @param player2 the second dot texture
+    @param fileName the name of the settings file
+    @param controlPrompts the control prompt to be set
+ 
+    @return true if the controls are loaded successfully
+ */
 bool loadSettings(lRigidDot* player1,lRigidDot* player2, string fileName, string controlPrompts[]);
 //method to load the leaderboard
+/**
+    Load the leaderboard from the leaderboard.txt file
+ 
+    @param fileName the filename of the leaderboard file
+    @param names the names loaded from the leaderboard file
+    @param scores the socres loaded from the leaderboard file
+ 
+    @return true if the leaderboard was loaded successfully
+ */
 bool loadLeaderboard(string fileName, string names[], float scores[]);
 //close down and free resources
+/**
+    Deallocate all resources and close libs
+ */
 void close();
 //method to resize all UI elements to fit current window dimensions
+/**
+    Resize the global UI elements on a window event
+ 
+    @param e the SDL_Event to handle
+ */
 void resizeUI(SDL_Event* e);
 
 bool init(){

@@ -20,48 +20,160 @@ public:
     //total number of particles per dot
     static const int TOTAL_PARTICLES = 20;
     //constructor to setup screen size and renderer to use
+    /**
+        Initialize a lRigidDot object
+     
+        @param width the width of the dot texture
+        @param height the height of the dot texture
+        @param renderer the SDL_Renderer for the object
+        @param startX the starting x coor on the screen
+        @param startY the starting y coor on the screen
+     
+     */
     lRigidDot(int width=0, int height=0, SDL_Renderer* renderer=NULL, int startX=0, int startY=0);
     //need a deconstructor to destroy particles
     ~lRigidDot();
     //method to load the control scheme for the dot
+    /**
+        Loads the control scheme for the dot
+     
+        @param control the controls to use for the controls
+     */
     void loadControls(const char* control[]);
     //handle events to set the velocity through key presses
+    /**
+        Handle SDL_Events for the dot
+     
+        @param e the event to check
+     */
     void handleEvent(SDL_Event& e);
     //method to update the speed of the dot
+    /**
+        Update the velocity of the dot subject to the user inputs and its location
+     
+        @param time the time passed since last call to updateVelocity
+        @param tiles the tiles defining the map
+     */
     void updateVelocity(float time, lTile* tiles[]);
     //the first move method will just move the dot subject to the screen boundaries
+    /**
+        Move the dot subject to the time since last move
+     
+        @param timeStep the time since last move call
+     */
     void move(float timeStep);
     //move the dot's posiiton synced to time subject to and one circle
+    /**
+        Move the dot, check for collision with another dot object on map
+     
+        @param time the time since last call to move
+        @param circle the collidable dot on the map
+     */
     void move(float time, circle& circle);
     //method to move the dot relative to a bunch of tiles
+    /**
+        Move the dot, check for collisions with another dot and the map
+     
+        @param time the time since the last call to move
+        @param circle the other collidable dot on the map
+        @param tiles the tiles defining the map
+     */
     void move(float time,circle& circle, lTile* tiles[]);
     //method to detect if the dot is touching walls defined by tiles
+    /**
+        Check for collision between a circle and the map
+     
+        @param circle the dot object
+        @param tiles the tiles defining the map
+     
+        @return true if any collision is occuring
+    */
     bool touchingTileWall(circle& circle, lTile* tiles[]);
     //detect if two circles are touching
+    /**
+        Check collision between two circles
+     
+        @param circleA the first circle
+        @param circleB the second circle
+     
+        @return true if the circles are touching
+     */
     bool detectCollision(circle& circleA, circle& circleB);
     //method to see if a circle and a box are touching
+    /**
+        Check for collision between a circle and an SDL_Rect
+     
+        @param circle the circle
+        @param box the SDL_Rect
+     
+        @return true if the objects are touching
+     */
     bool detectCollision(circle& circle, SDL_Rect& box);
     //going to overload the loadFromFile method of lTexture to setup collision box here
+    /**
+        Get the dot texture from file
+     
+        @param path the file path for the image
+        @param colorKey true if color keying is needed
+        @param keyColor the rgb color to use in color keying
+     
+        @return true if image was converted to texture successfully
+     */
     bool loadFromFile(string path, SDL_bool colorKey, SDL_Color keyColor = {0,0,0});
     //need a function to render the circle taking into account the offset and the camera
+    /**
+        Render to screen defined by the camera
+     
+        @param camera the SDL_Rect representing the camera for the dot
+     */
     void render(SDL_Rect& camera);
     //need a method to set the camera relative to dot's position
+    /**
+        Set the camera location relative to the dot location
+     
+        @param camera the camera object
+     */
     void setCamera(SDL_Rect& camera);
     //functions to return the dot's position
+    /**
+        @return the x position of the dot
+     */
     float getXPos(){return xCenterPos;};
+    /**
+        @return the y position of the dot
+     */
     float getYPos(){return yCenterPos;};
+    /**
+        @return the circle defining the boundary of the dot
+     */
     circle& getCollider(){return mCollisionCircle;};
     //constant static for the maximum velocity
     static const int DOT_MAX_VEL = 300; //PIXELS PER SECOND
     //constant for dot acceleration in pixels/s*s
     static const int DOT_ACCEL = 600;
     //method to return true if the dot has moved from its starting location
+    /**
+        @return true if the dot has moved out of the starting area
+     */
     bool hasMoved();
     //method to return true is the dot has reached the end point (which is the middle of the screen)
+    /**
+        @return true if the dot is in the endzone
+     */
     bool isFinished();
     //method to reset the player
+    /**
+        Resets the dot's position and velocity and acceleration
+     */
     void reset();
     //method to get the control scheme for given player
+    /**
+        Get the control for motion i = { 0 -> UP, 1 -> DOWN, 2-> LEFT, 3 -> RIGHT}
+     
+        @param i the control to return
+     
+        @return the SDL_Scancode for the desired control
+     */
     SDL_Scancode getControlButton(int i);
 private:
     //screen positions of the CENTER of the circle

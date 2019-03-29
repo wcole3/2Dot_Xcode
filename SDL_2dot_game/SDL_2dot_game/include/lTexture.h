@@ -15,35 +15,146 @@ using namespace std;
 class lTexture{
 public:
     lTexture(SDL_Renderer* renderer=NULL);
+    
     ~lTexture();
+    /**
+        Loads a image from file and converts it to an SDL_texture
+     
+        @param path the file path of the image
+        @param colorKey true if colorkeying is needed
+        @param keyColor the rgb color to set to transparent in keying
+     
+        @return true if the image was loaded and converted to an SDL_texture
+    */
     bool loadFromFile(string path, SDL_bool colorKey, SDL_Color keyColor = {0,0,0});
-    //want a seperate load function to the image but without color keying and manualing setting the pixels
-    //TEMP REMOVAL
-    //bool loadFromFileWithPixels(string path, bool colorKeying = false, SDL_Color colorKey = {0,0,0});
 #ifdef _SDL_TTF_H
+    /**
+        Loads a text string into a SDL_texture using a TTF_font
+     
+        @param text the string to convert to a texture
+        @param color the rgb color of the text string
+     
+        @return true if the text was successfully loaded into a texture
+    */
     bool loadFromRenderedText(string text, SDL_Color color);
+    /**
+        Sets the TTF_font to use
+     
+        @param font the TTF_Font to use
+    */
     void setFont(TTF_Font* font);
 #endif
+    /**
+        Free all allocated textures and resets object variables
+     */
     void free();
     //method to create a blank texture with controllable access
+    /**
+        Create a black SDL_texture of defined size with access permissions
+     
+        @param width the width of the texture
+        @param height the height of the texture
+        @param access the SDL_TextureAccess mode
+     
+        @return true if texture was successfully created
+     */
     bool createTexture(int width, int height, SDL_TextureAccess access);
+    /**
+        Sets the SDL_Renderer for the given object
+     
+        @param renderer the SDL_Renderer object to use for the object
+     */
     void setRenderer(SDL_Renderer* renderer);
+    /**
+        Sets the blend mode of the given object
+     
+        @param blend the SDL_BlendMode to use
+     */
     void setBlend(SDL_BlendMode blend);
+    /**
+        Set the color modulation of this
+     
+        @param red the red mod. value
+        @param green the green mod. value
+        @param blue the blue mod. value
+     */
     void setColor(Uint8 red, Uint8 green, Uint8 blue);
+    /**
+        Set the alpha of this object
+     
+        @param alpha the value to set the alpha of the texture to
+     */
     void setAlpha(Uint8 alpha);
+    /**
+        Render the texture to the target of the object's SDL_Renderer
+     
+        @param x the x coor. on screen to render
+        @param y the y coor. on screen to render
+        @param clip the portion of the texture to render
+        @param screen the size of the screen to render to
+        @param angle the angle to rotate the texture
+        @param center the point about which to rotate
+        @param flip reflection operation to apply to the texture
+     */
     void render(int x, int y, SDL_Rect* clip=NULL,SDL_Rect* screen = NULL,double angle=0, SDL_Point* center=NULL,SDL_RendererFlip flip=SDL_FLIP_NONE );
+    /**
+        Get the width of the texture
+     
+        @return the width of the texture
+     */
     int getWidth(){return textW;};
+    /**
+        Get the height of the texture
+     
+        @return the height of the texture
+     */
     int getHeight(){return textH;};
     //need to be able to lock and unlock the texture
+    /**
+        Locks the texture to pixel manipulation
+     
+        @return true if the texture is locked
+     */
     bool lockTexture();
+    /**
+        Unlocks the texture for pixel manipulation
+     
+        @return true if the texture is unlocked
+     */
     bool unlockTexture();
+    /**
+        Get the pixels associate with the texture
+     
+        @return a type-less pointer to the pixels
+     */
     void* getPixels(){return mPixels;};
+    /**
+        Get the pitch of a texture
+     
+        @return the pitch of the texture
+     */
     int getPitch(){return mPitch;};
     //need a method to get a specific pixel in the image
+    /**
+        Get a specific pixel, (x,y), of a texture
+     
+        @param x the x index of the pixel
+        @param y the y index of the pixel
+     
+        @return the pixel at (x,y)
+     */
     Uint32 getPixel(unsigned int x, unsigned int y);
     //method to copy pixels into a texture
+    /**
+        Copy the pixels of a texture
+     
+        @param pixels the pixels of the texture to memory
+     */
     void copyPixels(void* pixels);
     //method to set the texture as the renderer target
+    /**
+        Sets the render target of the renderer to the objects texture
+     */
     void setRenderTarget();
 private:
     int textW;
@@ -59,6 +170,13 @@ private:
 #endif
 };
 //top level declaration of method to batch assign fonts
+/**
+    Sets the TTF_fonts for a array of lTexture objects
+ 
+    @param textTextures array of the lTexture to have their font set
+    @param font the TTF_Font to use
+    @param sizeOfArray the size of the textTextures[] array
+ */
 void setFonts(lTexture textTextures[], TTF_Font* font, int sizeOfArray);
 
 //define methods
@@ -142,76 +260,7 @@ bool lTexture::loadFromFile(string path, SDL_bool colorKey, SDL_Color keyColor){
     //return true if mTexture is not NULL
     return mTexture!=NULL;
 }
-//I'm leaving this here for now as I might use it in later builds
-/*
-//method to load image and pixels into mPixel and color key if the user wants to
-bool lTexture::loadFromFileWithPixels(string path, bool colorKeying, SDL_Color colorKey){
-    //important to note that this will need to run we a global window that has already been created
-    extern SDL_Window* gWindow;
-    if(gWindow == NULL){
-        printf("Window has not yet been created!");
-        return false;
-    }
-    //if the window has created we can do things
-    free();
-    //now load in the image
-    SDL_Surface* newSurface = NULL;
-    SDL_Texture* newTexture = NULL;
-    newSurface = IMG_Load(path.c_str());
-    if(newSurface == NULL){
-        printf("Could not load image at path: %s! IMG error: %s\n", path.c_str(), IMG_GetError());
-    }else{
-        //if the surface has been loaded in then we can get the format
-        SDL_Surface* formattedSurface = SDL_ConvertSurfaceFormat(newSurface, SDL_GetWindowPixelFormat(gWindow), NULL);
-        if(formattedSurface == NULL){
-            printf("Could not created formatted surface! SDL error: %s\n", SDL_GetError());
-        }else{
-            //once we have the formatted surface we need to get the pixels of the image whcih will start with creating a texture with teh correct formatting
-            newTexture = SDL_CreateTexture(lRenderer, SDL_GetWindowPixelFormat(gWindow), SDL_TEXTUREACCESS_STREAMING, formattedSurface->w, formattedSurface->h);
-            if(newTexture == NULL){
-                printf("Could not create new texture! SDL error: %s\n", SDL_GetError());
-            }else{
-                //set texture blending
-                SDL_SetTextureBlendMode(newTexture, SDL_BLENDMODE_BLEND);
-                //here we get the pixels, we have to lock the texture first
-                SDL_LockTexture(newTexture, NULL, &mPixels, &mPitch);
-                //now we need to get the pixels from the surface
-                //the last argument is the size which is the memory width * the surface height
-                memcpy(mPixels, formattedSurface->pixels, formattedSurface->pitch * formattedSurface->h);
-                //now that we have the pixel we can put them into the texture by unlocking the texture and clearing the pointer to the pixels
-                //get the width and height
-                textW = formattedSurface->w;
-                textH = formattedSurface->h;
-                //if we are doing colorkeying we need to do it here
-                if(colorKeying){
-                    //get the pitch and pixel count
-                    Uint32* pixels = (Uint32*)getPixels();
-                    int pixelCount = (getPitch()/4)*getHeight();
-                    //the transparent pixel will be the bad color with zero alhpa
-                    Uint32 transparent = SDL_MapRGBA(formattedSurface->format, (Uint32)colorKey.r, (Uint32)colorKey.g, (Uint32)colorKey.b, 0);
-                    //get the Uint32 of the colorkey
-                    Uint32 badColor = SDL_MapRGB(formattedSurface->format, (Uint32)colorKey.r, (Uint32)colorKey.g, (Uint32)colorKey.b);
-                    //loop through each pixel
-                    for(int i = 0; i < pixelCount; i++){
-                        //check if the pixel is the bad color
-                        if(pixels[i] == badColor){
-                            pixels[i] = transparent;
-                        }
-                    }
-                }
-                SDL_UnlockTexture(newTexture);
-                mPixels = NULL;
-            }
-            //now we can release some variables
-            SDL_FreeSurface(formattedSurface);
-        }
-        SDL_FreeSurface(newSurface);
-    }
-    mTexture = newTexture;
-    //return true if the texture is set
-    return mTexture != NULL;
-}
-*/
+
 #ifdef _SDL_TTF_H
 //method to load an image text string, this works pretty similar to above just using TTF
 bool lTexture::loadFromRenderedText(string text, SDL_Color color){

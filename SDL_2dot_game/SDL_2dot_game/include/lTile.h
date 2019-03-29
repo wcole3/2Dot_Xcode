@@ -42,12 +42,31 @@ SDL_Rect gTileSprite[TOTAL_TILES_TYPES];
 class lTile{
 public:
     //need to construct a tile with a position and type
+    /**
+        Initialize the tile object
+     
+        @param x the x position of the tile
+        @param y the y position of the tile
+        @param type the type of the tile
+     */
     lTile(int x, int y, int type);
     //method to render the tile if it is in the camera view
+    /**
+        Renders the tile to screen if it is in the view of the camera
+     
+        @param tileSpriteSheet the sprite sheet for the tiles
+        @param camera the camera object
+     */
     void render(lTexture* tileSpriteSheet, SDL_Rect camera);
     //method to get the collion box of the tile
+    /**
+        @return the box defining the tiles position
+     */
     SDL_Rect& getBox(){return mBox;};
     //method to get the type of tile
+    /**
+        @return the type of the tile
+     */
     int getType(){return tileType;};
     
 private:
@@ -79,6 +98,13 @@ void lTile::render(lTexture* tileSpriteSheet, SDL_Rect camera){
 //tile specific methods
 
 //method to setup the tiles subject to the map we will read in
+/**
+    Reads the map file and sets the associated tile map
+ 
+    @param tiles the to be set from the map file
+ 
+    @return true if the tiles are set successfully
+ */
 bool setTiles(lTile* tiles[]){
     bool tilesSet = true;
     //also set x and y offsets

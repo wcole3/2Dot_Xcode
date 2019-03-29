@@ -12,12 +12,40 @@
 #define lLeaderboardMethods_h
 
 //display the leaderboard menu screen
+/**
+    Display the leaderboard screen
+ 
+    @param globalQuit true if user wants to quit the program
+ */
 void displayLeaderboardScreen(bool* globalQuit);
 //check the game finish time and return true if new leader
+/**
+    Check if a passed time belongs on the leaderboard
+ 
+    @param finishTime the finishing time for the player
+    @param newScore the index for the new top score
+ 
+    @return true if score goes on the leaderboard
+ */
 bool newLeader(float finishTime, int* newScore);
 //method to get new name for the board
+/**
+    Get a name for a new leaderboard entry
+ 
+    @param e the SDL_Event to handle input
+    @param letterBox a SDL_Rect highlighting current letter
+    @param globalQuit true if user wants to quit the program
+    @param index the index for the new high score
+    @param nameEntered true if a new name has been entered
+    @param name the name list for the leaderboard
+ */
 void getNewName(SDL_Event e, SDL_Rect* letterBox , bool* globalQuit, int* index, bool* nameEntered, string name[]);
 //method to save the leaderboard to file
+/**
+    Saves the new leaderboard to the leaderboard file
+ 
+    @param fileName the name of the leaderboard file
+ */
 void saveLeaderboard(string fileName);
 
 
