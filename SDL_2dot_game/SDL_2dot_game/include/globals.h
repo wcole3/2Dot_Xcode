@@ -15,8 +15,8 @@ using namespace std;
 //screen constants
 int SCREEN_WIDTH = 640;
 int SCREEN_HEIGHT = 480;
-int LEVEL_WIDTH = 1280;
-int LEVEL_HEIGHT = 960;
+int LEVEL_WIDTH;
+int LEVEL_HEIGHT;
 
 //Game window
 lWindow gWindow;

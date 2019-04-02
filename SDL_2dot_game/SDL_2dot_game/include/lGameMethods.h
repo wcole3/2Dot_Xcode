@@ -221,6 +221,9 @@ bool playAgain(lTexture* splashScreen, bool* globalQuit, float time){
     SDL_Event e;
     //highlight box for new winner
     SDL_Rect highlightBox = {gWindow.getWidth()/4, gWindow.getHeight() / 7 , gWindow.getWidth() / 2 ,gWindow.getHeight() / 10};
+    //check for new name entered
+    bool newNameEntered = false;
+    SDL_StartTextInput();
     //int index for a possible new high score
     int index = -1;
     //check for new entries
@@ -229,9 +232,6 @@ bool playAgain(lTexture* splashScreen, bool* globalQuit, float time){
         //change the highlight box y value to the correct one
         highlightBox.y += (index + 1) * highlightBox.h;
     }
-    //check for new name entered
-    bool newNameEntered = false;
-    SDL_StartTextInput();
     while(!done){
         while(SDL_PollEvent(&e) != 0){
             if(e.type == SDL_QUIT){
@@ -242,7 +242,7 @@ bool playAgain(lTexture* splashScreen, bool* globalQuit, float time){
             //handle window resizing of the ui
             gWindow.handleEvent(e);
             resizeUI(&e);
-            if(e.type == SDL_KEYDOWN && (newNameEntered && highlight)){
+            if((e.type == SDL_KEYDOWN && !highlight) || (e.type == SDL_KEYDOWN && newNameEntered)){
                 if(e.key.keysym.sym == SDLK_y){
                     playAgain = true;
                     done = true;

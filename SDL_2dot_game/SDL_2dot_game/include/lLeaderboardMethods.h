@@ -48,6 +48,7 @@ void getNewName(SDL_Event e, SDL_Rect* letterBox , bool* globalQuit, int* index,
  */
 void saveLeaderboard(string fileName);
 
+//TODO add the ability to reset the leaderboard in game
 
 //method to display the leaderboard screen
 void displayLeaderboardScreen(bool* globalQuit){
@@ -121,6 +122,10 @@ void displayLeaderboardScreen(bool* globalQuit){
 bool newLeader(float time, int* newScore){
     //tag to check if the time is better than the exist ones on the board
     bool newLeader = false;
+    //if the time was 0 then the game was lost and there cannot be a new winner
+    if(time <= 0){
+        return newLeader;
+    }
     //index of the winner
     int index = -1;
     //loop from the slowest to fastest times

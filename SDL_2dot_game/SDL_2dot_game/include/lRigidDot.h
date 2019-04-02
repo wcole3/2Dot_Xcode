@@ -23,16 +23,21 @@ public:
     /**
         Initialize a lRigidDot object
      
-        @param width the width of the dot texture
-        @param height the height of the dot texture
         @param renderer the SDL_Renderer for the object
         @param startX the starting x coor on the screen
         @param startY the starting y coor on the screen
      
      */
-    lRigidDot(int width=0, int height=0, SDL_Renderer* renderer=NULL, int startX=0, int startY=0);
+    lRigidDot(SDL_Renderer* renderer = NULL, int startX = 0, int startY = 0);
     //need a deconstructor to destroy particles
     ~lRigidDot();
+    /**
+         Set the starting position of the dot
+         
+         @param x the starting x coor. of the dot
+         @param y the starting y coor. of the dot
+     */
+    void setStartingPos(int x, int y);
     //method to load the control scheme for the dot
     /**
         Loads the control scheme for the dot
@@ -134,6 +139,13 @@ public:
         @param camera the camera object
      */
     void setCamera(SDL_Rect& camera);
+    /**
+        Set the level size of the dot
+     
+        @param width the width of the level
+        @param height the height of the level
+     */
+    void setLevelSize(int width, int height);
     //functions to return the dot's position
     /**
         @return the x position of the dot
@@ -190,7 +202,7 @@ private:
     int screenW, screenH;
     //method to shift the collision circle with dot movement
     void shiftCollider();
-    void setStartingPos(int x, int y);
+    
     //bool to tell is the dot should be deccerating to stop
     bool xdecel, ydecel;
     //a float defining the friction of the surface the dot is currently on
@@ -209,17 +221,17 @@ private:
 #endif
 };
 //constructor to set screen and renderer
-lRigidDot::lRigidDot(int width, int height, SDL_Renderer* renderer, int startX, int startY){
+lRigidDot::lRigidDot(SDL_Renderer* renderer, int startX, int startY){
     //initialize all variables
-    xCenterPos=0;
-    yCenterPos=0;
-    xAccel=0;
-    yAccel=0;
+    xCenterPos = 0;
+    yCenterPos = 0;
+    xAccel = 0;
+    yAccel = 0;
     xVelocity = 0;
     yVelocity = 0;
     //set screen size
-    screenW=width;
-    screenH=height;
+    screenW = 0;
+    screenH = 0;
     //set starting position
     setStartingPos(startX, startY);
     //setup rest
@@ -650,6 +662,12 @@ void lRigidDot::setCamera(SDL_Rect& camera){
     else if(camera.y + camera.h > screenH){
         camera.y = screenH - camera.h;
     }
+}
+
+//set the level size, must be called after tiles are set
+void lRigidDot::setLevelSize(int width, int height){
+    screenW = width;
+    screenH = height;
 }
 
 //method to check if the dot has moved from start

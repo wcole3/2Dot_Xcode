@@ -78,8 +78,8 @@ bool init(){
             successFlag = false;
         }else{
             //setup the player object
-            player1 = lRigidDot(LEVEL_WIDTH,LEVEL_HEIGHT, gWindow.getRenderer(),0,0);
-            player2 = lRigidDot(LEVEL_WIDTH,LEVEL_HEIGHT, gWindow.getRenderer(),LEVEL_WIDTH,LEVEL_HEIGHT);
+            player1 = lRigidDot(gWindow.getRenderer());
+            player2 = lRigidDot(gWindow.getRenderer());
             //setup player prompts
             for(int i = 0; i < (sizeof(gPlayerPrompt)/sizeof(gPlayerPrompt[0])); ++i){
                 gPlayerPrompt[i] = lTexture(gWindow.getRenderer());
@@ -141,15 +141,6 @@ bool loadMedia(){
         //setup text prompt
         gCountdownText.setFont(gFont);
         gChangeSettingPrompt.setFont(gFont);
-    }
-    //load the player texture
-    if(!player1.loadFromFile("assets/dot.bmp", SDL_TRUE, cyan)){
-        printf("Could not load player 1 texture!\n");
-        successFlag = false;
-    }
-    if(!player2.loadFromFile("assets/dot.bmp", SDL_TRUE, cyan)){
-        printf("Could not load player 2 texture!\n");
-        successFlag = false;
     }
     if(!loadSettings(&player1,&player2, settingsFile, playerControls)){
         printf("Could not load settings!\n");
@@ -223,13 +214,27 @@ bool loadMedia(){
         successFlag = false;
     }
     //load tile sprite sheet
-    if(!gTileSpriteSheet.loadFromFile("assets/tiles.png", SDL_FALSE)){
+    if(!gTileSpriteSheet.loadFromFile("assets/tile_sprites.png", SDL_FALSE)){
         printf("Could not load tile sprite sheet texture!\n");
         successFlag = false;
     }
     //now we need to set the tiles
     if(!setTiles(gTiles)){
         printf("Could not set tiles!\n");
+        successFlag = false;
+    }else{
+        //need to setup the player's level area and starting position
+        player1.setLevelSize(LEVEL_WIDTH, LEVEL_HEIGHT);
+        player2.setLevelSize(LEVEL_WIDTH, LEVEL_HEIGHT);
+        player2.setStartingPos(LEVEL_WIDTH, LEVEL_HEIGHT);
+    }
+    //load the player texture
+    if(!player1.loadFromFile("assets/dot1.png", SDL_TRUE, white)){
+        printf("Could not load player 1 texture!\n");
+        successFlag = false;
+    }
+    if(!player2.loadFromFile("assets/dot2.png", SDL_TRUE, white)){
+        printf("Could not load player 2 texture!\n");
         successFlag = false;
     }
     return successFlag;

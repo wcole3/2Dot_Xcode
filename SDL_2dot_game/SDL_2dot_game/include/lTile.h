@@ -20,18 +20,24 @@ extern int LEVEL_HEIGHT;
 //Need a ke for the tile types, order is set by the map file we got from lazy foo
 
 const int RED_TILE = 0;
-const int GREEN_TILE = 1;
-const int BLUE_TILE = 2;
-const int CENTER = 3;
-const int TOP = 4;
-const int TOP_RIGHT = 5;
-const int RIGHT = 6;
-const int BOTTOM_RIGHT = 7;
-const int BOTTOM = 8;
-const int BOTTOM_LEFT = 9;
+const int BLUE_TILE = 1;
+const int RED_CHECK = 2;
+const int GREEN_TILE = 3;
+const int ENDZONE = 4;
+const int GREEN_SPIRAL = 5;
+const int CENTER = 6;
+const int TOP_LEFT = 7;
+const int TOP = 8;
+const int TOP_RIGHT = 9;
 const int LEFT = 10;
-const int TOP_LEFT = 11;
-const int TOTAL_TILES_TYPES =12;
+const int RIGHT = 11;
+const int BOTTOM_LEFT = 12;
+const int BOTTOM = 13;
+const int BOTTOM_RIGHT = 14;
+const int ALL_BORDER = 15;
+const int VERT_BORDER = 16;
+const int HORZ_BORDER = 17;
+const int TOTAL_TILES_TYPES = 18;
 
 
 //need a sprite sheet
@@ -119,6 +125,11 @@ bool setTiles(lTile* tiles[]){
         
     }else{
         //if the map is openned then we can begin looping to set the values
+        int width, height;
+        map >> width;
+        map >> height;
+        LEVEL_WIDTH = width * TILE_WIDTH;
+        LEVEL_HEIGHT = height * TILE_HEIGHT;
         for(int i = 0; i < TOTAL_TILES; i++){
             // the values from the file give the type of the tile
             int tileType=-1;
@@ -162,38 +173,57 @@ bool setTiles(lTile* tiles[]){
         gTileSprite[RED_TILE].x = 0;
         gTileSprite[RED_TILE].y = 0;
         
-        gTileSprite[GREEN_TILE].x = 0;
-        gTileSprite[GREEN_TILE].y = 80;
+        gTileSprite[BLUE_TILE].x = 80;
+        gTileSprite[BLUE_TILE].y = 0;
         
-        gTileSprite[BLUE_TILE].x = 0;
-        gTileSprite[BLUE_TILE].y = 160;
-        
-        gTileSprite[TOP_LEFT].x = 80;
+        gTileSprite[TOP_LEFT].x = 160;
         gTileSprite[TOP_LEFT].y = 0;
         
-        gTileSprite[TOP].x = 160;
+        gTileSprite[TOP].x = 240;
         gTileSprite[TOP].y = 0;
         
-        gTileSprite[TOP_RIGHT].x = 240;
+        gTileSprite[TOP_RIGHT].x = 320;
         gTileSprite[TOP_RIGHT].y = 0;
         
-        gTileSprite[LEFT].x = 80;
+        gTileSprite[ALL_BORDER].x = 400;
+        gTileSprite[ALL_BORDER].y = 0;
+        
+        gTileSprite[RED_CHECK].x = 0;
+        gTileSprite[RED_CHECK].y = 80;
+        
+        gTileSprite[GREEN_TILE].x = 80;
+        gTileSprite[GREEN_TILE].y = 80;
+        
+        gTileSprite[LEFT].x = 160;
         gTileSprite[LEFT].y = 80;
         
-        gTileSprite[CENTER].x = 160;
-        gTileSprite[CENTER].y =80;
+        gTileSprite[CENTER].x = 240;
+        gTileSprite[CENTER].y = 80;
         
-        gTileSprite[RIGHT].x = 240;
+        gTileSprite[RIGHT].x = 320;
         gTileSprite[RIGHT].y = 80;
         
-        gTileSprite[BOTTOM_LEFT].x = 80;
+        gTileSprite[VERT_BORDER].x = 400;
+        gTileSprite[VERT_BORDER].y = 80;
+        
+        gTileSprite[ENDZONE].x = 0;
+        gTileSprite[ENDZONE].y = 160;
+        
+        gTileSprite[GREEN_SPIRAL].x = 80;
+        gTileSprite[GREEN_SPIRAL].y = 160;
+        
+        gTileSprite[BOTTOM_LEFT].x = 160;
         gTileSprite[BOTTOM_LEFT].y = 160;
         
-        gTileSprite[BOTTOM].x = 160;
+        gTileSprite[BOTTOM].x = 240;
         gTileSprite[BOTTOM].y = 160;
         
-        gTileSprite[BOTTOM_RIGHT].x = 240;
+        gTileSprite[BOTTOM_RIGHT].x = 320;
         gTileSprite[BOTTOM_RIGHT].y = 160;
+        
+        gTileSprite[HORZ_BORDER].x = 400;
+        gTileSprite[HORZ_BORDER].y = 160;
+        
     }
     
     map.close();
