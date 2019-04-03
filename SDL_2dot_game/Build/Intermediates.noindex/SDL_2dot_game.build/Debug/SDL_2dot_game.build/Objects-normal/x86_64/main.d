@@ -48,7 +48,6 @@ dependencies: \
   /Library/Frameworks/SDL2.framework/Headers/SDL_version.h \
   /Library/Frameworks/SDL2_image.framework/Headers/SDL_image.h \
   /Library/Frameworks/SDL2_ttf.framework/Headers/SDL_ttf.h \
-  /Library/Frameworks/SDL2_mixer.framework/Headers/SDL_mixer.h \
   /Users/wcole/Desktop/SDL_2dot/SDL_2dot_game/SDL_2dot_game/include/lUtilityFunc.h \
   /Users/wcole/Desktop/SDL_2dot/SDL_2dot_game/SDL_2dot_game/include/lTexture.h \
   /Users/wcole/Desktop/SDL_2dot/SDL_2dot_game/SDL_2dot_game/include/lTimer.h \

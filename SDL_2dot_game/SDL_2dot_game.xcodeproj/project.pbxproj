@@ -17,7 +17,6 @@
 		AB0A0631225415BC001BBD59 /* SDL2_ttf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB0A062D225415BC001BBD59 /* SDL2_ttf.framework */; };
 		AB0A0632225415BC001BBD59 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB0A062E225415BC001BBD59 /* SDL2.framework */; };
 		AB0A0633225415BC001BBD59 /* SDL2_image.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB0A062F225415BC001BBD59 /* SDL2_image.framework */; };
-		AB0A0634225415BC001BBD59 /* SDL2_mixer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB0A0630225415BC001BBD59 /* SDL2_mixer.framework */; };
 		ABF20209221C9FE700923A85 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ABF20208221C9FE700923A85 /* main.cpp */; };
 /* End PBXBuildFile section */
 
@@ -246,7 +245,6 @@
 				AB0A0631225415BC001BBD59 /* SDL2_ttf.framework in Frameworks */,
 				AB0A0632225415BC001BBD59 /* SDL2.framework in Frameworks */,
 				AB0A0633225415BC001BBD59 /* SDL2_image.framework in Frameworks */,
-				AB0A0634225415BC001BBD59 /* SDL2_mixer.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
