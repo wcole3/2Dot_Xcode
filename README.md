@@ -8,3 +8,5 @@ This game is a culmination of the excellent LazyFoo Tutorials on SDL.  The game 
 movement of a dot, with goal of getting each dot into the endzone before time expires.
 
 There is leaderboard functionaility along with variable controls set by the user.
+
+4/2/19: There is a stuttering issue if you have USB peripherals plugged in.  It is a bug in SDL caused by USB devices (any device besides mouse and keyboard).  It causes a stutter every 3000ms
