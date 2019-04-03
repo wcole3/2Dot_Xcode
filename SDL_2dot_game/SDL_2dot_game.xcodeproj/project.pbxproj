@@ -13,10 +13,14 @@
 		AB0A061E224D72B3001BBD59 /* preGameInst.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = ABF2023122408FE800923A85 /* preGameInst.png */; };
 		AB0A061F224D72B3001BBD59 /* loseScreen.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = ABF202302240704300923A85 /* loseScreen.png */; };
 		AB0A0620224D72B3001BBD59 /* winScreen.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = ABF2022F2240704300923A85 /* winScreen.png */; };
-		AB0A0624224D72B3001BBD59 /* tiles.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = ABF20222221D03B800923A85 /* tiles.png */; };
 		AB0A0631225415BC001BBD59 /* SDL2_ttf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB0A062D225415BC001BBD59 /* SDL2_ttf.framework */; };
 		AB0A0632225415BC001BBD59 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB0A062E225415BC001BBD59 /* SDL2.framework */; };
 		AB0A0633225415BC001BBD59 /* SDL2_image.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB0A062F225415BC001BBD59 /* SDL2_image.framework */; };
+		AB0A0635225562A9001BBD59 /* lazy_custom.map in CopyFiles */ = {isa = PBXBuildFile; fileRef = AB0A062C2253023A001BBD59 /* lazy_custom.map */; };
+		AB0A0636225562A9001BBD59 /* dot1.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = AB0A062A2252F79F001BBD59 /* dot1.png */; };
+		AB0A0637225562A9001BBD59 /* dot2.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = AB0A062B2252F79F001BBD59 /* dot2.png */; };
+		AB0A0638225562A9001BBD59 /* tile_sprites.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = AB0A06292251C895001BBD59 /* tile_sprites.png */; };
+		AB0A063A22556382001BBD59 /* OpenSans-Regular.ttf in CopyFiles */ = {isa = PBXBuildFile; fileRef = AB0A06392255637E001BBD59 /* OpenSans-Regular.ttf */; };
 		ABF20209221C9FE700923A85 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ABF20208221C9FE700923A85 /* main.cpp */; };
 /* End PBXBuildFile section */
 
@@ -27,10 +31,14 @@
 			dstPath = assets;
 			dstSubfolderSpec = 7;
 			files = (
+				AB0A063A22556382001BBD59 /* OpenSans-Regular.ttf in CopyFiles */,
+				AB0A0635225562A9001BBD59 /* lazy_custom.map in CopyFiles */,
+				AB0A0636225562A9001BBD59 /* dot1.png in CopyFiles */,
+				AB0A0637225562A9001BBD59 /* dot2.png in CopyFiles */,
+				AB0A0638225562A9001BBD59 /* tile_sprites.png in CopyFiles */,
 				AB0A061E224D72B3001BBD59 /* preGameInst.png in CopyFiles */,
 				AB0A061F224D72B3001BBD59 /* loseScreen.png in CopyFiles */,
 				AB0A0620224D72B3001BBD59 /* winScreen.png in CopyFiles */,
-				AB0A0624224D72B3001BBD59 /* tiles.png in CopyFiles */,
 				AB0A061D224D72AB001BBD59 /* menuScreen.png in CopyFiles */,
 				AB0A061C224D72A8001BBD59 /* settingsScreen.png in CopyFiles */,
 				AB0A061B224D72A0001BBD59 /* leaderboardScreen.png in CopyFiles */,
@@ -50,6 +58,7 @@
 		AB0A062E225415BC001BBD59 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = Frameworks/SDL2.framework; sourceTree = "<group>"; };
 		AB0A062F225415BC001BBD59 /* SDL2_image.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_image.framework; path = Frameworks/SDL2_image.framework; sourceTree = "<group>"; };
 		AB0A0630225415BC001BBD59 /* SDL2_mixer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_mixer.framework; path = Frameworks/SDL2_mixer.framework; sourceTree = "<group>"; };
+		AB0A06392255637E001BBD59 /* OpenSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Regular.ttf"; sourceTree = "<group>"; };
 		AB206793224B4667006D11B2 /* publish.bat */ = {isa = PBXFileReference; lastKnownFileType = text; path = publish.bat; sourceTree = "<group>"; };
 		AB206794224B4667006D11B2 /* exclude.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = exclude.txt; sourceTree = "<group>"; };
 		AB206795224B4667006D11B2 /* backup.bat */ = {isa = PBXFileReference; lastKnownFileType = text; path = backup.bat; sourceTree = "<group>"; };
@@ -940,6 +949,7 @@
 		ABF2021A221CA0C100923A85 /* assets */ = {
 			isa = PBXGroup;
 			children = (
+				AB0A06392255637E001BBD59 /* OpenSans-Regular.ttf */,
 				AB0A062C2253023A001BBD59 /* lazy_custom.map */,
 				AB0A062A2252F79F001BBD59 /* dot1.png */,
 				AB0A062B2252F79F001BBD59 /* dot2.png */,

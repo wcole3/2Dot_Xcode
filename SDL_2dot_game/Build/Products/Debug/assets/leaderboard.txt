@@ -1,0 +1,5 @@
+NaN	500
+NaN	600
+NaN	700
+NaN	800
+NaN	900
