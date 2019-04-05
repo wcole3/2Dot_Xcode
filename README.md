@@ -1,7 +1,7 @@
 # 2Dot
 A simple two handed racing game I've been working on
 
-Code can be found in SDL_2dot_game/SDL_2dot_game and a UNIX executabel is in SDL_2dot_game/Build/Product/Debug
+Code can be found in SDL_2dot_game/SDL_2dot_game and a UNIX executable is in SDL_2dot_game/Build/Product/Debug
 
 This was written using the SDL, SDL_IMG, and SDL_TTF libs and compiled using xCode for mac.  The raw C++ files and headers
 are also given
