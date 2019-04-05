@@ -160,9 +160,9 @@ public:
      */
     circle& getCollider(){return mCollisionCircle;};
     //constant static for the maximum velocity
-    static const int DOT_MAX_VEL = 300; //PIXELS PER SECOND
+    static const int DOT_MAX_VEL = 250; //PIXELS PER SECOND
     //constant for dot acceleration in pixels/s*s
-    static const int DOT_ACCEL = 600;
+    static const int DOT_ACCEL = 350;
     //method to return true if the dot has moved from its starting location
     /**
         @return true if the dot has moved out of the starting area
@@ -206,7 +206,9 @@ private:
     //bool to tell is the dot should be deccerating to stop
     bool xdecel, ydecel;
     //a float defining the friction of the surface the dot is currently on
-    float surfaceFriction = 200;//TEMP, later we want to define this depending on the surface
+    float surfaceFriction = 50;
+    //a float that determines the dampening that occurs on wall collisons
+    float wallDamp = -0.75;
     //the following is the control scheme and the prompts to render to screen at the start
     SDL_Scancode upButton;
     SDL_Scancode downButton;
@@ -428,21 +430,21 @@ void lRigidDot::updateVelocity(float timeStep, lTile* tiles[]){
             if(detectCollision(getCollider(), tiles[i]->getBox())){
             //if the tiles is colored
                 switch (tiles[i]->getType()) {
-                    case 0://red tile, want to boost at the start
-                        if(xdecel){xVeloMod = 0.75;}
-                        else{xVeloMod = 2;}
-                        if(ydecel){yVeloMod = 0.75;}
-                        else{yVeloMod = 2;}
-                        break;
-                    case 1://green tile, normal movement
-                        xVeloMod = 1;
-                        yVeloMod = 1;
-                        break;
-                    case 2://blue tile, cut speed
+                    case 1://blue tile, apply slight slowwing effect
                         if(xdecel){xVeloMod = 2;}
-                        else{xVeloMod = 0.5;}
+                        else{xVeloMod = 0.4;}
                         if(ydecel){yVeloMod = 2;}
-                        else{yVeloMod = 0.5;}
+                        else{yVeloMod = 0.4;}
+                        break;
+                    case 2://red checker tile, give a boost
+                        if(xdecel){xVeloMod = 0.75;}
+                        else{xVeloMod = 4;}
+                        if(ydecel){yVeloMod = 0.75;}
+                        else{yVeloMod = 4;}
+                        break;
+                    case 4://we are in the endzone, put the brakes on
+                        xVeloMod = 4;
+                        yVeloMod = 4;
                         break;
                     default:
                         break;
@@ -455,7 +457,7 @@ void lRigidDot::updateVelocity(float timeStep, lTile* tiles[]){
     xVelocity += ((xAccel)*timeStep)*xVeloMod;
     if(xdecel){
         //set the acceleration to the appropriate direction; which is the opposite of the current direction
-        xAccel = ((-1)*getSign(oldXVelocity)*surfaceFriction);//the rate of deceleration is controled by the surface the dot is on
+        xAccel = ((-1)*getSign(oldXVelocity)*(surfaceFriction * xVeloMod));//the rate of deceleration is controled by the surface the dot is on
         //dot is deccelerating and we need to stop it at 0
         //we want the dot to stop moving once it changes direction
         if(getSign(xVelocity) == getSign(xAccel)){
@@ -467,7 +469,7 @@ void lRigidDot::updateVelocity(float timeStep, lTile* tiles[]){
     float oldYVelocity = yVelocity;
     yVelocity += ((yAccel)*timeStep)*yVeloMod;
     if(ydecel){
-        yAccel = ((-1)*getSign(oldYVelocity)*surfaceFriction);
+        yAccel = ((-1)*getSign(oldYVelocity) * (surfaceFriction * yVeloMod));
         if(getSign(yVelocity) == getSign(yAccel)){
             yVelocity = 0;
             yAccel = 0;
@@ -490,12 +492,12 @@ void lRigidDot::move(float timeStep){
     if(xCenterPos-mCollisionCircle.r < 0){
         xCenterPos=mCollisionCircle.r;
         shiftCollider();
-        xVelocity=(-1)*xVelocity;
+        xVelocity=wallDamp * xVelocity;
     }
     if(xCenterPos + mCollisionCircle.r > screenW){
         xCenterPos=screenW-mCollisionCircle.r;
         shiftCollider();
-        xVelocity=(-1)*xVelocity;
+        xVelocity=wallDamp * xVelocity;
     }
     
     //check y
@@ -504,12 +506,12 @@ void lRigidDot::move(float timeStep){
     if(yCenterPos - mCollisionCircle.r < 0){
         yCenterPos=mCollisionCircle.r;
         shiftCollider();
-        yVelocity = (-1)*yVelocity;
+        yVelocity = wallDamp * yVelocity;
     }
     if(yCenterPos + mCollisionCircle.r > screenH){
         yCenterPos=screenH-mCollisionCircle.r;
         shiftCollider();
-        yVelocity = (-1)*yVelocity;
+        yVelocity = wallDamp * yVelocity;
     }
     
 }
@@ -530,17 +532,17 @@ void lRigidDot::move(float time, circle& circle){
         //too far left
         xCenterPos = 0 + mCollisionCircle.r;
         shiftCollider();
-        xVelocity=(-1)*xVelocity;
+        xVelocity= wallDamp * xVelocity;
     }else if(xCenterPos + mCollisionCircle.r > screenW){
         //too far right
         xCenterPos = screenW - mCollisionCircle.r;
         shiftCollider();
-        xVelocity=(-1)*xVelocity;
+        xVelocity= wallDamp * xVelocity;
     }else if(detectCollision(getCollider(), circle)){
         //the dot has collided with the box along the x axis
         xCenterPos=oldxPos;//not sure if there is a cleverer way to do this
         shiftCollider();
-        xVelocity=(-1)*xVelocity;
+        xVelocity= wallDamp * xVelocity;
     }
     //now do the same for the y direction
     float oldyPos=yCenterPos;
@@ -551,17 +553,17 @@ void lRigidDot::move(float time, circle& circle){
         //too far up
         yCenterPos = 0 + mCollisionCircle.r;
         shiftCollider();
-        yVelocity = (-1)*yVelocity;
+        yVelocity = wallDamp * yVelocity;
     }else if(yCenterPos + mCollisionCircle.r > screenH){
         //too far down
         yCenterPos=screenH - mCollisionCircle.r;
         shiftCollider();
-        yVelocity = (-1)*yVelocity;
+        yVelocity = wallDamp * yVelocity;
     }else if(detectCollision(getCollider(), circle)){
         //the dot has collided with the box along the y axis
         yCenterPos=oldyPos;
         shiftCollider();
-        yVelocity = (-1)*yVelocity;
+        yVelocity = wallDamp * yVelocity;
     }
 }
 
@@ -577,18 +579,18 @@ void lRigidDot::move(float timeStep,circle& circle, lTile* tiles[]){
     if(xCenterPos - mCollisionCircle.r < 0){
         xCenterPos = mCollisionCircle.r;
         shiftCollider();
-        xVelocity=(-1)*xVelocity;
+        xVelocity= wallDamp * xVelocity;
     }
     else if(xCenterPos + mCollisionCircle.r > screenW){
         xCenterPos = screenW - mCollisionCircle.r;
         shiftCollider();
-        xVelocity=(-1)*xVelocity;
+        xVelocity= wallDamp * xVelocity;
     }
     //test wall and circle collision
     else if(touchingTileWall(getCollider(), tiles) || detectCollision(getCollider(), circle)){
         xCenterPos = oldXPos;
         shiftCollider();
-        xVelocity=(-1)*xVelocity;
+        xVelocity= wallDamp * xVelocity;
     }
     //do the same for y direction
     yCenterPos += timeStep*yVelocity;
@@ -597,17 +599,17 @@ void lRigidDot::move(float timeStep,circle& circle, lTile* tiles[]){
     if(yCenterPos - mCollisionCircle.r < 0){
         yCenterPos = mCollisionCircle.r;
         shiftCollider();
-        yVelocity = (-1)*yVelocity;
+        yVelocity = wallDamp * yVelocity;
     }
     else if(yCenterPos + mCollisionCircle.r > screenH){
         yCenterPos = screenH - mCollisionCircle.r;
         shiftCollider();
-        yVelocity = (-1)*yVelocity;
+        yVelocity = wallDamp * yVelocity;
     }
     else if(touchingTileWall(getCollider(), tiles) || detectCollision(getCollider(), circle)){
         yCenterPos = oldYPos;
         shiftCollider();
-        yVelocity = (-1)*yVelocity;
+        yVelocity = wallDamp * yVelocity;
     }
     
 }

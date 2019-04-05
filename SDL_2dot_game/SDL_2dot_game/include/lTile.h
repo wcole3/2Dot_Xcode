@@ -24,7 +24,7 @@ const int BLUE_TILE = 1;
 const int RED_CHECK = 2;
 const int GREEN_TILE = 3;
 const int ENDZONE = 4;
-const int GREEN_SPIRAL = 5;
+const int TOP_CAP = 5;
 const int CENTER = 6;
 const int TOP_LEFT = 7;
 const int TOP = 8;
@@ -37,7 +37,10 @@ const int BOTTOM_RIGHT = 14;
 const int ALL_BORDER = 15;
 const int VERT_BORDER = 16;
 const int HORZ_BORDER = 17;
-const int TOTAL_TILES_TYPES = 18;
+const int RIGHT_CAP = 18;
+const int LEFT_CAP = 19;
+const int BOT_CAP = 20;
+const int TOTAL_TILES_TYPES = 21;
 
 
 //need a sprite sheet
@@ -188,6 +191,9 @@ bool setTiles(lTile* tiles[]){
         gTileSprite[ALL_BORDER].x = 400;
         gTileSprite[ALL_BORDER].y = 0;
         
+        gTileSprite[BOT_CAP].x = 480;
+        gTileSprite[BOT_CAP].y = 0;
+        
         gTileSprite[RED_CHECK].x = 0;
         gTileSprite[RED_CHECK].y = 80;
         
@@ -206,11 +212,14 @@ bool setTiles(lTile* tiles[]){
         gTileSprite[VERT_BORDER].x = 400;
         gTileSprite[VERT_BORDER].y = 80;
         
+        gTileSprite[LEFT_CAP].x = 480;
+        gTileSprite[LEFT_CAP].y = 80;
+        
         gTileSprite[ENDZONE].x = 0;
         gTileSprite[ENDZONE].y = 160;
         
-        gTileSprite[GREEN_SPIRAL].x = 80;
-        gTileSprite[GREEN_SPIRAL].y = 160;
+        gTileSprite[TOP_CAP].x = 80;
+        gTileSprite[TOP_CAP].y = 160;
         
         gTileSprite[BOTTOM_LEFT].x = 160;
         gTileSprite[BOTTOM_LEFT].y = 160;
@@ -223,6 +232,9 @@ bool setTiles(lTile* tiles[]){
         
         gTileSprite[HORZ_BORDER].x = 400;
         gTileSprite[HORZ_BORDER].y = 160;
+        
+        gTileSprite[RIGHT_CAP].x = 480;
+        gTileSprite[RIGHT_CAP].y = 160;
         
     }
     
