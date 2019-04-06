@@ -27,9 +27,9 @@
 #include "include/lGameMethods.h"
 #include "include/lMenuMethods.h"
 
-//implementing settings and leaderboard
+//sound and particles
 
-
+//movement system under review
 
 int main(int argc, const char * argv[]) {
     // lets get down to business

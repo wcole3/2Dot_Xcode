@@ -244,7 +244,7 @@ bool loadMedia(){
 bool loadSettings(lRigidDot* player1,lRigidDot* player2, string fileName, string controlPrompts[]){
     bool successFlag = true;
     //start by setting up a default setting object
-    const char* defaultSettings[8];//up button, down button, left, right for each player
+    const char* defaultSettings[TOTAL_CONTROLS - 1];//up button, down button, left, right for each player
     for(int i = 0; i < sizeof(defaultSettings)/sizeof(defaultSettings[0]); ++i){
         defaultSettings[i] = NULL;
     }
@@ -281,19 +281,22 @@ bool loadSettings(lRigidDot* player1,lRigidDot* player2, string fileName, string
             controlPrompts[6] = "H";
             defaultSettings[7] = "K";
             controlPrompts[7] = "K";
+            string boost = "Space";
+            controlPrompts[8] = "Space";
             //now write buttons
             for(int i = 0; i < sizeof(defaultSettings)/sizeof(defaultSettings[0]); ++i){
                 file << defaultSettings[i];
                 file << endl;
             }
+            file << boost.c_str();
             file.close();
             //need to partition the settings into arrays for loading to the players
             for(int i = 0; i < sizeof(player1Controls)/sizeof(player1Controls[0]); ++i){
                 player1Controls[i] = defaultSettings[i];
                 player2Controls[i] = defaultSettings[i+4];
             }
-            player1->loadControls(player1Controls);
-            player2->loadControls(player2Controls);
+            player1->loadControls(player1Controls, boost.c_str());
+            player2->loadControls(player2Controls, boost.c_str());
         }else{
             printf("Could not create new settings file!\n");
             successFlag = false;
@@ -301,7 +304,7 @@ bool loadSettings(lRigidDot* player1,lRigidDot* player2, string fileName, string
     }else{
         //here we read in the data from the settings file
         printf("Loading settings...\n");
-        string line[8];
+        string line[TOTAL_CONTROLS];
         for(int i = 0; i < sizeof(defaultSettings)/sizeof(defaultSettings[0]); ++i){
             char key;
             file >> key;
@@ -317,14 +320,17 @@ bool loadSettings(lRigidDot* player1,lRigidDot* player2, string fileName, string
             defaultSettings[i] = line[i].c_str();
             controlPrompts[i] = line[i];//also assign the control prompt
         }
+        string boost;
+        file >> boost;
+        controlPrompts[8] = boost;
         file.close();
         //need to partition the settings into arrays for loading to the players
         for(int i = 0; i < sizeof(player1Controls)/sizeof(player1Controls[0]); ++i){
             player1Controls[i] = defaultSettings[i];
             player2Controls[i] = defaultSettings[i+4];
         }
-        player1->loadControls(player1Controls);
-        player2->loadControls(player2Controls);
+        player1->loadControls(player1Controls, boost.c_str());
+        player2->loadControls(player2Controls, boost.c_str());
     }
     return successFlag;
 }

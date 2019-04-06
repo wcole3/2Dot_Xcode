@@ -229,7 +229,6 @@
 		ABF2021C221CA0EA00923A85 /* lTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lTimer.h; sourceTree = "<group>"; };
 		ABF2021E221CA0EA00923A85 /* lRigidDot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lRigidDot.h; sourceTree = "<group>"; };
 		ABF2021F221CA0EA00923A85 /* lUtilityFunc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lUtilityFunc.h; sourceTree = "<group>"; };
-		ABF20222221D03B800923A85 /* tiles.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tiles.png; sourceTree = "<group>"; };
 		ABF2022722287EB000923A85 /* lWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lWindow.h; sourceTree = "<group>"; };
 		ABF20229222DEC1D00923A85 /* lTile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lTile.h; sourceTree = "<group>"; };
 		ABF2022C2240693600923A85 /* lInitMethods.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lInitMethods.h; sourceTree = "<group>"; };
@@ -962,7 +961,6 @@
 				ABF2023122408FE800923A85 /* preGameInst.png */,
 				ABF202302240704300923A85 /* loseScreen.png */,
 				ABF2022F2240704300923A85 /* winScreen.png */,
-				ABF20222221D03B800923A85 /* tiles.png */,
 			);
 			path = assets;
 			sourceTree = "<group>";

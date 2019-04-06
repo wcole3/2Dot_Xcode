@@ -50,8 +50,10 @@ TTF_Font* gFont = NULL;
 //ALL TEXT TEXTURES
 //headings for control prompts
 const string controlButton[4] = {"Up   : ", "Down : ", "Left : ", "Right: "};
+//total control buttons
+const int TOTAL_CONTROLS = 9;
 //player control prompt textures
-lTexture gPlayerPrompt[8];
+lTexture gPlayerPrompt[TOTAL_CONTROLS];
 //texture for the countdown texture
 lTexture gCountdownText;
 //the menu commands
@@ -75,7 +77,7 @@ lTexture gLetters[MAX_LETTERS];
 //need the name of the settings file
 string settingsFile = "assets/settings.txt";
 //all of the player controls
-string playerControls[8];
+string playerControls[TOTAL_CONTROLS];
 //name of the leaderboard file
 string leaderboardFile = "assets/leaderboard.txt";
 //number of leaderboard entries

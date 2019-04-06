@@ -43,8 +43,9 @@ public:
         Loads the control scheme for the dot
      
         @param control the controls to use for the controls
+        @param boost the button controlling boost
      */
-    void loadControls(const char* control[]);
+    void loadControls(const char* control[], const char* boost);
     //handle events to set the velocity through key presses
     /**
         Handle SDL_Events for the dot
@@ -159,10 +160,7 @@ public:
         @return the circle defining the boundary of the dot
      */
     circle& getCollider(){return mCollisionCircle;};
-    //constant static for the maximum velocity
-    static const int DOT_MAX_VEL = 250; //PIXELS PER SECOND
-    //constant for dot acceleration in pixels/s*s
-    static const int DOT_ACCEL = 350;
+    
     //method to return true if the dot has moved from its starting location
     /**
         @return true if the dot has moved out of the starting area
@@ -202,18 +200,24 @@ private:
     int screenW, screenH;
     //method to shift the collision circle with dot movement
     void shiftCollider();
-    
+    //constant static for the maximum velocity
+    static const int DOT_MAX_VEL = 250; //PIXELS PER SECOND
+    //constant for dot acceleration in pixels/s*s
+    static const int DOT_ACCEL = 450;
+    //int multiplier for boosting
+    int boost = 1;
     //bool to tell is the dot should be deccerating to stop
     bool xdecel, ydecel;
     //a float defining the friction of the surface the dot is currently on
-    float surfaceFriction = 50;
+    float surfaceFriction = 350;
     //a float that determines the dampening that occurs on wall collisons
-    float wallDamp = -0.75;
+    float wallDamp = -0.6;
     //the following is the control scheme and the prompts to render to screen at the start
     SDL_Scancode upButton;
     SDL_Scancode downButton;
     SDL_Scancode leftButton;
     SDL_Scancode rightButton;
+    SDL_Scancode boostButton;
     
 #ifdef lParticle_h
     //list of particles for dot
@@ -288,11 +292,12 @@ bool lRigidDot::loadFromFile(string path, SDL_bool colorKey, SDL_Color keyColor)
     return successFlag;
 }
 //method to load control scheme for the dot
-void lRigidDot::loadControls(const char* control[]){
+void lRigidDot::loadControls(const char* control[], const char* boost){
     upButton = SDL_GetScancodeFromName(control[0]);
     downButton = SDL_GetScancodeFromName(control[1]);
     leftButton = SDL_GetScancodeFromName(control[2]);
     rightButton = SDL_GetScancodeFromName(control[3]);
+    boostButton = SDL_GetScancodeFromName(boost);
 }
 //need to handle keypresses and set the velocity appropriately
 void lRigidDot::handleEvent(SDL_Event& e){
@@ -337,6 +342,19 @@ void lRigidDot::handleEvent(SDL_Event& e){
     }
     if(!keyStates[leftButton] && !keyStates[rightButton]){
         xdecel = true;
+    }
+    //check for boost
+    if(keyStates[boostButton]){
+        //give a boost
+        boost = 2;
+        if(!xdecel){
+            xVelocity = 1.3 * xVelocity;
+        }
+        if(!ydecel){
+            yVelocity = 1.3 * yVelocity;
+        }
+    }else{
+        boost = 1;//set boost to default if boost not blocked
     }
 }
 //need to be able to detect collision between two circles
@@ -430,12 +448,7 @@ void lRigidDot::updateVelocity(float timeStep, lTile* tiles[]){
             if(detectCollision(getCollider(), tiles[i]->getBox())){
             //if the tiles is colored
                 switch (tiles[i]->getType()) {
-                    case 1://blue tile, apply slight slowwing effect
-                        if(xdecel){xVeloMod = 2;}
-                        else{xVeloMod = 0.4;}
-                        if(ydecel){yVeloMod = 2;}
-                        else{yVeloMod = 0.4;}
-                        break;
+                    
                     case 2://red checker tile, give a boost
                         if(xdecel){xVeloMod = 0.75;}
                         else{xVeloMod = 4;}
@@ -476,9 +489,9 @@ void lRigidDot::updateVelocity(float timeStep, lTile* tiles[]){
         }
     }
     //make sure the particle isn't speeding
-    if(sqrtf((xVelocity*xVelocity)+(yVelocity*yVelocity)) >= DOT_MAX_VEL){
-        xVelocity = (xVelocity/sqrtf((xVelocity*xVelocity)+(yVelocity*yVelocity))) * DOT_MAX_VEL;//normalize the components
-        yVelocity = (yVelocity/sqrtf((xVelocity*xVelocity)+(yVelocity*yVelocity))) * DOT_MAX_VEL;
+    if(sqrtf((xVelocity*xVelocity)+(yVelocity*yVelocity)) >= (DOT_MAX_VEL * boost)){
+        xVelocity = (xVelocity/sqrtf((xVelocity*xVelocity)+(yVelocity*yVelocity))) * (DOT_MAX_VEL * boost);//normalize the components
+        yVelocity = (yVelocity/sqrtf((xVelocity*xVelocity)+(yVelocity*yVelocity))) * (DOT_MAX_VEL * boost);
     }
 }
 //move function subject to screen size
