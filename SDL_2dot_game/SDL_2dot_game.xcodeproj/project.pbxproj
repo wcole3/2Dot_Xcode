@@ -21,6 +21,7 @@
 		AB0A0637225562A9001BBD59 /* dot2.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = AB0A062B2252F79F001BBD59 /* dot2.png */; };
 		AB0A0638225562A9001BBD59 /* tile_sprites.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = AB0A06292251C895001BBD59 /* tile_sprites.png */; };
 		AB0A063A22556382001BBD59 /* OpenSans-Regular.ttf in CopyFiles */ = {isa = PBXBuildFile; fileRef = AB0A06392255637E001BBD59 /* OpenSans-Regular.ttf */; };
+		AB0A063B22595144001BBD59 /* SDL2_mixer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABF20213221C9FFF00923A85 /* SDL2_mixer.framework */; };
 		ABF20209221C9FE700923A85 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ABF20208221C9FE700923A85 /* main.cpp */; };
 /* End PBXBuildFile section */
 
@@ -250,9 +251,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AB0A0631225415BC001BBD59 /* SDL2_ttf.framework in Frameworks */,
 				AB0A0632225415BC001BBD59 /* SDL2.framework in Frameworks */,
 				AB0A0633225415BC001BBD59 /* SDL2_image.framework in Frameworks */,
+				AB0A0631225415BC001BBD59 /* SDL2_ttf.framework in Frameworks */,
+				AB0A063B22595144001BBD59 /* SDL2_mixer.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -422,7 +422,7 @@ bool lRigidDot::touchingTileWall(circle& circleCollider, lTile* tiles[]){
     //need to loop through each tile
     for(int i = 0; i < TOTAL_TILES; i++){
         //need to check what type of tile an entry is, we only care about the tiles with walls
-        if(tiles[i]->getType() >= CENTER && tiles[i]->getType() < TOTAL_TILES_TYPES){
+        if(tiles[i]->getType() >= TOP_CAP && tiles[i]->getType() < TOTAL_TILES_TYPES){
             //so if we know the tile is the correct type we want to check the collision
             if(detectCollision(getCollider(), tiles[i]->getBox())){
                 return true;//returns true if touching wall
@@ -444,7 +444,7 @@ void lRigidDot::updateVelocity(float timeStep, lTile* tiles[]){
     float xVeloMod = 1;
     float yVeloMod = 1;
     for(int i = 0; i < TOTAL_TILES; ++i){
-        if(tiles[i]->getType() < CENTER){
+        if(tiles[i]->getType() < TOP_CAP){
             if(detectCollision(getCollider(), tiles[i]->getBox())){
             //if the tiles is colored
                 switch (tiles[i]->getType()) {

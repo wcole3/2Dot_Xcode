@@ -73,13 +73,25 @@ lTexture gLetters[MAX_LETTERS];
 
 
 
-//FILE INPUTS
+
+//FILE_LOCATIONS
+string DEFAULT_ASSET_LOC = "assets/";
 //need the name of the settings file
-string settingsFile = "assets/settings.txt";
+string settingsFile = DEFAULT_ASSET_LOC + "settings.txt";
+//name of the leaderboard file
+string leaderboardFile = DEFAULT_ASSET_LOC + "leaderboard.txt";
+string textFontFile = DEFAULT_ASSET_LOC + "OpenSans-Regular.ttf";
+string winScreenFile = DEFAULT_ASSET_LOC + "winScreen.png";
+string loseScreenFile = DEFAULT_ASSET_LOC + "loseScreen.png";
+string pregameScreen = DEFAULT_ASSET_LOC + "preGameInst.png";
+string menuScreenFile = DEFAULT_ASSET_LOC + "menuScreen.png";
+string settingsScreenFile = DEFAULT_ASSET_LOC + "settingsScreen.png";
+string leaderboardScreenFile = DEFAULT_ASSET_LOC + "leaderboardScreen.png";
+string tileSpriteFile = DEFAULT_ASSET_LOC + "tile_sprites.png";
+string dot1File = DEFAULT_ASSET_LOC + "dot1.png";
+string dot2File = DEFAULT_ASSET_LOC + "dot2.png";
 //all of the player controls
 string playerControls[TOTAL_CONTROLS];
-//name of the leaderboard file
-string leaderboardFile = "assets/leaderboard.txt";
 //number of leaderboard entries
 const int LEADERBOARD_LINES = 5;
 //names of the leaderboard

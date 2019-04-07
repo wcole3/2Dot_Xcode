@@ -52,6 +52,13 @@ bool loadSettings(lRigidDot* player1,lRigidDot* player2, string fileName, string
     @return true if the leaderboard was loaded successfully
  */
 bool loadLeaderboard(string fileName, string names[], float scores[]);
+//method to load all music and sound effects
+/**
+    Load the music files and the sounds effects
+ 
+    @return true returns true on success
+ */
+bool loadMusicAndEffects();
 //close down and free resources
 /**
     Deallocate all resources and close libs
@@ -68,7 +75,7 @@ void resizeUI(SDL_Event* e);
 bool init(){
     bool successFlag = true;
     //start SDL
-    if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) < 0){
+    if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_AUDIO) < 0){
         printf("Could not start SDL! SDL error: %s\n", SDL_GetError());
         successFlag = false;
     }else{
@@ -114,8 +121,14 @@ bool init(){
         printf("Could not start IMG! IMG error: %s\n", IMG_GetError());
         successFlag = false;
     }
+    //start SDL_TTF
     if(TTF_Init() < 0){
         printf("Could not start TTF! TTF error: %s\n", TTF_GetError());
+        successFlag = false;
+    }
+    //Start SDL_mix with 1 kb chunks
+    if(Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 1024) < 0){
+        printf("Could not start Mix! Mix error: %s", Mix_GetError());
         successFlag = false;
     }
     return successFlag;
@@ -125,7 +138,7 @@ bool init(){
 bool loadMedia(){
     bool successFlag = true;
     //load the font
-    gFont = TTF_OpenFont("assets/OpenSans-Regular.ttf", 15);
+    gFont = TTF_OpenFont(textFontFile.c_str(), 15);
     if(gFont == NULL){
         printf("Could not open font! TTF error: %s\n", TTF_GetError());
         successFlag = false;
@@ -177,27 +190,27 @@ bool loadMedia(){
         }
     }
     //load splash screens
-    if(!gWinSplash.loadFromFile("assets/winScreen.png", SDL_FALSE)){
+    if(!gWinSplash.loadFromFile(winScreenFile, SDL_FALSE)){
         printf("Could not load win splash screen!\n");
         successFlag = false;
     }
-    if(!gLoseSplash.loadFromFile("assets/loseScreen.png", SDL_FALSE)){
+    if(!gLoseSplash.loadFromFile(loseScreenFile, SDL_FALSE)){
         printf("Could not load lose splash screen!\n");
         successFlag = false;
     }
-    if(!gPregameSplash.loadFromFile("assets/preGameInst.png", SDL_FALSE)){
+    if(!gPregameSplash.loadFromFile(pregameScreen, SDL_FALSE)){
         printf("Could not load pregame splash!\n");
         successFlag = false;
     }
-    if(!gMenu.loadFromFile("assets/menuScreen.png", SDL_FALSE)){
+    if(!gMenu.loadFromFile(menuScreenFile, SDL_FALSE)){
         printf("Could not load menu texture!\n");
         successFlag = false;
     }
-    if(!gSettingsScreen.loadFromFile("assets/settingsScreen.png", SDL_FALSE)){
+    if(!gSettingsScreen.loadFromFile(settingsScreenFile, SDL_FALSE)){
         printf("Could not load setting texture!\n");
         successFlag = false;
     }
-    if(!gLeaderboardScreen.loadFromFile("assets/leaderboardScreen.png", SDL_FALSE)){
+    if(!gLeaderboardScreen.loadFromFile(leaderboardScreenFile, SDL_FALSE)){
         printf("Could not load leaderboard screen!\n");
         successFlag = false;
     }
@@ -214,7 +227,7 @@ bool loadMedia(){
         successFlag = false;
     }
     //load tile sprite sheet
-    if(!gTileSpriteSheet.loadFromFile("assets/tile_sprites.png", SDL_FALSE)){
+    if(!gTileSpriteSheet.loadFromFile(tileSpriteFile, SDL_FALSE)){
         printf("Could not load tile sprite sheet texture!\n");
         successFlag = false;
     }
@@ -229,11 +242,11 @@ bool loadMedia(){
         player2.setStartingPos(LEVEL_WIDTH, LEVEL_HEIGHT);
     }
     //load the player texture
-    if(!player1.loadFromFile("assets/dot1.png", SDL_TRUE, white)){
+    if(!player1.loadFromFile(dot1File, SDL_TRUE, white)){
         printf("Could not load player 1 texture!\n");
         successFlag = false;
     }
-    if(!player2.loadFromFile("assets/dot2.png", SDL_TRUE, white)){
+    if(!player2.loadFromFile(dot2File, SDL_TRUE, white)){
         printf("Could not load player 2 texture!\n");
         successFlag = false;
     }
@@ -411,6 +424,7 @@ void close(){
     SDL_Quit();
     IMG_Quit();
     TTF_Quit();
+    Mix_Quit();
 }
 
 //resize all UI element to fit current window size
