@@ -136,14 +136,18 @@ void playingGame(bool* globalQuit){
             SDL_RenderPresent(gWindow.getRenderer());
             //or if the limit has passed or both players are done
             if(timeLeft < 0 || (player1.isFinished() && player2.isFinished())){
+                //pause music
+                Mix_FadeOutMusic(200);
                 float finishTime;
                 countdownTicker.pause();
                 //check if game was one or lost
                 if(timeLeft > 0){
+                    Mix_PlayChannel(-1, gWinSound, 0);
                     //game was won, set splash screen to winner
                     endgameSplash = &gWinSplash;
                     finishTime = (countdownTicker.getTime() / 1000.f);
                 }else{
+                    Mix_PlayChannel(-1, gLoseSound, 0);
                     //game was lost splash screen is loser
                     endgameSplash = &gLoseSplash;
                     finishTime = 0;
@@ -159,6 +163,10 @@ void playingGame(bool* globalQuit){
                     //clear out splash screen
                     SDL_RenderClear(gWindow.getRenderer());
                     endgameSplash = NULL;
+                    //rewind the music
+                    Mix_FadeInMusic(gGameMusic, -1, 100);
+                    Mix_RewindMusic();
+                    Mix_SetMusicPosition(2.9);
                 }else{
                     SDL_RenderClear(gWindow.getRenderer());
                     endgameSplash = NULL;
@@ -166,6 +174,10 @@ void playingGame(bool* globalQuit){
                 }
             }
         }
+        Mix_HaltMusic();
+        //play menumusic
+        Mix_VolumeMusic(30);
+        Mix_FadeInMusic(gMenuMusic, -1,1000);
     }
 }
 
@@ -325,6 +337,8 @@ bool playAgain(lTexture* splashScreen, bool* globalQuit, float time){
 //signal from the user
 void pregameSetup(bool* globalQuit){
     //flag to check if the user is ready
+    //fade out music
+    Mix_FadeOutMusic(500);
     bool userReady = false;
     SDL_Event e;
     //user key press prompt
@@ -352,6 +366,7 @@ void pregameSetup(bool* globalQuit){
                 const Uint8* keyState = NULL;
                 keyState = SDL_GetKeyboardState(NULL);
                 if(keyState[player1.getControlButton(3)] && keyState[player2.getControlButton(2)]){
+                    Mix_PlayChannel(-1, gClickSound, 0);
                     userReady = true;
                 }
             }
@@ -368,6 +383,10 @@ void pregameSetup(bool* globalQuit){
     }
     //get rid of user prompt
     lUserPrompt.free();
+    //start the music
+    Mix_VolumeMusic(80);
+    Mix_PlayMusic(gGameMusic, -1);
+    Mix_SetMusicPosition(2.9);
 }
 
 #endif /* lGameMethods_h */

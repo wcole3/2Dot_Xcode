@@ -1,5 +1,5 @@
-wtc	5.943
-run	7.42
-eEW	7.908
-nEW	8.047
-wtc	8.309
+wtc	5.162
+ccc	7.392
+htc	15.6
+NaN	500
+NaN	600

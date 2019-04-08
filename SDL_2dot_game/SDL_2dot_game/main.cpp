@@ -45,6 +45,9 @@ int main(int argc, const char * argv[]) {
             bool quit = false;
             //need an int to move the highlighter box
             int offset = 0;
+            //start the menu music
+            Mix_VolumeMusic(30);
+            Mix_FadeInMusic(gMenuMusic, -1, 2000);
             while(!quit){
                 while(SDL_PollEvent(&e) != 0){
                     if(e.type == SDL_QUIT){
@@ -73,6 +76,7 @@ int main(int argc, const char * argv[]) {
                 SDL_RenderFillRect(gWindow.getRenderer(), &buttonBubble);
                 SDL_RenderPresent(gWindow.getRenderer());
             }
+            Mix_HaltMusic();
         }
     }
     //free all resources and close libs

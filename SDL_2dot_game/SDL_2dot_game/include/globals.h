@@ -71,6 +71,15 @@ const int MAX_LETTERS = 3;
 //entered name letter textures
 lTexture gLetters[MAX_LETTERS];
 
+//Mix Chunks and music
+Mix_Chunk* gLoseSound = NULL;
+Mix_Chunk* gWinSound = NULL;
+Mix_Chunk* gClickSound = NULL;
+Mix_Chunk* gSelectSound = NULL;
+Mix_Chunk* gWallBounceSound = NULL;
+Mix_Music* gMenuMusic = NULL;
+Mix_Music* gGameMusic = NULL;
+
 
 
 
@@ -90,6 +99,13 @@ string leaderboardScreenFile = DEFAULT_ASSET_LOC + "leaderboardScreen.png";
 string tileSpriteFile = DEFAULT_ASSET_LOC + "tile_sprites.png";
 string dot1File = DEFAULT_ASSET_LOC + "dot1.png";
 string dot2File = DEFAULT_ASSET_LOC + "dot2.png";
+string loseSoundFile = DEFAULT_ASSET_LOC + "aww.wav";
+string clickSoundFile = DEFAULT_ASSET_LOC + "click.wav";
+string wallBounceSoundFile = DEFAULT_ASSET_LOC + "jump.wav";
+string selectSoundFile = DEFAULT_ASSET_LOC + "pop.wav";
+string winSoundFile = DEFAULT_ASSET_LOC + "short_fanfare.wav";
+string menuMusicFile = DEFAULT_ASSET_LOC + "Sky_puzzle.mp3";
+string gameMusicFile = DEFAULT_ASSET_LOC + "Techno_Caper.mp3";
 //all of the player controls
 string playerControls[TOTAL_CONTROLS];
 //number of leaderboard entries

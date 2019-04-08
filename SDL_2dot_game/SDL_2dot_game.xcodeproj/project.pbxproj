@@ -22,6 +22,13 @@
 		AB0A0638225562A9001BBD59 /* tile_sprites.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = AB0A06292251C895001BBD59 /* tile_sprites.png */; };
 		AB0A063A22556382001BBD59 /* OpenSans-Regular.ttf in CopyFiles */ = {isa = PBXBuildFile; fileRef = AB0A06392255637E001BBD59 /* OpenSans-Regular.ttf */; };
 		AB0A063B22595144001BBD59 /* SDL2_mixer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABF20213221C9FFF00923A85 /* SDL2_mixer.framework */; };
+		AB193A6E225AEC02000C2D00 /* aww.wav in CopyFiles */ = {isa = PBXBuildFile; fileRef = AB193A67225AD866000C2D00 /* aww.wav */; };
+		AB193A6F225AEC02000C2D00 /* click.wav in CopyFiles */ = {isa = PBXBuildFile; fileRef = AB193A6A225AD866000C2D00 /* click.wav */; };
+		AB193A70225AEC02000C2D00 /* jump.wav in CopyFiles */ = {isa = PBXBuildFile; fileRef = AB193A66225AD866000C2D00 /* jump.wav */; };
+		AB193A71225AEC02000C2D00 /* pop.wav in CopyFiles */ = {isa = PBXBuildFile; fileRef = AB193A6B225AD866000C2D00 /* pop.wav */; };
+		AB193A72225AEC02000C2D00 /* Short_fanfare.wav in CopyFiles */ = {isa = PBXBuildFile; fileRef = AB193A68225AD866000C2D00 /* Short_fanfare.wav */; };
+		AB193A73225AEC02000C2D00 /* Sky_puzzle.mp3 in CopyFiles */ = {isa = PBXBuildFile; fileRef = AB193A6D225AD866000C2D00 /* Sky_puzzle.mp3 */; };
+		AB193A74225AEC02000C2D00 /* Techno_Caper.mp3 in CopyFiles */ = {isa = PBXBuildFile; fileRef = AB193A6C225AD866000C2D00 /* Techno_Caper.mp3 */; };
 		ABF20209221C9FE700923A85 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ABF20208221C9FE700923A85 /* main.cpp */; };
 /* End PBXBuildFile section */
 
@@ -32,6 +39,13 @@
 			dstPath = assets;
 			dstSubfolderSpec = 7;
 			files = (
+				AB193A6E225AEC02000C2D00 /* aww.wav in CopyFiles */,
+				AB193A6F225AEC02000C2D00 /* click.wav in CopyFiles */,
+				AB193A70225AEC02000C2D00 /* jump.wav in CopyFiles */,
+				AB193A71225AEC02000C2D00 /* pop.wav in CopyFiles */,
+				AB193A72225AEC02000C2D00 /* Short_fanfare.wav in CopyFiles */,
+				AB193A73225AEC02000C2D00 /* Sky_puzzle.mp3 in CopyFiles */,
+				AB193A74225AEC02000C2D00 /* Techno_Caper.mp3 in CopyFiles */,
 				AB0A063A22556382001BBD59 /* OpenSans-Regular.ttf in CopyFiles */,
 				AB0A0635225562A9001BBD59 /* lazy_custom.map in CopyFiles */,
 				AB0A0636225562A9001BBD59 /* dot1.png in CopyFiles */,
@@ -60,6 +74,14 @@
 		AB0A062F225415BC001BBD59 /* SDL2_image.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_image.framework; path = Frameworks/SDL2_image.framework; sourceTree = "<group>"; };
 		AB0A0630225415BC001BBD59 /* SDL2_mixer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_mixer.framework; path = Frameworks/SDL2_mixer.framework; sourceTree = "<group>"; };
 		AB0A06392255637E001BBD59 /* OpenSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Regular.ttf"; sourceTree = "<group>"; };
+		AB193A66225AD866000C2D00 /* jump.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = jump.wav; sourceTree = "<group>"; };
+		AB193A67225AD866000C2D00 /* aww.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = aww.wav; sourceTree = "<group>"; };
+		AB193A68225AD866000C2D00 /* Short_fanfare.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Short_fanfare.wav; sourceTree = "<group>"; };
+		AB193A69225AD866000C2D00 /* pling.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = pling.wav; sourceTree = "<group>"; };
+		AB193A6A225AD866000C2D00 /* click.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = click.wav; sourceTree = "<group>"; };
+		AB193A6B225AD866000C2D00 /* pop.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = pop.wav; sourceTree = "<group>"; };
+		AB193A6C225AD866000C2D00 /* Techno_Caper.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Techno_Caper.mp3; sourceTree = "<group>"; };
+		AB193A6D225AD866000C2D00 /* Sky_puzzle.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Sky_puzzle.mp3; sourceTree = "<group>"; };
 		AB206793224B4667006D11B2 /* publish.bat */ = {isa = PBXFileReference; lastKnownFileType = text; path = publish.bat; sourceTree = "<group>"; };
 		AB206794224B4667006D11B2 /* exclude.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = exclude.txt; sourceTree = "<group>"; };
 		AB206795224B4667006D11B2 /* backup.bat */ = {isa = PBXFileReference; lastKnownFileType = text; path = backup.bat; sourceTree = "<group>"; };
@@ -950,6 +972,14 @@
 		ABF2021A221CA0C100923A85 /* assets */ = {
 			isa = PBXGroup;
 			children = (
+				AB193A67225AD866000C2D00 /* aww.wav */,
+				AB193A6A225AD866000C2D00 /* click.wav */,
+				AB193A66225AD866000C2D00 /* jump.wav */,
+				AB193A69225AD866000C2D00 /* pling.wav */,
+				AB193A6B225AD866000C2D00 /* pop.wav */,
+				AB193A68225AD866000C2D00 /* Short_fanfare.wav */,
+				AB193A6D225AD866000C2D00 /* Sky_puzzle.mp3 */,
+				AB193A6C225AD866000C2D00 /* Techno_Caper.mp3 */,
 				AB0A06392255637E001BBD59 /* OpenSans-Regular.ttf */,
 				AB0A062C2253023A001BBD59 /* lazy_custom.map */,
 				AB0A062A2252F79F001BBD59 /* dot1.png */,

@@ -250,6 +250,15 @@ bool loadMedia(){
         printf("Could not load player 2 texture!\n");
         successFlag = false;
     }
+    //load sounds
+    if(!loadMusicAndEffects()){
+        printf("Could not load sound!\n");
+        successFlag = false;
+    }else{
+        //set dot sound effects
+        player1.setSoundEffect(gWallBounceSound);
+        player2.setSoundEffect(gWallBounceSound);
+    }
     return successFlag;
 }
 
@@ -385,6 +394,59 @@ bool loadLeaderboard(string fileName, string names[], float scores[]){
     }
     return successFlag;
 }
+//load music and sound effects
+bool loadMusicAndEffects(){
+    bool successFlag = true;
+    //load all sound effects and set volume, for reference the music is at volume 30
+    gWinSound = Mix_LoadWAV(winSoundFile.c_str());
+    if(gWinSound == NULL){
+        printf("Could not load sound effect at : %s! Mix Error: %s\n", winSoundFile.c_str(), Mix_GetError());
+        successFlag = false;
+    }else{
+        Mix_VolumeChunk(gWinSound, 25);//set volume
+    }
+    gLoseSound = Mix_LoadWAV(loseSoundFile.c_str());
+    if(gLoseSound == NULL){
+        printf("Could not load sound effect at : %s! Mix Error: %s\n", loseSoundFile.c_str(), Mix_GetError());
+        successFlag = false;
+    }else{
+        Mix_VolumeChunk(gLoseSound, 25);
+    }
+    gClickSound = Mix_LoadWAV(clickSoundFile.c_str());
+    if(gClickSound == NULL){
+        printf("Could not load sound effect at : %s! Mix Error: %s\n", clickSoundFile.c_str(), Mix_GetError());
+        successFlag = false;
+    }else{
+        Mix_VolumeChunk(gClickSound, 40);
+    }
+    gSelectSound = Mix_LoadWAV(selectSoundFile.c_str());
+    if(gSelectSound == NULL){
+        printf("Could not load sound effect at : %s! Mix Error: %s\n", selectSoundFile.c_str(), Mix_GetError());
+        successFlag = false;
+    }else{
+        Mix_VolumeChunk(gSelectSound, 40);
+    }
+    gWallBounceSound = Mix_LoadWAV(wallBounceSoundFile.c_str());
+    if(gWallBounceSound == NULL){
+        printf("Could not load sound effect at : %s! Mix Error: %s\n", wallBounceSoundFile.c_str(), Mix_GetError());
+        successFlag = false;
+    }else{
+        Mix_VolumeChunk(gWallBounceSound, 80);
+    }
+    //load music
+    gMenuMusic = Mix_LoadMUS(menuMusicFile.c_str());
+    if(gMenuMusic == NULL){
+        printf("Could not load music file at : %s! Mix Error: %s\n", menuMusicFile.c_str(), Mix_GetError());
+        successFlag = false;
+    }
+    gGameMusic = Mix_LoadMUS(gameMusicFile.c_str());
+    if(gGameMusic == NULL){
+        printf("Could not load music file at : %s! Mix Error: %s\n", gameMusicFile.c_str(), Mix_GetError());
+        successFlag = false;
+    }
+    return successFlag;
+}
+
 
 //cleanup everything
 void close(){
@@ -417,6 +479,14 @@ void close(){
     for(int i = 0; i < TOTAL_TILES; ++i){
         delete gTiles[i];
     }
+    //free chunks and music
+    Mix_FreeChunk(gWinSound);
+    Mix_FreeChunk(gLoseSound);
+    Mix_FreeChunk(gClickSound);
+    Mix_FreeChunk(gSelectSound);
+    Mix_FreeChunk(gWallBounceSound);
+    Mix_FreeMusic(gMenuMusic);
+    Mix_FreeMusic(gGameMusic);
     gWindow.free();
     TTF_CloseFont(gFont);
     gFont = NULL;

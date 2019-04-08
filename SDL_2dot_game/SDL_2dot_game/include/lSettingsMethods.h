@@ -187,6 +187,7 @@ void handleKeyPress(SDL_Event e, int* xOffset, int* yOffset, bool* goBack, bool*
             if(*yOffset < 0){
                 *yOffset = 5;
             }
+            Mix_PlayChannel(-1, gClickSound, 0);
         }
         if(e.key.keysym.sym == SDLK_DOWN){
             ++*yOffset;
@@ -194,6 +195,7 @@ void handleKeyPress(SDL_Event e, int* xOffset, int* yOffset, bool* goBack, bool*
             if(*yOffset > 5){
                 *yOffset = 0;
             }
+            Mix_PlayChannel(-1, gClickSound, 0);
         }
         if(e.key.keysym.sym == SDLK_LEFT){
             //only do this if we are not on the back button
@@ -202,6 +204,7 @@ void handleKeyPress(SDL_Event e, int* xOffset, int* yOffset, bool* goBack, bool*
                 if(*xOffset < 0){
                     *xOffset = 1;
                 }
+                Mix_PlayChannel(-1, gClickSound, 0);
             }
         }
         if(e.key.keysym.sym == SDLK_RIGHT){
@@ -211,6 +214,7 @@ void handleKeyPress(SDL_Event e, int* xOffset, int* yOffset, bool* goBack, bool*
                 if(*xOffset > 1){
                     *xOffset = 0;
                 }
+                Mix_PlayChannel(-1, gClickSound, 0);
             }
         }
         if(e.key.keysym.sym == SDLK_RETURN){
@@ -219,12 +223,14 @@ void handleKeyPress(SDL_Event e, int* xOffset, int* yOffset, bool* goBack, bool*
             if(*yOffset == 5){
                 //user wants to go back
                 *goBack = true;
+                Mix_PlayChannel(-1, gSelectSound, 0);
                 //save any changes
                 if(!saveSettings(settingsFile, playerControls)){
                     printf("Could not save settings!\n");
                 }
             }else{
                 //then we need to change the settings file and the player prompts
+                Mix_PlayChannel(-1, gSelectSound, 0);
                 changeSettingHotkey(e, *xOffset, *yOffset, globalQuit);
             }
         }
@@ -257,6 +263,7 @@ void handleMouseEvent(SDL_Event e, int* xOffset, int *yOffset, bool* goBack, boo
                     //check mouse button down
                     if(e.type == SDL_MOUSEBUTTONDOWN){
                         changeSettingHotkey(e, *xOffset, *yOffset, globalQuit);
+                        Mix_PlayChannel(-1, gSelectSound, 0);
                     }
                 }
             }
@@ -268,6 +275,7 @@ void handleMouseEvent(SDL_Event e, int* xOffset, int *yOffset, bool* goBack, boo
             *yOffset = 4;
             if(e.type == SDL_MOUSEBUTTONDOWN){
                 changeSettingHotkey(e, *xOffset, 4, globalQuit);
+                Mix_PlayChannel(-1, gSelectSound, 0);
             }
         }
         //set the textBox to the back button location
@@ -277,6 +285,7 @@ void handleMouseEvent(SDL_Event e, int* xOffset, int *yOffset, bool* goBack, boo
             *yOffset = 5;
             if(e.type == SDL_MOUSEBUTTONDOWN){
                 *goBack = true;
+                Mix_PlayChannel(-1, gSelectSound, 0);
                 //save any changes
                 if(!saveSettings(settingsFile, playerControls)){
                     printf("Could not save settings!\n");
@@ -307,6 +316,7 @@ void changeSettingHotkey(SDL_Event e, int x, int y, bool* globalQuit){
             if(e.type == SDL_KEYDOWN){
                 if(e.key.keysym.sym == SDLK_BACKSPACE || e.key.keysym.sym == SDLK_ESCAPE){
                     keyEntered = true;
+                    Mix_PlayChannel(-1, gClickSound, 0);
                     break;
                 }
                 //check for special space bar entry
@@ -314,6 +324,7 @@ void changeSettingHotkey(SDL_Event e, int x, int y, bool* globalQuit){
                     newKey = "Space";
                     keyEntered = true;
                     keyChanged = true;
+                    Mix_PlayChannel(-1, gClickSound, 0);
                 }
             }
             //make sure the key wasnt already entered
@@ -324,6 +335,7 @@ void changeSettingHotkey(SDL_Event e, int x, int y, bool* globalQuit){
                 newKey += key;
                 keyEntered = true;
                 keyChanged = true;
+                Mix_PlayChannel(-1, gClickSound, 0);
             }
             
             

@@ -14,6 +14,7 @@
 #include "lTile.h"
 using namespace std;
 
+
 //wrapper class for a movable dot with circular collision 'boxes'
 class lRigidDot: public lTexture{
 public:
@@ -147,6 +148,13 @@ public:
         @param height the height of the level
      */
     void setLevelSize(int width, int height);
+    //method to set the wall bounce sound effect
+    /**
+        Set the dot's wall bounce sound effect
+     
+        @param effect the wall bounce sound effect
+     */
+    void setSoundEffect(Mix_Chunk* effect);
     //functions to return the dot's position
     /**
         @return the x position of the dot
@@ -212,6 +220,8 @@ private:
     float surfaceFriction = 350;
     //a float that determines the dampening that occurs on wall collisons
     float wallDamp = -0.6;
+    //the sound effect for wall bounces
+    Mix_Chunk* wallBounce = NULL;
     //the following is the control scheme and the prompts to render to screen at the start
     SDL_Scancode upButton;
     SDL_Scancode downButton;
@@ -604,6 +614,7 @@ void lRigidDot::move(float timeStep,circle& circle, lTile* tiles[]){
         xCenterPos = oldXPos;
         shiftCollider();
         xVelocity= wallDamp * xVelocity;
+        Mix_PlayChannel(-1, wallBounce, 0);
     }
     //do the same for y direction
     yCenterPos += timeStep*yVelocity;
@@ -623,6 +634,7 @@ void lRigidDot::move(float timeStep,circle& circle, lTile* tiles[]){
         yCenterPos = oldYPos;
         shiftCollider();
         yVelocity = wallDamp * yVelocity;
+        Mix_PlayChannel(-1, wallBounce, 0);
     }
     
 }
@@ -683,6 +695,13 @@ void lRigidDot::setCamera(SDL_Rect& camera){
 void lRigidDot::setLevelSize(int width, int height){
     screenW = width;
     screenH = height;
+}
+//set the sound effect
+void lRigidDot::setSoundEffect(Mix_Chunk* chunk){
+    if(wallBounce == NULL && chunk != NULL){
+        wallBounce = chunk;
+    }
+    
 }
 
 //method to check if the dot has moved from start
