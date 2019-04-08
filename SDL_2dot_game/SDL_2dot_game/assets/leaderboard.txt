@@ -1,5 +1,5 @@
-wtc	5.162
-ccc	7.392
-htc	15.6
 NaN	500
 NaN	600
+NaN	700
+NaN	800
+NaN	900

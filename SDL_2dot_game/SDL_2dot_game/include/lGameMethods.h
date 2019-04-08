@@ -56,10 +56,10 @@ void playingGame(bool* globalQuit){
         //need a seperate timer for countdown
         lTimer countdownTicker = lTimer();
         //load the starting text
-        int timeLimit = 20;
-        string startString = "Time Remaining: ";
+        float startTime = 0;
+        string startString = "Time: ";
         SDL_Color countdownColor = {0,0,0};
-        gCountdownText.loadFromRenderedText(startString + std::to_string(timeLimit), countdownColor);
+        gCountdownText.loadFromRenderedText(startString + std::to_string(startTime), countdownColor);
         countdownTicker.start();
         while(played){
             while(SDL_PollEvent(&e) != 0){
@@ -127,31 +127,23 @@ void playingGame(bool* globalQuit){
             SDL_RenderSetViewport(gWindow.getRenderer(), NULL);
             SDL_RenderFillRect(gWindow.getRenderer(), &split);
             //now render the time remaining
-            float timeLeft = timeLimit - (countdownTicker.getTime() / 1000.f);
+            float runningTime = countdownTicker.getTime() / 1000.f;
             char timeBuffer [10];
-            sprintf(timeBuffer, "%.3f", timeLeft);
+            sprintf(timeBuffer, "%.3f", runningTime);
             //now rerender the countdown text
             gCountdownText.loadFromRenderedText(startString + timeBuffer, countdownColor);
             gCountdownText.render((gWindow.getWidth() - gCountdownText.getWidth())/2, 0);
             SDL_RenderPresent(gWindow.getRenderer());
             //or if the limit has passed or both players are done
-            if(timeLeft < 0 || (player1.isFinished() && player2.isFinished())){
+            if((player1.isFinished() && player2.isFinished())){
                 //pause music
                 Mix_FadeOutMusic(200);
                 float finishTime;
                 countdownTicker.pause();
                 //check if game was one or lost
-                if(timeLeft > 0){
-                    Mix_PlayChannel(-1, gWinSound, 0);
-                    //game was won, set splash screen to winner
-                    endgameSplash = &gWinSplash;
-                    finishTime = (countdownTicker.getTime() / 1000.f);
-                }else{
-                    Mix_PlayChannel(-1, gLoseSound, 0);
-                    //game was lost splash screen is loser
-                    endgameSplash = &gLoseSplash;
-                    finishTime = 0;
-                }
+                //game was finished
+                endgameSplash = &gWinSplash;
+                finishTime = (countdownTicker.getTime() / 1000.f);
                 //regardless of end condition we reset the game
                 player1.reset();
                 player1.setCamera(camera1);
@@ -241,8 +233,12 @@ bool playAgain(lTexture* splashScreen, bool* globalQuit, float time){
     //check for new entries
     bool highlight = newLeader(time, &index);
     if(highlight){
+        //the user won
+        Mix_PlayChannel(-1, gWinSound, 0);
         //change the highlight box y value to the correct one
         highlightBox.y += (index + 1) * highlightBox.h;
+    }else{
+        Mix_PlayChannel(-1, gLoseSound, 0);
     }
     while(!done){
         while(SDL_PollEvent(&e) != 0){
