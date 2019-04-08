@@ -1,5 +1,5 @@
-run	7.42
-nEW	8.047
-wtc	8.309
-nEW	8.528
-sEW	8.674
+NaN	500
+NaN	600
+NaN	700
+NaN	800
+NaN	900

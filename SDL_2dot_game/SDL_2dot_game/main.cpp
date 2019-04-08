@@ -10,6 +10,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2_image/SDL_image.h>
 #include <SDL2_ttf/SDL_ttf.h>
+#include <SDL2_mixer/SDL_mixer.h>
 #include <stdio.h>
 #include <string>
 #include <sstream>
@@ -27,9 +28,9 @@
 #include "include/lGameMethods.h"
 #include "include/lMenuMethods.h"
 
-//implementing settings and leaderboard
+//sound and particles
 
-
+//movement system under review
 
 int main(int argc, const char * argv[]) {
     // lets get down to business
@@ -44,6 +45,9 @@ int main(int argc, const char * argv[]) {
             bool quit = false;
             //need an int to move the highlighter box
             int offset = 0;
+            //start the menu music
+            Mix_VolumeMusic(30);
+            Mix_FadeInMusic(gMenuMusic, -1, 2000);
             while(!quit){
                 while(SDL_PollEvent(&e) != 0){
                     if(e.type == SDL_QUIT){
@@ -72,6 +76,7 @@ int main(int argc, const char * argv[]) {
                 SDL_RenderFillRect(gWindow.getRenderer(), &buttonBubble);
                 SDL_RenderPresent(gWindow.getRenderer());
             }
+            Mix_HaltMusic();
         }
     }
     //free all resources and close libs

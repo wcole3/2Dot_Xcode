@@ -56,10 +56,10 @@ void playingGame(bool* globalQuit){
         //need a seperate timer for countdown
         lTimer countdownTicker = lTimer();
         //load the starting text
-        int timeLimit = 20;
-        string startString = "Time Remaining: ";
+        float startTime = 0;
+        string startString = "Time: ";
         SDL_Color countdownColor = {0,0,0};
-        gCountdownText.loadFromRenderedText(startString + std::to_string(timeLimit), countdownColor);
+        gCountdownText.loadFromRenderedText(startString + std::to_string(startTime), countdownColor);
         countdownTicker.start();
         while(played){
             while(SDL_PollEvent(&e) != 0){
@@ -127,27 +127,23 @@ void playingGame(bool* globalQuit){
             SDL_RenderSetViewport(gWindow.getRenderer(), NULL);
             SDL_RenderFillRect(gWindow.getRenderer(), &split);
             //now render the time remaining
-            float timeLeft = timeLimit - (countdownTicker.getTime() / 1000.f);
+            float runningTime = countdownTicker.getTime() / 1000.f;
             char timeBuffer [10];
-            sprintf(timeBuffer, "%.3f", timeLeft);
+            sprintf(timeBuffer, "%.3f", runningTime);
             //now rerender the countdown text
             gCountdownText.loadFromRenderedText(startString + timeBuffer, countdownColor);
             gCountdownText.render((gWindow.getWidth() - gCountdownText.getWidth())/2, 0);
             SDL_RenderPresent(gWindow.getRenderer());
             //or if the limit has passed or both players are done
-            if(timeLeft < 0 || (player1.isFinished() && player2.isFinished())){
+            if((player1.isFinished() && player2.isFinished())){
+                //pause music
+                Mix_FadeOutMusic(200);
                 float finishTime;
                 countdownTicker.pause();
                 //check if game was one or lost
-                if(timeLeft > 0){
-                    //game was won, set splash screen to winner
-                    endgameSplash = &gWinSplash;
-                    finishTime = (countdownTicker.getTime() / 1000.f);
-                }else{
-                    //game was lost splash screen is loser
-                    endgameSplash = &gLoseSplash;
-                    finishTime = 0;
-                }
+                //game was finished
+                endgameSplash = &gWinSplash;
+                finishTime = (countdownTicker.getTime() / 1000.f);
                 //regardless of end condition we reset the game
                 player1.reset();
                 player1.setCamera(camera1);
@@ -159,6 +155,10 @@ void playingGame(bool* globalQuit){
                     //clear out splash screen
                     SDL_RenderClear(gWindow.getRenderer());
                     endgameSplash = NULL;
+                    //rewind the music
+                    Mix_FadeInMusic(gGameMusic, -1, 100);
+                    Mix_RewindMusic();
+                    Mix_SetMusicPosition(2.9);
                 }else{
                     SDL_RenderClear(gWindow.getRenderer());
                     endgameSplash = NULL;
@@ -166,6 +166,10 @@ void playingGame(bool* globalQuit){
                 }
             }
         }
+        Mix_HaltMusic();
+        //play menumusic
+        Mix_VolumeMusic(30);
+        Mix_FadeInMusic(gMenuMusic, -1,1000);
     }
 }
 
@@ -229,8 +233,12 @@ bool playAgain(lTexture* splashScreen, bool* globalQuit, float time){
     //check for new entries
     bool highlight = newLeader(time, &index);
     if(highlight){
+        //the user won
+        Mix_PlayChannel(-1, gWinSound, 0);
         //change the highlight box y value to the correct one
         highlightBox.y += (index + 1) * highlightBox.h;
+    }else{
+        Mix_PlayChannel(-1, gLoseSound, 0);
     }
     while(!done){
         while(SDL_PollEvent(&e) != 0){
@@ -325,6 +333,8 @@ bool playAgain(lTexture* splashScreen, bool* globalQuit, float time){
 //signal from the user
 void pregameSetup(bool* globalQuit){
     //flag to check if the user is ready
+    //fade out music
+    Mix_FadeOutMusic(500);
     bool userReady = false;
     SDL_Event e;
     //user key press prompt
@@ -352,6 +362,7 @@ void pregameSetup(bool* globalQuit){
                 const Uint8* keyState = NULL;
                 keyState = SDL_GetKeyboardState(NULL);
                 if(keyState[player1.getControlButton(3)] && keyState[player2.getControlButton(2)]){
+                    Mix_PlayChannel(-1, gClickSound, 0);
                     userReady = true;
                 }
             }
@@ -368,6 +379,10 @@ void pregameSetup(bool* globalQuit){
     }
     //get rid of user prompt
     lUserPrompt.free();
+    //start the music
+    Mix_VolumeMusic(80);
+    Mix_PlayMusic(gGameMusic, -1);
+    Mix_SetMusicPosition(2.9);
 }
 
 #endif /* lGameMethods_h */

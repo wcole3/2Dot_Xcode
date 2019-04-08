@@ -52,6 +52,13 @@ bool loadSettings(lRigidDot* player1,lRigidDot* player2, string fileName, string
     @return true if the leaderboard was loaded successfully
  */
 bool loadLeaderboard(string fileName, string names[], float scores[]);
+//method to load all music and sound effects
+/**
+    Load the music files and the sounds effects
+ 
+    @return true returns true on success
+ */
+bool loadMusicAndEffects();
 //close down and free resources
 /**
     Deallocate all resources and close libs
@@ -68,7 +75,7 @@ void resizeUI(SDL_Event* e);
 bool init(){
     bool successFlag = true;
     //start SDL
-    if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) < 0){
+    if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_AUDIO) < 0){
         printf("Could not start SDL! SDL error: %s\n", SDL_GetError());
         successFlag = false;
     }else{
@@ -114,8 +121,14 @@ bool init(){
         printf("Could not start IMG! IMG error: %s\n", IMG_GetError());
         successFlag = false;
     }
+    //start SDL_TTF
     if(TTF_Init() < 0){
         printf("Could not start TTF! TTF error: %s\n", TTF_GetError());
+        successFlag = false;
+    }
+    //Start SDL_mix with 1 kb chunks
+    if(Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 1024) < 0){
+        printf("Could not start Mix! Mix error: %s", Mix_GetError());
         successFlag = false;
     }
     return successFlag;
@@ -125,7 +138,7 @@ bool init(){
 bool loadMedia(){
     bool successFlag = true;
     //load the font
-    gFont = TTF_OpenFont("assets/OpenSans-Regular.ttf", 15);
+    gFont = TTF_OpenFont(textFontFile.c_str(), 15);
     if(gFont == NULL){
         printf("Could not open font! TTF error: %s\n", TTF_GetError());
         successFlag = false;
@@ -177,27 +190,27 @@ bool loadMedia(){
         }
     }
     //load splash screens
-    if(!gWinSplash.loadFromFile("assets/winScreen.png", SDL_FALSE)){
+    if(!gWinSplash.loadFromFile(winScreenFile, SDL_FALSE)){
         printf("Could not load win splash screen!\n");
         successFlag = false;
     }
-    if(!gLoseSplash.loadFromFile("assets/loseScreen.png", SDL_FALSE)){
+    if(!gLoseSplash.loadFromFile(loseScreenFile, SDL_FALSE)){
         printf("Could not load lose splash screen!\n");
         successFlag = false;
     }
-    if(!gPregameSplash.loadFromFile("assets/preGameInst.png", SDL_FALSE)){
+    if(!gPregameSplash.loadFromFile(pregameScreen, SDL_FALSE)){
         printf("Could not load pregame splash!\n");
         successFlag = false;
     }
-    if(!gMenu.loadFromFile("assets/menuScreen.png", SDL_FALSE)){
+    if(!gMenu.loadFromFile(menuScreenFile, SDL_FALSE)){
         printf("Could not load menu texture!\n");
         successFlag = false;
     }
-    if(!gSettingsScreen.loadFromFile("assets/settingsScreen.png", SDL_FALSE)){
+    if(!gSettingsScreen.loadFromFile(settingsScreenFile, SDL_FALSE)){
         printf("Could not load setting texture!\n");
         successFlag = false;
     }
-    if(!gLeaderboardScreen.loadFromFile("assets/leaderboardScreen.png", SDL_FALSE)){
+    if(!gLeaderboardScreen.loadFromFile(leaderboardScreenFile, SDL_FALSE)){
         printf("Could not load leaderboard screen!\n");
         successFlag = false;
     }
@@ -214,7 +227,7 @@ bool loadMedia(){
         successFlag = false;
     }
     //load tile sprite sheet
-    if(!gTileSpriteSheet.loadFromFile("assets/tile_sprites.png", SDL_FALSE)){
+    if(!gTileSpriteSheet.loadFromFile(tileSpriteFile, SDL_FALSE)){
         printf("Could not load tile sprite sheet texture!\n");
         successFlag = false;
     }
@@ -229,13 +242,22 @@ bool loadMedia(){
         player2.setStartingPos(LEVEL_WIDTH, LEVEL_HEIGHT);
     }
     //load the player texture
-    if(!player1.loadFromFile("assets/dot1.png", SDL_TRUE, white)){
+    if(!player1.loadFromFile(dot1File, SDL_TRUE, white)){
         printf("Could not load player 1 texture!\n");
         successFlag = false;
     }
-    if(!player2.loadFromFile("assets/dot2.png", SDL_TRUE, white)){
+    if(!player2.loadFromFile(dot2File, SDL_TRUE, white)){
         printf("Could not load player 2 texture!\n");
         successFlag = false;
+    }
+    //load sounds
+    if(!loadMusicAndEffects()){
+        printf("Could not load sound!\n");
+        successFlag = false;
+    }else{
+        //set dot sound effects
+        player1.setSoundEffect(gWallBounceSound);
+        player2.setSoundEffect(gWallBounceSound);
     }
     return successFlag;
 }
@@ -244,7 +266,7 @@ bool loadMedia(){
 bool loadSettings(lRigidDot* player1,lRigidDot* player2, string fileName, string controlPrompts[]){
     bool successFlag = true;
     //start by setting up a default setting object
-    const char* defaultSettings[8];//up button, down button, left, right for each player
+    const char* defaultSettings[TOTAL_CONTROLS - 1];//up button, down button, left, right for each player
     for(int i = 0; i < sizeof(defaultSettings)/sizeof(defaultSettings[0]); ++i){
         defaultSettings[i] = NULL;
     }
@@ -281,19 +303,22 @@ bool loadSettings(lRigidDot* player1,lRigidDot* player2, string fileName, string
             controlPrompts[6] = "H";
             defaultSettings[7] = "K";
             controlPrompts[7] = "K";
+            string boost = "Space";
+            controlPrompts[8] = "Space";
             //now write buttons
             for(int i = 0; i < sizeof(defaultSettings)/sizeof(defaultSettings[0]); ++i){
                 file << defaultSettings[i];
                 file << endl;
             }
+            file << boost.c_str();
             file.close();
             //need to partition the settings into arrays for loading to the players
             for(int i = 0; i < sizeof(player1Controls)/sizeof(player1Controls[0]); ++i){
                 player1Controls[i] = defaultSettings[i];
                 player2Controls[i] = defaultSettings[i+4];
             }
-            player1->loadControls(player1Controls);
-            player2->loadControls(player2Controls);
+            player1->loadControls(player1Controls, boost.c_str());
+            player2->loadControls(player2Controls, boost.c_str());
         }else{
             printf("Could not create new settings file!\n");
             successFlag = false;
@@ -301,7 +326,7 @@ bool loadSettings(lRigidDot* player1,lRigidDot* player2, string fileName, string
     }else{
         //here we read in the data from the settings file
         printf("Loading settings...\n");
-        string line[8];
+        string line[TOTAL_CONTROLS];
         for(int i = 0; i < sizeof(defaultSettings)/sizeof(defaultSettings[0]); ++i){
             char key;
             file >> key;
@@ -317,14 +342,17 @@ bool loadSettings(lRigidDot* player1,lRigidDot* player2, string fileName, string
             defaultSettings[i] = line[i].c_str();
             controlPrompts[i] = line[i];//also assign the control prompt
         }
+        string boost;
+        file >> boost;
+        controlPrompts[8] = boost;
         file.close();
         //need to partition the settings into arrays for loading to the players
         for(int i = 0; i < sizeof(player1Controls)/sizeof(player1Controls[0]); ++i){
             player1Controls[i] = defaultSettings[i];
             player2Controls[i] = defaultSettings[i+4];
         }
-        player1->loadControls(player1Controls);
-        player2->loadControls(player2Controls);
+        player1->loadControls(player1Controls, boost.c_str());
+        player2->loadControls(player2Controls, boost.c_str());
     }
     return successFlag;
 }
@@ -366,6 +394,59 @@ bool loadLeaderboard(string fileName, string names[], float scores[]){
     }
     return successFlag;
 }
+//load music and sound effects
+bool loadMusicAndEffects(){
+    bool successFlag = true;
+    //load all sound effects and set volume, for reference the music is at volume 30
+    gWinSound = Mix_LoadWAV(winSoundFile.c_str());
+    if(gWinSound == NULL){
+        printf("Could not load sound effect at : %s! Mix Error: %s\n", winSoundFile.c_str(), Mix_GetError());
+        successFlag = false;
+    }else{
+        Mix_VolumeChunk(gWinSound, 25);//set volume
+    }
+    gLoseSound = Mix_LoadWAV(loseSoundFile.c_str());
+    if(gLoseSound == NULL){
+        printf("Could not load sound effect at : %s! Mix Error: %s\n", loseSoundFile.c_str(), Mix_GetError());
+        successFlag = false;
+    }else{
+        Mix_VolumeChunk(gLoseSound, 25);
+    }
+    gClickSound = Mix_LoadWAV(clickSoundFile.c_str());
+    if(gClickSound == NULL){
+        printf("Could not load sound effect at : %s! Mix Error: %s\n", clickSoundFile.c_str(), Mix_GetError());
+        successFlag = false;
+    }else{
+        Mix_VolumeChunk(gClickSound, 40);
+    }
+    gSelectSound = Mix_LoadWAV(selectSoundFile.c_str());
+    if(gSelectSound == NULL){
+        printf("Could not load sound effect at : %s! Mix Error: %s\n", selectSoundFile.c_str(), Mix_GetError());
+        successFlag = false;
+    }else{
+        Mix_VolumeChunk(gSelectSound, 40);
+    }
+    gWallBounceSound = Mix_LoadWAV(wallBounceSoundFile.c_str());
+    if(gWallBounceSound == NULL){
+        printf("Could not load sound effect at : %s! Mix Error: %s\n", wallBounceSoundFile.c_str(), Mix_GetError());
+        successFlag = false;
+    }else{
+        Mix_VolumeChunk(gWallBounceSound, 80);
+    }
+    //load music
+    gMenuMusic = Mix_LoadMUS(menuMusicFile.c_str());
+    if(gMenuMusic == NULL){
+        printf("Could not load music file at : %s! Mix Error: %s\n", menuMusicFile.c_str(), Mix_GetError());
+        successFlag = false;
+    }
+    gGameMusic = Mix_LoadMUS(gameMusicFile.c_str());
+    if(gGameMusic == NULL){
+        printf("Could not load music file at : %s! Mix Error: %s\n", gameMusicFile.c_str(), Mix_GetError());
+        successFlag = false;
+    }
+    return successFlag;
+}
+
 
 //cleanup everything
 void close(){
@@ -398,6 +479,14 @@ void close(){
     for(int i = 0; i < TOTAL_TILES; ++i){
         delete gTiles[i];
     }
+    //free chunks and music
+    Mix_FreeChunk(gWinSound);
+    Mix_FreeChunk(gLoseSound);
+    Mix_FreeChunk(gClickSound);
+    Mix_FreeChunk(gSelectSound);
+    Mix_FreeChunk(gWallBounceSound);
+    Mix_FreeMusic(gMenuMusic);
+    Mix_FreeMusic(gGameMusic);
     gWindow.free();
     TTF_CloseFont(gFont);
     gFont = NULL;
@@ -405,6 +494,7 @@ void close(){
     SDL_Quit();
     IMG_Quit();
     TTF_Quit();
+    Mix_Quit();
 }
 
 //resize all UI element to fit current window size

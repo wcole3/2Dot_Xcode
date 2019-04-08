@@ -44,6 +44,7 @@ void handleMenuButtonEvents(SDL_Event e, int* offset, bool* globalQuit){
             if(*offset < 0){
                 *offset = TOTAL_MENU_BUTTONS - 1;
             }
+            Mix_PlayChannel(-1, gClickSound, 0);
         }
         if(e.key.keysym.sym == SDLK_DOWN){
             ++*offset;
@@ -51,21 +52,26 @@ void handleMenuButtonEvents(SDL_Event e, int* offset, bool* globalQuit){
             if(*offset > TOTAL_MENU_BUTTONS - 1){
                 *offset = 0;
             }
+            Mix_PlayChannel(-1, gClickSound, 0);
         }
         //once option is selected use offset to do things
         if(e.key.keysym.sym == SDLK_RETURN){
             switch (*offset) {
                 case 0://play game
+                    Mix_PlayChannel(-1, gSelectSound, 0);
                     pregameSetup(globalQuit);
                     playingGame(globalQuit);
                     break;
                 case 1://display settings screen
+                    Mix_PlayChannel(-1, gSelectSound, 0);
                     displaySettingsScreen(globalQuit);
                     break;
                 case 2:
+                    Mix_PlayChannel(-1, gSelectSound, 0);
                     displayLeaderboardScreen(globalQuit);
                     break;
                 case 3://user wants to quit
+                    Mix_PlayChannel(-1, gSelectSound, 0);
                     *globalQuit = true;
                     break;
                     
@@ -97,13 +103,16 @@ void handleMenuMouseEvents(SDL_Event e, int* offset, bool* globalQuit){
                     //again check the offset and do the appropriate thing
                     switch (*offset) {
                         case 0://play game
+                            Mix_PlayChannel(-1, gSelectSound, 0);
                             pregameSetup(globalQuit);
                             playingGame(globalQuit);
                             break;
                         case 1://display settings screen
+                            Mix_PlayChannel(-1, gSelectSound, 0);
                             displaySettingsScreen(globalQuit);
                             break;
                         case 2:
+                            Mix_PlayChannel(-1, gSelectSound, 0);
                             displayLeaderboardScreen(globalQuit);
                             break;
                         case 3://user wants to quit

@@ -78,6 +78,7 @@ void displayLeaderboardScreen(bool* globalQuit){
                 }
                 if(e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_RETURN && e.key.repeat == 0){
                     done = true;
+                    Mix_PlayChannel(-1, gSelectSound, 0);
                 }
             }
             if(e.type == SDL_MOUSEMOTION || e.type == SDL_MOUSEBUTTONDOWN){
@@ -90,6 +91,7 @@ void displayLeaderboardScreen(bool* globalQuit){
                     renderBox = true;
                     if(e.type == SDL_MOUSEBUTTONDOWN){
                         done = true;
+                        Mix_PlayChannel(-1, gSelectSound, 0);
                     }
                 }else{
                     renderBox = false;
