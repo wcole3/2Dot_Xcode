@@ -6,9 +6,9 @@ Code can be found in SDL_2dot_game/SDL_2dot_game and a UNIX executable is in SDL
 Version 2.0 Updates (4/8/2019)
 -
 1) Added speed boost to control scheme (default key = 'Space')
-2) Changed dot velocity and deccelration values to make movement more responsive
+2) Changed dot velocity and decel values to make movement more responsive
 3) Added SOUND!! 
-4) Changed timing system from countdown to countup, now everyrun will finish, but not everyone gets on the leaderboard!
+4) Changed timing system from countdown to countup, now every run will finish, but not everyone gets on the leaderboard!
 5) Some texture updates
 
 This was written using the SDL, SDL_IMG, and SDL_TTF libs and compiled using xCode for mac.  The raw C++ files and headers
