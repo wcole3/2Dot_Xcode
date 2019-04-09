@@ -1,7 +1,7 @@
 # 2Dot_Version2.0.1
 A simple two handed racing game I've been working on
 
-Code can be found in SDL_2dot_game/SDL_2dot_game and a UNIX executable is in SDL_2dot_game/Build/Product/Debug
+Code can be found in SDL_2dot_game/SDL_2dot_game and a UNIX executable is in SDL_2dot_game/Build/Product either Debug or Release should work
 
 Version 2.0.1 Updates (4/9/2019)
 -
