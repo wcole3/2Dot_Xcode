@@ -21,10 +21,11 @@ movement of a dot, with goal of getting each dot into the endzone before time ex
 There is leaderboard functionaility along with variable controls set by the user.
 
 ##Assets Information
-###Fonts
+
+##Fonts
  - OpenSans-Regular.ttf : Obtained from https://www.fontsquirrel.com/fonts
 
-###Audio (Royality Free)
+##Audio (Royalty Free)
  - Menu theme - "Sky_puzzle" from Soundimage.org
  - Game theme - "Techno_caper" from soundimage.org"
  - Wall bouce - 
@@ -32,7 +33,7 @@ There is leaderboard functionaility along with variable controls set by the user
  - Victory Que - "Short_triumphal_fanfare" from SoundBible.com
  - Game loss que - "Aww_sympathy" from SoundBible.com
 
-###Textures
+##Textures
  - All textures we created in Paintbrush for mac; no expense was spared
 
 4/2/19: There is a stuttering issue if you have USB peripherals plugged in.  It is a bug in SDL caused by USB devices (any device besides mouse and keyboard).  It causes a stutter every 3000ms
