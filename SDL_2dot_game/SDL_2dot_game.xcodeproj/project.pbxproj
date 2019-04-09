@@ -11,7 +11,6 @@
 		AB0A061C224D72A8001BBD59 /* settingsScreen.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = ABF20236224558BA00923A85 /* settingsScreen.png */; };
 		AB0A061D224D72AB001BBD59 /* menuScreen.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = ABF202322243313300923A85 /* menuScreen.png */; };
 		AB0A061E224D72B3001BBD59 /* preGameInst.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = ABF2023122408FE800923A85 /* preGameInst.png */; };
-		AB0A061F224D72B3001BBD59 /* loseScreen.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = ABF202302240704300923A85 /* loseScreen.png */; };
 		AB0A0620224D72B3001BBD59 /* winScreen.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = ABF2022F2240704300923A85 /* winScreen.png */; };
 		AB0A0631225415BC001BBD59 /* SDL2_ttf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB0A062D225415BC001BBD59 /* SDL2_ttf.framework */; };
 		AB0A0632225415BC001BBD59 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB0A062E225415BC001BBD59 /* SDL2.framework */; };
@@ -52,7 +51,6 @@
 				AB0A0637225562A9001BBD59 /* dot2.png in CopyFiles */,
 				AB0A0638225562A9001BBD59 /* tile_sprites.png in CopyFiles */,
 				AB0A061E224D72B3001BBD59 /* preGameInst.png in CopyFiles */,
-				AB0A061F224D72B3001BBD59 /* loseScreen.png in CopyFiles */,
 				AB0A0620224D72B3001BBD59 /* winScreen.png in CopyFiles */,
 				AB0A061D224D72AB001BBD59 /* menuScreen.png in CopyFiles */,
 				AB0A061C224D72A8001BBD59 /* settingsScreen.png in CopyFiles */,
@@ -258,7 +256,6 @@
 		ABF2022D224069ED00923A85 /* lGameMethods.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lGameMethods.h; sourceTree = "<group>"; };
 		ABF2022E22406A7E00923A85 /* globals.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = globals.h; sourceTree = "<group>"; };
 		ABF2022F2240704300923A85 /* winScreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = winScreen.png; sourceTree = "<group>"; };
-		ABF202302240704300923A85 /* loseScreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loseScreen.png; sourceTree = "<group>"; };
 		ABF2023122408FE800923A85 /* preGameInst.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = preGameInst.png; sourceTree = "<group>"; };
 		ABF202322243313300923A85 /* menuScreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menuScreen.png; sourceTree = "<group>"; };
 		ABF2023322454C8500923A85 /* lMenuMethods.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lMenuMethods.h; sourceTree = "<group>"; };
@@ -991,7 +988,6 @@
 				ABF20236224558BA00923A85 /* settingsScreen.png */,
 				ABF202322243313300923A85 /* menuScreen.png */,
 				ABF2023122408FE800923A85 /* preGameInst.png */,
-				ABF202302240704300923A85 /* loseScreen.png */,
 				ABF2022F2240704300923A85 /* winScreen.png */,
 			);
 			path = assets;

@@ -106,7 +106,6 @@ bool init(){
             SDL_SetRenderDrawColor(gWindow.getRenderer(), 255, 255, 255, 255);
             //setup textures; there is probabaly a good way to do this as a batch
             gWinSplash = lTexture(gWindow.getRenderer());
-            gLoseSplash = lTexture(gWindow.getRenderer());
             gPregameSplash = lTexture(gWindow.getRenderer());
             gMenu = lTexture(gWindow.getRenderer());
             gSettingsScreen = lTexture(gWindow.getRenderer());
@@ -192,10 +191,6 @@ bool loadMedia(){
     //load splash screens
     if(!gWinSplash.loadFromFile(winScreenFile, SDL_FALSE)){
         printf("Could not load win splash screen!\n");
-        successFlag = false;
-    }
-    if(!gLoseSplash.loadFromFile(loseScreenFile, SDL_FALSE)){
-        printf("Could not load lose splash screen!\n");
         successFlag = false;
     }
     if(!gPregameSplash.loadFromFile(pregameScreen, SDL_FALSE)){
@@ -455,7 +450,6 @@ void close(){
     player2.free();
     //free all textures
     gWinSplash.free();
-    gLoseSplash.free();
     gPregameSplash.free();
     gMenu.free();
     gSettingsScreen.free();

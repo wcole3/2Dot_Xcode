@@ -44,6 +44,8 @@ void pregameSetup(bool* globalQuit);
 
 //the actual game loop
 void playingGame(bool* globalQuit){
+    player1.reset();
+    player2.reset();
     if(*globalQuit != true){
         //the loop condition for playing the game
         bool played = true;
@@ -136,6 +138,7 @@ void playingGame(bool* globalQuit){
             SDL_RenderPresent(gWindow.getRenderer());
             //or if the limit has passed or both players are done
             if((player1.isFinished() && player2.isFinished())){
+                Mix_Volume(-1, 70);
                 //pause music
                 Mix_FadeOutMusic(200);
                 float finishTime;

@@ -194,6 +194,12 @@ public:
      */
     SDL_Scancode getControlButton(int i);
 private:
+    //method to handle dot growth or shrinkage
+    /**
+        Grow or shrink the dot
+     
+     */
+    void handleGrowth();
     //screen positions of the CENTER of the circle
     float xCenterPos, yCenterPos;
     //floats of the velocity
@@ -202,6 +208,8 @@ private:
     float xAccel, yAccel;
     //two ints specify the startting screen position
     int xStart, yStart;
+    //box that contains the dot, used for growth and shrinking
+    SDL_Rect dotBox;
     //SDL_rect which defines the collision zone for the texture
     circle mCollisionCircle;
     //screen/level size
@@ -216,6 +224,20 @@ private:
     int boost = 1;
     //bool to tell is the dot should be deccerating to stop
     bool xdecel, ydecel;
+    //some bools to determine if the dot is growing or not
+    bool doGrow = false;
+    bool doShrink = false;
+    //the max time to stay big
+    float maxBigTime = 2000;//in ms
+    //growth step
+    float growthStepTime = 100;//in ms
+    //max size to grow to
+    int maxRadius = 30;//in pixels
+    int orgRadius;
+    //timer to limit the time spent big
+    lTimer timeBig = lTimer();
+    //timer for the growth
+    lTimer growTimer = lTimer();
     //a float defining the friction of the surface the dot is currently on
     float surfaceFriction = 350;
     //a float that determines the dampening that occurs on wall collisons
@@ -245,6 +267,7 @@ lRigidDot::lRigidDot(SDL_Renderer* renderer, int startX, int startY){
     yAccel = 0;
     xVelocity = 0;
     yVelocity = 0;
+    dotBox = {0,0,0,0};
     //set screen size
     screenW = 0;
     screenH = 0;
@@ -295,6 +318,7 @@ bool lRigidDot::loadFromFile(string path, SDL_bool colorKey, SDL_Color keyColor)
     //then setup the extras, I'm doing this since the texture's width and height are not set before this call
     //we can then setup the circle
     mCollisionCircle.r=getWidth()/2;
+    orgRadius = mCollisionCircle.r;
     xCenterPos= xStart + mCollisionCircle.r;
     yCenterPos= yStart + mCollisionCircle.r;
     //move the collision circle's x and y positions to the xCenterPos and yCenterPos taking into account offsets
@@ -367,6 +391,45 @@ void lRigidDot::handleEvent(SDL_Event& e){
         boost = 1;//set boost to default if boost not blocked
     }
 }
+//method to handle dot growth and shrinage
+void lRigidDot::handleGrowth(){
+    //check if dot should be growing or shrinking
+    if(doGrow){
+        //grow the dot
+        if(growTimer.getTime() > growthStepTime){
+            mCollisionCircle.r += 2;
+            growTimer.start();
+        }
+        //but not too much
+        if(mCollisionCircle.r >= maxRadius){
+            mCollisionCircle.r = maxRadius;
+            growTimer.stop();
+        }
+    }
+    //handle end of growth
+    if(timeBig.getTime() > maxBigTime){
+        //shrink back down
+        doShrink = true;
+        doGrow = false;
+        growTimer.start();
+        timeBig.stop();
+    }
+    if(doShrink){
+        //shrink the dot
+        if(growTimer.getTime() > growthStepTime){
+            mCollisionCircle.r -= 2;
+            growTimer.start();
+        }
+        //but not to much
+        if(mCollisionCircle.r <= orgRadius){
+            mCollisionCircle.r = orgRadius;
+            doShrink = false; //done shrinking
+            growTimer.stop();
+            timeBig.start();//starting timeBig again to give a buffer between growths
+        }
+    }
+}
+
 //need to be able to detect collision between two circles
 bool lRigidDot::detectCollision(circle& circleA, circle& circleB){
     //need to test if the distance squared between the two circles is less than the total radius squared if so then the objects are colliding
@@ -446,6 +509,11 @@ bool lRigidDot::touchingTileWall(circle& circleCollider, lTile* tiles[]){
 void lRigidDot::shiftCollider(){
     mCollisionCircle.x=xCenterPos;
     mCollisionCircle.y=yCenterPos;
+    //set the dotBox to move with collider
+    dotBox.x = xCenterPos - mCollisionCircle.r;
+    dotBox.y = yCenterPos - mCollisionCircle.r;
+    dotBox.w = 2 * mCollisionCircle.r;
+    dotBox.h = dotBox.w;
 }
 
 //here we want to update the velocity of the dot making sure that the velocity doesnt exceed the maximum
@@ -459,11 +527,12 @@ void lRigidDot::updateVelocity(float timeStep, lTile* tiles[]){
             //if the tiles is colored
                 switch (tiles[i]->getType()) {
                     
-                    case 2://red checker tile, give a boost
-                        if(xdecel){xVeloMod = 0.75;}
-                        else{xVeloMod = 4;}
-                        if(ydecel){yVeloMod = 0.75;}
-                        else{yVeloMod = 4;}
+                    case 2://red checker tile, grow the dot
+                        if(!doGrow && !doShrink && (timeBig.getTime() > 1000)){
+                            doGrow = true;
+                            growTimer.start();
+                            timeBig.start();
+                        }
                         break;
                     case 4://we are in the endzone, put the brakes on
                         xVeloMod = 4;
@@ -503,6 +572,7 @@ void lRigidDot::updateVelocity(float timeStep, lTile* tiles[]){
         xVelocity = (xVelocity/sqrtf((xVelocity*xVelocity)+(yVelocity*yVelocity))) * (DOT_MAX_VEL * boost);//normalize the components
         yVelocity = (yVelocity/sqrtf((xVelocity*xVelocity)+(yVelocity*yVelocity))) * (DOT_MAX_VEL * boost);
     }
+    
 }
 //move function subject to screen size
 void lRigidDot::move(float timeStep){
@@ -591,52 +661,92 @@ void lRigidDot::move(float time, circle& circle){
 }
 
 void lRigidDot::move(float timeStep,circle& circle, lTile* tiles[]){
-    //start by getting the current position
-    float oldXPos = getXPos();
-    float oldYPos = getYPos();
+    if(doGrow || doShrink){
+        //handle grow events
+        handleGrowth();
+        shiftCollider();
+    }
     //start with x direct; move the dot and shift colliders
     updateVelocity(timeStep, tiles);
     xCenterPos += timeStep*xVelocity;
+    yCenterPos += timeStep*yVelocity;
     shiftCollider();
     //now check for level collision and wall collision
     if(xCenterPos - mCollisionCircle.r < 0){
         xCenterPos = mCollisionCircle.r;
         shiftCollider();
+        float mappedVelo = abs((xVelocity / (DOT_MAX_VEL * boost))) * 70;
         xVelocity= wallDamp * xVelocity;
+        Mix_Volume(-1, (int)mappedVelo);
+        Mix_PlayChannel(-1, wallBounce, 0);
     }
     else if(xCenterPos + mCollisionCircle.r > screenW){
         xCenterPos = screenW - mCollisionCircle.r;
         shiftCollider();
+        float mappedVelo = abs((xVelocity / (DOT_MAX_VEL * boost))) * 70;
         xVelocity= wallDamp * xVelocity;
+        Mix_Volume(-1, (int)mappedVelo);
+        Mix_PlayChannel(-1, wallBounce, 0);
     }
     //test wall and circle collision
     else if(touchingTileWall(getCollider(), tiles) || detectCollision(getCollider(), circle)){
-        xCenterPos = oldXPos;
-        shiftCollider();
+        xCenterPos -= (timeStep * xVelocity);//start by going back to the start
+        //need to figure out if collision is coming from the left or right
+        //we can test by shifting the collider right and rechecking collision
+        mCollisionCircle.x += mCollisionCircle.r;
+        if(touchingTileWall(getCollider(), tiles) || detectCollision(getCollider(), circle)){
+            xCenterPos -= 1;
+            shiftCollider();
+        }else{
+            xCenterPos += 1;
+            shiftCollider();
+        }
+        //use velocity to set volume to max of 80
+        float mappedVelo = abs((xVelocity / (DOT_MAX_VEL * boost))) * 70;
         xVelocity= wallDamp * xVelocity;
+        //xCenterPos += (timeStep * xVelocity);
+        shiftCollider();
+        Mix_Volume(-1, (int)mappedVelo);
         Mix_PlayChannel(-1, wallBounce, 0);
     }
     //do the same for y direction
-    yCenterPos += timeStep*yVelocity;
-    shiftCollider();
     //check collisions
     if(yCenterPos - mCollisionCircle.r < 0){
         yCenterPos = mCollisionCircle.r;
         shiftCollider();
         yVelocity = wallDamp * yVelocity;
+        float mappedVelo = abs((yVelocity / (DOT_MAX_VEL * boost))) * 70;
+        Mix_Volume(-1, (int)mappedVelo);
+        Mix_PlayChannel(-1, wallBounce, 0);
     }
     else if(yCenterPos + mCollisionCircle.r > screenH){
         yCenterPos = screenH - mCollisionCircle.r;
         shiftCollider();
         yVelocity = wallDamp * yVelocity;
-    }
-    else if(touchingTileWall(getCollider(), tiles) || detectCollision(getCollider(), circle)){
-        yCenterPos = oldYPos;
-        shiftCollider();
-        yVelocity = wallDamp * yVelocity;
+        float mappedVelo = abs((yVelocity / (DOT_MAX_VEL * boost))) * 70;
+        Mix_Volume(-1, (int)mappedVelo);
         Mix_PlayChannel(-1, wallBounce, 0);
     }
-    
+    else if(touchingTileWall(getCollider(), tiles) || detectCollision(getCollider(), circle)){
+        yCenterPos -= (timeStep * yVelocity);
+        //check if the collision comes from the top or bottom
+        mCollisionCircle.y += mCollisionCircle.r;//move collider down
+        if(touchingTileWall(getCollider(), tiles) || detectCollision(getCollider(), circle)){
+                yCenterPos -= 1;
+                shiftCollider();
+        }else{
+                yCenterPos += 1;
+                shiftCollider();
+        }
+        yVelocity = wallDamp * yVelocity;
+        //yCenterPos += (timeStep * yVelocity);
+        //since y checking goes after x we need to smooth a bit
+        xCenterPos += 1;
+        float mappedVelo = abs((yVelocity / (DOT_MAX_VEL * boost))) * 70;
+        shiftCollider();
+        Mix_Volume(-1, (int)mappedVelo);
+        Mix_PlayChannel(-1, wallBounce, 0);
+    }
 }
 
 
@@ -647,7 +757,7 @@ void lRigidDot::render(SDL_Rect& camera){
     int topLeftX = (int)(xCenterPos-getCollider().r);
     int topLeftY = (int)(yCenterPos-getCollider().r);
     //render relative to the offsets
-    lTexture::render((topLeftX - camera.x), (topLeftY - camera.y));
+    lTexture::render((topLeftX - camera.x), (topLeftY - camera.y), NULL, &dotBox);
 #ifdef lParticle_h
     //then we need to render the particles
     renderParticles();
@@ -734,6 +844,8 @@ void lRigidDot::reset(){
     xCenterPos = xStart + mCollisionCircle.r;
     yCenterPos = yStart + mCollisionCircle.r;
     shiftCollider();
+    //start big timer
+    timeBig.start();
 }
 
 //method to return the sdl scancode of a particular control

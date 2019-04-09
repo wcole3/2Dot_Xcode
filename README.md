@@ -1,15 +1,16 @@
-# 2Dot_Version2.0
+# 2Dot_Version2.0.1
 A simple two handed racing game I've been working on
 
 Code can be found in SDL_2dot_game/SDL_2dot_game and a UNIX executable is in SDL_2dot_game/Build/Product/Debug
 
-Version 2.0 Updates (4/8/2019)
+Version 2.0.1 Updates (4/9/2019)
 -
 1) Added speed boost to control scheme (default key = 'Space')
 2) Changed dot velocity and decel values to make movement more responsive
 3) Added SOUND!! 
 4) Changed timing system from countdown to countup, now every run will finish, but not everyone gets on the leaderboard!
 5) Some texture updates
+6) Red checker board tile now cause the dots to swell in size making navigation much more difficult
 
 This was written using the SDL, SDL_IMG, and SDL_TTF libs and compiled using xCode for mac.  The raw C++ files and headers
 are also given

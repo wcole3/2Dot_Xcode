@@ -33,8 +33,6 @@ lTexture gTileSpriteSheet;
 lTile* gTiles[TOTAL_TILES];
 //winning game splash screen
 lTexture gWinSplash;
-//losing game splash screen
-lTexture gLoseSplash;
 //pregame instruction splash
 lTexture gPregameSplash;
 //menu screen
@@ -91,7 +89,6 @@ string settingsFile = DEFAULT_ASSET_LOC + "settings.txt";
 string leaderboardFile = DEFAULT_ASSET_LOC + "leaderboard.txt";
 string textFontFile = DEFAULT_ASSET_LOC + "OpenSans-Regular.ttf";
 string winScreenFile = DEFAULT_ASSET_LOC + "winScreen.png";
-string loseScreenFile = DEFAULT_ASSET_LOC + "loseScreen.png";
 string pregameScreen = DEFAULT_ASSET_LOC + "preGameInst.png";
 string menuScreenFile = DEFAULT_ASSET_LOC + "menuScreen.png";
 string settingsScreenFile = DEFAULT_ASSET_LOC + "settingsScreen.png";
