@@ -230,7 +230,7 @@ private:
     //the max time to stay big
     float maxBigTime = 2000;//in ms
     //growth step
-    float growthStepTime = 100;//in ms
+    float growthStepTime = 50;//in ms
     //max size to grow to
     int maxRadius = 30;//in pixels
     int orgRadius;
@@ -397,7 +397,7 @@ void lRigidDot::handleGrowth(){
     if(doGrow){
         //grow the dot
         if(growTimer.getTime() > growthStepTime){
-            mCollisionCircle.r += 2;
+            mCollisionCircle.r += 1;
             growTimer.start();
         }
         //but not too much
@@ -417,7 +417,7 @@ void lRigidDot::handleGrowth(){
     if(doShrink){
         //shrink the dot
         if(growTimer.getTime() > growthStepTime){
-            mCollisionCircle.r -= 2;
+            mCollisionCircle.r -= 1;
             growTimer.start();
         }
         //but not to much
