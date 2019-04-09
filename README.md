@@ -10,7 +10,7 @@ Version 2.0.1 Updates (4/9/2019)
 3) Added SOUND!! 
 4) Changed timing system from countdown to countup, now every run will finish, but not everyone gets on the leaderboard!
 5) Some texture updates
-6) Red checker board tile now cause the dots to swell in size making navigation much more difficult
+6) Red checkerboard tile now causes the dots to swell in size making navigation much more difficult
 
 This was written using the SDL, SDL_IMG, and SDL_TTF libs and compiled using xCode for mac.  The raw C++ files and headers
 are also given
@@ -27,13 +27,13 @@ There is leaderboard functionaility along with variable controls set by the user
 
 ##Audio (Royalty Free)
  - Menu theme - "Sky_puzzle" from Soundimage.org
- - Game theme - "Techno_caper" from soundimage.org"
- - Wall bouce - 
- - Button Click - "Click" from SoundBible.com"
+ - Game theme - "Techno_caper" from soundimage.org
+ - Wall bounce - "pling.wav" from SoundBible.com
+ - Button Click - "Click" from SoundBible.com
  - Victory Que - "Short_triumphal_fanfare" from SoundBible.com
  - Game loss que - "Aww_sympathy" from SoundBible.com
 
 ##Textures
- - All textures we created in Paintbrush for mac; no expense was spared
+ - All textures created in Paintbrush for mac; no expense was spared
 
 4/2/19: There is a stuttering issue if you have USB peripherals plugged in.  It is a bug in SDL caused by USB devices (any device besides mouse and keyboard).  It causes a stutter every 3000ms
