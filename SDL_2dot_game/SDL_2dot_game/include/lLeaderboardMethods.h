@@ -88,6 +88,9 @@ void displayLeaderboardScreen(bool* globalQuit){
                 SDL_Rect textLine = {3 * (gWindow.getWidth() / 4),5 * (gWindow.getHeight() / 6), gWindow.getWidth() / 8, gWindow.getHeight() / 10};
                 if(checkMouseBoxCollision(xM, yM, textLine)){
                     //we are over the back button
+                    if(!renderBox){
+                        Mix_PlayChannel(-1, gClickSound, 0);
+                    }
                     renderBox = true;
                     if(e.type == SDL_MOUSEBUTTONDOWN){
                         done = true;
@@ -180,9 +183,9 @@ void getNewName(SDL_Event e, SDL_Rect* letterBox ,bool* globalQuit, int* current
     }
     gWindow.handleEvent(e);
     resizeUI(&e);
-    if(e.type == SDL_KEYDOWN){
+    if(e.type == SDL_KEYDOWN && e.key.repeat == 0){
         //use left and right to move current index
-        if(e.key.keysym.sym == SDLK_LEFT && e.key.repeat == 0){
+        if(e.key.keysym.sym == SDLK_LEFT){
             --*currentIndex;
             if(*currentIndex < 0){
                 *currentIndex = (MAX_LETTERS - 1);
@@ -190,7 +193,7 @@ void getNewName(SDL_Event e, SDL_Rect* letterBox ,bool* globalQuit, int* current
             //set the letter box
             letterBox->x = ((3*gWindow.getWidth()) / 4) + (*currentIndex * (gWindow.getHeight() / 12));
         }
-        else if(e.key.keysym.sym == SDLK_RIGHT && e.key.repeat == 0){
+        else if(e.key.keysym.sym == SDLK_RIGHT){
             ++*currentIndex;
             if(*currentIndex > (MAX_LETTERS - 1)){
                 *currentIndex = 0;
@@ -198,7 +201,7 @@ void getNewName(SDL_Event e, SDL_Rect* letterBox ,bool* globalQuit, int* current
             letterBox->x = ((3*gWindow.getWidth()) / 4) + (*currentIndex * (gWindow.getHeight() / 12));
         }
         //use tab to move as well
-        else if(e.key.keysym.sym == SDLK_TAB && e.key.repeat == 0){
+        else if(e.key.keysym.sym == SDLK_TAB){
             ++*currentIndex;
             if(*currentIndex > (MAX_LETTERS - 1)){
                 *currentIndex = 0;
@@ -214,6 +217,12 @@ void getNewName(SDL_Event e, SDL_Rect* letterBox ,bool* globalQuit, int* current
         char letter = e.text.text[0];
         name[*currentIndex] = letter;
         gLetters[*currentIndex].loadFromRenderedText(name[*currentIndex].c_str(), blue);
+        //also move the selector to the next letter
+        ++*currentIndex;
+        if(*currentIndex > (MAX_LETTERS - 1)){
+            *currentIndex = 0;
+        }
+        letterBox->x = ((3*gWindow.getWidth()) / 4) + (*currentIndex * (gWindow.getHeight() / 12));
     }
 }
 

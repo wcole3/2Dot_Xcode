@@ -233,6 +233,7 @@ bool loadMedia(){
     }else{
         //need to setup the player's level area and starting position
         player1.setLevelSize(LEVEL_WIDTH, LEVEL_HEIGHT);
+        player1.setStartingPos(0, 0);
         player2.setLevelSize(LEVEL_WIDTH, LEVEL_HEIGHT);
         player2.setStartingPos(LEVEL_WIDTH, LEVEL_HEIGHT);
     }
@@ -251,8 +252,8 @@ bool loadMedia(){
         successFlag = false;
     }else{
         //set dot sound effects
-        player1.setSoundEffect(gWallBounceSound);
-        player2.setSoundEffect(gWallBounceSound);
+        player1.setSoundEffect(gWallBounceSound, gGrowthSound);
+        player2.setSoundEffect(gWallBounceSound, gGrowthSound);
     }
     return successFlag;
 }
@@ -290,14 +291,14 @@ bool loadSettings(lRigidDot* player1,lRigidDot* player2, string fileName, string
             controlPrompts[2] = "A";
             defaultSettings[3] = "D";
             controlPrompts[3] = "D";
-            defaultSettings[4] = "U";//start player 2
-            controlPrompts[4] = "U";
-            defaultSettings[5] = "J";
-            controlPrompts[5] = "J";
-            defaultSettings[6] = "H";
-            controlPrompts[6] = "H";
-            defaultSettings[7] = "K";
-            controlPrompts[7] = "K";
+            defaultSettings[4] = "I";//start player 2
+            controlPrompts[4] = "I";
+            defaultSettings[5] = "K";
+            controlPrompts[5] = "K";
+            defaultSettings[6] = "J";
+            controlPrompts[6] = "J";
+            defaultSettings[7] = "L";
+            controlPrompts[7] = "L";
             string boost = "Space";
             controlPrompts[8] = "Space";
             //now write buttons
@@ -365,12 +366,12 @@ bool loadLeaderboard(string fileName, string names[], float scores[]){
         if(file.is_open()){
             printf("Creating default leaderboard file...\n");
             //write default leaderboard
-            string defaultName = "NaN";
+            string defaultNames[LEADERBOARD_LINES] = {"IBM", "FDR", "SAS", "JFK", "LOL"};
             for(int i = 0; i < LEADERBOARD_LINES; ++i){
-                scores[i] = 500 + (i * 100);//set default scores to something arbitrairly high
-                names[i] = defaultName;
+                scores[i] = 25 + (i * 25);//set default scores to something arbitrairly high
+                names[i] = defaultNames[i];
                 //now write out to file
-                file << defaultName << '\t' << scores[i] << endl;
+                file << defaultNames[i] << '\t' << scores[i] << endl;
             }
             file.close();
         }else{
@@ -428,6 +429,13 @@ bool loadMusicAndEffects(){
     }else{
         Mix_VolumeChunk(gWallBounceSound, 80);
     }
+    gGrowthSound = Mix_LoadWAV(growthSoundFile.c_str());
+    if(gGrowthSound == NULL){
+        printf("Could not load sound effect at : %s! Mix Error: %s\n", growthSoundFile.c_str(), Mix_GetError());
+        successFlag = false;
+    }else{
+        Mix_VolumeChunk(gGrowthSound, 80);
+    }
     //load music
     gMenuMusic = Mix_LoadMUS(menuMusicFile.c_str());
     if(gMenuMusic == NULL){
@@ -473,12 +481,14 @@ void close(){
     for(int i = 0; i < TOTAL_TILES; ++i){
         delete gTiles[i];
     }
+    
     //free chunks and music
     Mix_FreeChunk(gWinSound);
     Mix_FreeChunk(gLoseSound);
     Mix_FreeChunk(gClickSound);
     Mix_FreeChunk(gSelectSound);
     Mix_FreeChunk(gWallBounceSound);
+    Mix_FreeChunk(gGrowthSound);
     Mix_FreeMusic(gMenuMusic);
     Mix_FreeMusic(gGameMusic);
     gWindow.free();

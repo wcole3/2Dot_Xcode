@@ -1,6 +1,8 @@
 #Ignore the Xcode gen files
 Index/
+Intermediates.noindex/
 
 #Ignore old assets
 Old_assets/
 tile_playground/
+

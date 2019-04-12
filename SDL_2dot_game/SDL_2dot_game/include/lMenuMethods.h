@@ -97,6 +97,10 @@ void handleMenuMouseEvents(SDL_Event e, int* offset, bool* globalQuit){
             //check mouse box collision
             if(checkMouseBoxCollision(x, y, button)){
                 //the mouse is over the button
+                if(i != *offset){
+                    //mouse has enter a new button, play sound
+                    Mix_PlayChannel(-1, gClickSound, 0);
+                }
                 *offset = i;
                 //after offset is set check for button down event
                 if(e.type == SDL_MOUSEBUTTONDOWN){
