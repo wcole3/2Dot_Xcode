@@ -208,7 +208,6 @@ private:
     //method to handle dot growth or shrinkage
     /**
         Grow or shrink the dot
-     
      */
     void handleGrowth();
     //screen positions of the CENTER of the circle

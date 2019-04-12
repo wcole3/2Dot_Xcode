@@ -109,7 +109,6 @@ private:
     bool mMinimized;
     bool mFullScreen;
     bool mShown;
-    
 };
 
 lWindow::lWindow(){
