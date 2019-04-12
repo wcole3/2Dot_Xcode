@@ -74,13 +74,9 @@ void playingGame(bool* globalQuit){
                 //only handle player events if the player hasnt finished
                 if(!player1.isFinished()){
                     player1.handleEvent(e);
-                }else{
-                    //TODO write out time it took for player 1
                 }
                 if(!player2.isFinished()){
                     player2.handleEvent(e);
-                }else{
-                    //TODO write out the timer it took for player 2
                 }
                 gWindow.handleEvent(e);
                 //update the UI
@@ -179,6 +175,8 @@ void playingGame(bool* globalQuit){
 //method to check if the user wants to play again, this got a lot bigger than I intended (TODO chop this up)
 bool playAgain(lTexture* splashScreen, bool* globalQuit, float time){
     //reset the letter textures
+    lTimer delayTimer = lTimer();
+    delayTimer.start();
     string defaultName[MAX_LETTERS] = {"N", "E", "W"};
     for(int i = 0; i < (sizeof(gLetters)/sizeof(gLetters[0])); ++i){
         gLetters[i].loadFromRenderedText(defaultName[i].c_str(), blue);
@@ -273,8 +271,9 @@ bool playAgain(lTexture* splashScreen, bool* globalQuit, float time){
                 }
             }
             //handle event if user is entering a name
-            if(highlight && !newNameEntered){
+            if(highlight && !newNameEntered && (delayTimer.getTime() > 1000)){
                 getNewName(e, &currentLetter, globalQuit, &letterIndex, &newNameEntered, defaultName);
+                delayTimer.pause();
             }
         }
         //display the chosen splash screen
@@ -296,9 +295,6 @@ bool playAgain(lTexture* splashScreen, bool* globalQuit, float time){
                 //the users time is on the board
                 SDL_SetRenderDrawColor(gWindow.getRenderer(), 100, 50, 50, 100);
                 SDL_RenderFillRect(gWindow.getRenderer(), &highlightBox);
-                
-                //TODO enter a new name into the board
-                
                 if(!newNameEntered){
                     for(int i = 0; i < MAX_LETTERS; ++i){
                         gLetters[i].render(((3*gWindow.getWidth()) / 4) + (i * currentLetter.w), (gWindow.getHeight() / 7) + ((LEADERBOARD_LINES + 1) * (gWindow.getHeight() / 10)), NULL, &currentLetter);
@@ -329,6 +325,7 @@ bool playAgain(lTexture* splashScreen, bool* globalQuit, float time){
     lLeaderboardHeader.free();
     lPlayAgainPrompt.free();
     lUserTime.free();
+    delayTimer.stop();
     return playAgain;
 }
 

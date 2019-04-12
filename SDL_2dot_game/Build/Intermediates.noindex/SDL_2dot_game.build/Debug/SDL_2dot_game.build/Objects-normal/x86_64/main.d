@@ -52,8 +52,8 @@ dependencies: \
   /Users/wcole/Desktop/SDL_2dot/SDL_2dot_game/SDL_2dot_game/include/lUtilityFunc.h \
   /Users/wcole/Desktop/SDL_2dot/SDL_2dot_game/SDL_2dot_game/include/lTexture.h \
   /Users/wcole/Desktop/SDL_2dot/SDL_2dot_game/SDL_2dot_game/include/lTimer.h \
-  /Users/wcole/Desktop/SDL_2dot/SDL_2dot_game/SDL_2dot_game/include/lRigidDot.h \
   /Users/wcole/Desktop/SDL_2dot/SDL_2dot_game/SDL_2dot_game/include/lTile.h \
+  /Users/wcole/Desktop/SDL_2dot/SDL_2dot_game/SDL_2dot_game/include/lRigidDot.h \
   /Users/wcole/Desktop/SDL_2dot/SDL_2dot_game/SDL_2dot_game/include/lWindow.h \
   /Users/wcole/Desktop/SDL_2dot/SDL_2dot_game/SDL_2dot_game/include/globals.h \
   /Users/wcole/Desktop/SDL_2dot/SDL_2dot_game/SDL_2dot_game/include/lInitMethods.h \

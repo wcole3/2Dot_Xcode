@@ -232,6 +232,7 @@ void handleKeyPress(SDL_Event e, int* xOffset, int* yOffset, bool* goBack, bool*
                 //then we need to change the settings file and the player prompts
                 Mix_PlayChannel(-1, gSelectSound, 0);
                 changeSettingHotkey(e, *xOffset, *yOffset, globalQuit);
+                Mix_PlayChannel(-1, gClickSound, 0);
             }
         }
     }
@@ -258,12 +259,16 @@ void handleMouseEvent(SDL_Event e, int* xOffset, int *yOffset, bool* goBack, boo
                 //text mouse position
                 if(checkMouseBoxCollision(xM, yM, textBox)){
                     //the mouse is over the corresponding textbox
+                    if(*yOffset != y || *xOffset != x){
+                        Mix_PlayChannel(-1, gClickSound, 0);//just got here, play sound
+                    }
                     *xOffset = x;
                     *yOffset = y;
                     //check mouse button down
                     if(e.type == SDL_MOUSEBUTTONDOWN){
-                        changeSettingHotkey(e, *xOffset, *yOffset, globalQuit);
                         Mix_PlayChannel(-1, gSelectSound, 0);
+                        changeSettingHotkey(e, *xOffset, *yOffset, globalQuit);
+                        Mix_PlayChannel(-1, gClickSound, 0);
                     }
                 }
             }
@@ -272,16 +277,23 @@ void handleMouseEvent(SDL_Event e, int* xOffset, int *yOffset, bool* goBack, boo
         textBox.x = (gWindow.getWidth() / 2) - (width / 2);
         textBox.y = 2 * (gWindow.getHeight() / 3);
         if(checkMouseBoxCollision(xM, yM, textBox)){
+            if(*yOffset != 4){
+                Mix_PlayChannel(-1, gClickSound, 0);//just got here, play sound
+            }
             *yOffset = 4;
             if(e.type == SDL_MOUSEBUTTONDOWN){
-                changeSettingHotkey(e, *xOffset, 4, globalQuit);
                 Mix_PlayChannel(-1, gSelectSound, 0);
+                changeSettingHotkey(e, *xOffset, 4, globalQuit);
+                Mix_PlayChannel(-1, gClickSound, 0);
             }
         }
         //set the textBox to the back button location
         textBox.x = 3 * (gWindow.getWidth() / 4);
         textBox.y = 5 * (gWindow.getHeight() / 6);
         if(checkMouseBoxCollision(xM, yM, textBox)){
+            if(*yOffset != 5){
+                Mix_PlayChannel(-1, gClickSound, 0);//just got here, play sound
+            }
             *yOffset = 5;
             if(e.type == SDL_MOUSEBUTTONDOWN){
                 *goBack = true;

@@ -13,10 +13,12 @@
 using namespace std;
 
 //screen constants
-int SCREEN_WIDTH = 640;
-int SCREEN_HEIGHT = 480;
+const int SCREEN_WIDTH = 640;
+const int SCREEN_HEIGHT = 480;
+//level information
 int LEVEL_WIDTH;
 int LEVEL_HEIGHT;
+int TOTAL_TILES;
 
 //Game window
 lWindow gWindow;
@@ -30,7 +32,7 @@ lRigidDot player2;
 //sprite sheet for background tiles
 lTexture gTileSpriteSheet;
 //the actual tile objects
-lTile* gTiles[TOTAL_TILES];
+lTile** gTiles;
 //winning game splash screen
 lTexture gWinSplash;
 //pregame instruction splash
@@ -75,34 +77,38 @@ Mix_Chunk* gWinSound = NULL;
 Mix_Chunk* gClickSound = NULL;
 Mix_Chunk* gSelectSound = NULL;
 Mix_Chunk* gWallBounceSound = NULL;
+Mix_Chunk* gGrowthSound = NULL;
 Mix_Music* gMenuMusic = NULL;
 Mix_Music* gGameMusic = NULL;
 
 
 
 
+
 //FILE_LOCATIONS
-string DEFAULT_ASSET_LOC = "assets/";
+const string DEFAULT_ASSET_LOC = "assets/";
 //need the name of the settings file
-string settingsFile = DEFAULT_ASSET_LOC + "settings.txt";
+const string settingsFile = DEFAULT_ASSET_LOC + "settings.txt";
 //name of the leaderboard file
-string leaderboardFile = DEFAULT_ASSET_LOC + "leaderboard.txt";
-string textFontFile = DEFAULT_ASSET_LOC + "OpenSans-Regular.ttf";
-string winScreenFile = DEFAULT_ASSET_LOC + "winScreen.png";
-string pregameScreen = DEFAULT_ASSET_LOC + "preGameInst.png";
-string menuScreenFile = DEFAULT_ASSET_LOC + "menuScreen.png";
-string settingsScreenFile = DEFAULT_ASSET_LOC + "settingsScreen.png";
-string leaderboardScreenFile = DEFAULT_ASSET_LOC + "leaderboardScreen.png";
-string tileSpriteFile = DEFAULT_ASSET_LOC + "tile_sprites.png";
-string dot1File = DEFAULT_ASSET_LOC + "dot1.png";
-string dot2File = DEFAULT_ASSET_LOC + "dot2.png";
-string loseSoundFile = DEFAULT_ASSET_LOC + "aww.wav";
-string clickSoundFile = DEFAULT_ASSET_LOC + "click.wav";
-string wallBounceSoundFile = DEFAULT_ASSET_LOC + "jump.wav";
-string selectSoundFile = DEFAULT_ASSET_LOC + "pop.wav";
-string winSoundFile = DEFAULT_ASSET_LOC + "short_fanfare.wav";
-string menuMusicFile = DEFAULT_ASSET_LOC + "Sky_puzzle.mp3";
-string gameMusicFile = DEFAULT_ASSET_LOC + "Techno_Caper.mp3";
+const string leaderboardFile = DEFAULT_ASSET_LOC + "leaderboard.txt";
+const string textFontFile = DEFAULT_ASSET_LOC + "OpenSans-Regular.ttf";
+const string winScreenFile = DEFAULT_ASSET_LOC + "winScreen.png";
+const string pregameScreen = DEFAULT_ASSET_LOC + "preGameInst.png";
+const string menuScreenFile = DEFAULT_ASSET_LOC + "menuScreen.png";
+const string settingsScreenFile = DEFAULT_ASSET_LOC + "settingsScreen.png";
+const string leaderboardScreenFile = DEFAULT_ASSET_LOC + "leaderboardScreen.png";
+const string tileSpriteFile = DEFAULT_ASSET_LOC + "tile_sprites.png";
+const string dot1File = DEFAULT_ASSET_LOC + "dot1.png";
+const string dot2File = DEFAULT_ASSET_LOC + "dot2.png";
+const string loseSoundFile = DEFAULT_ASSET_LOC + "aww.wav";
+const string clickSoundFile = DEFAULT_ASSET_LOC + "click.wav";
+const string wallBounceSoundFile = DEFAULT_ASSET_LOC + "jump.wav";
+const string growthSoundFile = DEFAULT_ASSET_LOC + "pling.wav";
+const string selectSoundFile = DEFAULT_ASSET_LOC + "pop.wav";
+const string winSoundFile = DEFAULT_ASSET_LOC + "short_fanfare.wav";
+const string menuMusicFile = DEFAULT_ASSET_LOC + "Sky_puzzle.mp3";
+const string gameMusicFile = DEFAULT_ASSET_LOC + "Techno_Caper.mp3";
+const string levelMapFile = DEFAULT_ASSET_LOC + "level_1.map";
 //all of the player controls
 string playerControls[TOTAL_CONTROLS];
 //number of leaderboard entries

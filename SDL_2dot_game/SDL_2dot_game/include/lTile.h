@@ -14,10 +14,11 @@ using namespace std;
 //some tile constants which are the same for each tile
 const int TILE_WIDTH = 80;
 const int TILE_HEIGHT = 80;
-const int TOTAL_TILES = 192;
+//level dependent info which changes with the map
+extern int TOTAL_TILES;
 extern int LEVEL_WIDTH;
 extern int LEVEL_HEIGHT;
-//Need a ke for the tile types, order is set by the map file we got from lazy foo
+//Need a key for the tile types, order is set by the map file
 
 const int RED_TILE = 0;
 const int BLUE_TILE = 1;
@@ -43,13 +44,12 @@ const int BOT_CAP = 20;
 const int TOTAL_TILES_TYPES = 21;
 
 
-//need a sprite sheet
-//extern lTexture gTileSpriteTexture;
-
 SDL_Rect gTileSprite[TOTAL_TILES_TYPES];
+extern const string levelMapFile;
 
 class lTile{
 public:
+    lTile();
     //need to construct a tile with a position and type
     /**
         Initialize the tile object
@@ -85,6 +85,12 @@ private:
     //type of tile
     int tileType;
 };
+lTile::lTile(){
+    xPos = 0;
+    yPos = 0;
+    mBox = {0,0,TILE_WIDTH,TILE_HEIGHT};
+    tileType = -1;
+}
 
 //setup tile object
 lTile::lTile(int x, int y, int type){
@@ -105,7 +111,7 @@ void lTile::render(lTexture* tileSpriteSheet, SDL_Rect camera){
 }
 
 //tile specific methods
-
+extern lTile** gTiles;
 //method to setup the tiles subject to the map we will read in
 /**
     Reads the map file and sets the associated tile map
@@ -114,13 +120,13 @@ void lTile::render(lTexture* tileSpriteSheet, SDL_Rect camera){
  
     @return true if the tiles are set successfully
  */
-bool setTiles(lTile* tiles[]){
+bool setTiles(lTile** tiles){
     bool tilesSet = true;
     //also set x and y offsets
     int x = 0;
     int y = 0;
     //first need to read in the map file
-    ifstream map("assets/lazy_custom.map");
+    ifstream map(levelMapFile);
     //first check if the file was openned
     if(!map.is_open()){
         printf("Could not open map file!\n");
@@ -131,6 +137,9 @@ bool setTiles(lTile* tiles[]){
         int width, height;
         map >> width;
         map >> height;
+        TOTAL_TILES = width * height;
+        //now that total tiles is know allocate gTiles
+        gTiles = new lTile*[TOTAL_TILES];
         LEVEL_WIDTH = width * TILE_WIDTH;
         LEVEL_HEIGHT = height * TILE_HEIGHT;
         for(int i = 0; i < TOTAL_TILES; i++){
@@ -147,7 +156,7 @@ bool setTiles(lTile* tiles[]){
                 //check if type is valid
                 if((tileType >= 0) && (tileType < TOTAL_TILES_TYPES)){
                     //after the type has been set we can create the tile object
-                    tiles[i] = new lTile(x, y, tileType);
+                    gTiles[i] = new lTile(x, y, tileType);
                 }
                 else{
                     printf("Tile type not valid for entry: %d\n", i);
@@ -191,8 +200,8 @@ bool setTiles(lTile* tiles[]){
         gTileSprite[ALL_BORDER].x = 400;
         gTileSprite[ALL_BORDER].y = 0;
         
-        gTileSprite[BOT_CAP].x = 480;
-        gTileSprite[BOT_CAP].y = 0;
+        gTileSprite[RIGHT_CAP].x = 480;
+        gTileSprite[RIGHT_CAP].y = 0;
         
         gTileSprite[RED_CHECK].x = 0;
         gTileSprite[RED_CHECK].y = 80;
@@ -233,8 +242,8 @@ bool setTiles(lTile* tiles[]){
         gTileSprite[HORZ_BORDER].x = 400;
         gTileSprite[HORZ_BORDER].y = 160;
         
-        gTileSprite[RIGHT_CAP].x = 480;
-        gTileSprite[RIGHT_CAP].y = 160;
+        gTileSprite[BOT_CAP].x = 480;
+        gTileSprite[BOT_CAP].y = 160;
         
     }
     
