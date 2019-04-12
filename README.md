@@ -23,7 +23,7 @@ User Note: If you are using a mac keyboard dont use "J", "H", and "Space" simult
 
 
 ## Version 2.0.1 Updates (4/9/2019)
--
+
 1) Added speed boost to control scheme (default key = 'Space')
 2) Changed dot velocity and decel values to make movement more responsive
 3) Added SOUND!! 
