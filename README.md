@@ -31,7 +31,7 @@ User Note: If you are using a mac keyboard dont use "J", "H", and "Space" simult
 5) Some texture updates
 6) Red checkerboard tile now causes the dots to swell in size making navigation much more difficult
 
-This was written using the SDL, SDL_IMG, and SDL_TTF libs and compiled using xCode for mac.  The raw C++ files and headers
+This was written using the SDL, SDL_IMG, SDL_TTF, and SDL_mixer libs and compiled using xCode for mac.  The raw C++ files and headers
 are also given
 
 This game is a culmination of the excellent LazyFoo Tutorials on SDL.  The game is a racer where each hand controls WASD 
