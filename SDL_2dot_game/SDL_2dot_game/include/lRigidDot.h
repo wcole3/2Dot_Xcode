@@ -218,7 +218,8 @@ private:
     //Acceleration components
     float xAccel, yAccel;
     //two ints specify the startting screen position
-    int xStart, yStart;
+    int xStart = 0;
+    int yStart = 0;
     //box that contains the dot, used for growth and shrinking
     SDL_Rect dotBox;
     //SDL_rect which defines the collision zone for the texture
@@ -228,15 +229,16 @@ private:
     //method to shift the collision circle with dot movement
     void shiftCollider();
     //constant static for the maximum velocity
-    static const int DOT_MAX_VEL = 350; //PIXELS PER SECOND
+    constexpr static const float DOT_MAX_VEL = 350; //PIXELS PER SECOND
     //constant for dot acceleration in pixels/s*s
-    static const int DOT_ACCEL = 700;
+    constexpr static const float DOT_ACCEL = 700;
     //int multiplier for boosting
     int boost = 1;
     //once boost is added we want to kick it
     bool xKicked, yKicked = false;
     //bool to tell is the dot should be deccerating to stop
-    bool xdecel, ydecel;
+    bool xdecel = false;
+    bool ydecel = false;;
     //some bools to determine if the dot is growing or not
     bool doGrow = false;
     bool doShrink = false;
@@ -254,7 +256,7 @@ private:
     //a float defining the friction of the surface the dot is currently on
     float surfaceFriction = 350;
     //a float that determines the dampening that occurs on wall collisons
-    float wallDamp = -0.6;
+    float wallDamp = -0.6f;
     //the sound effect for wall bounces and growth
     Mix_Chunk* wallBounce = NULL;
     Mix_Chunk* growth = NULL;
@@ -263,11 +265,11 @@ private:
     //bool to tell if the player is finished or not
     bool inEndZone = false;
     //the following is the control scheme and the prompts to render to screen at the start
-    SDL_Scancode upButton;
-    SDL_Scancode downButton;
-    SDL_Scancode leftButton;
-    SDL_Scancode rightButton;
-    SDL_Scancode boostButton;
+    SDL_Scancode upButton = SDL_SCANCODE_0;
+    SDL_Scancode downButton = SDL_SCANCODE_0;
+    SDL_Scancode leftButton = SDL_SCANCODE_0;
+    SDL_Scancode rightButton = SDL_SCANCODE_0;
+    SDL_Scancode boostButton = SDL_SCANCODE_0;
     
 #ifdef lParticle_h
     //list of particles for dot

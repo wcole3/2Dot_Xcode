@@ -166,7 +166,7 @@ private:
     SDL_Texture* mTexture;
     SDL_Renderer* lRenderer;
 #ifdef _SDL_TTF_H
-    TTF_Font* lFont;
+    TTF_Font* lFont = NULL;
 #endif
 };
 //top level declaration of method to batch assign fonts

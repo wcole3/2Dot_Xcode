@@ -31,7 +31,7 @@ struct circle{
     @return the distance sq. betw (x1,y1) and (x2,y2)
  
 */
-double distanceSquared(float x1, float x2, float y1, float y2){
+double distanceSquared(double x1, double x2, double y1, double y2){
     double distanceSq = ((x2-x1)*(x2-x1))+((y2-y1)*(y2-y1));
     return distanceSq;
 }

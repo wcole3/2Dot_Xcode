@@ -97,10 +97,10 @@ private:
     //the window's width and height
     int mWidth;
     int mHeight;
-    int mWindowID;
-    int mWindowDisplayID;
+    int mWindowID = 0;
+    int mWindowDisplayID = 0;
     //an outside definition of the max number fo connected displays
-    int TOTAL_DISPLAYS;
+    int TOTAL_DISPLAYS = 0;
     //the bounds of each display
     SDL_Rect* mDisplayBounds = NULL;
     //bools to determine the state of the window
