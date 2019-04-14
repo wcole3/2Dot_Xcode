@@ -366,9 +366,8 @@ bool loadLeaderboard(string fileName, string names[], float scores[]){
         if(file.is_open()){
             printf("Creating default leaderboard file...\n");
             //write default leaderboard
-            string defaultNames[LEADERBOARD_LINES] = {"IBM", "FDR", "SAS", "JFK", "LOL"};
             for(int i = 0; i < LEADERBOARD_LINES; ++i){
-                scores[i] = 25 + (i * 25);//set default scores to something arbitrairly high
+                scores[i] = defaultStartingScore + (i * defaultStartingScore);//set default scores to something arbitrairly high
                 names[i] = defaultNames[i];
                 //now write out to file
                 file << defaultNames[i] << '\t' << scores[i] << endl;
@@ -520,5 +519,6 @@ void resizeUI(SDL_Event* e){
         camera2.h = player2Screen.h;
     }
 }
+
 
 #endif /* initMethods_h */

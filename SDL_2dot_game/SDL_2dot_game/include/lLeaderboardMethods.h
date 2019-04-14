@@ -47,20 +47,27 @@ void getNewName(SDL_Event e, SDL_Rect* letterBox , bool* globalQuit, int* index,
     @param fileName the name of the leaderboard file
  */
 void saveLeaderboard(string fileName);
+//method to reset the leaderboard on command
+void resetLeaderboard();
 
-//TODO add the ability to reset the leaderboard in game
 
 //method to display the leaderboard screen
 void displayLeaderboardScreen(bool* globalQuit){
     //load a back button
     lTexture lBackButton = lTexture(gWindow.getRenderer());
+    lTexture lResetButton = lTexture(gWindow.getRenderer());
     lBackButton. setFont(gFont);
+    lResetButton.setFont(gFont);
     if(!lBackButton.loadFromRenderedText("Back", black)){
         printf("Could not load back button texture!\n");
+    }
+    if(!lResetButton.loadFromRenderedText("Reset", black)){
+        printf("Could not load reset button!\n");
     }
     bool done = false;
     SDL_Event e;
     bool renderBox = false;
+    int buttonIndex = 0;
     while(!done){
         while(SDL_PollEvent(&e) != 0){
             if(e.type == SDL_QUIT){
@@ -76,18 +83,21 @@ void displayLeaderboardScreen(bool* globalQuit){
                 if(e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_RETURN){
                     renderBox = true;
                 }
+                
                 if(e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_RETURN && e.key.repeat == 0){
                     done = true;
                     Mix_PlayChannel(-1, gSelectSound, 0);
                 }
             }
             if(e.type == SDL_MOUSEMOTION || e.type == SDL_MOUSEBUTTONDOWN){
-                //if the mouse is over the back button and pressed
+                //if the mouse is over the back button and pressed, also only allow the reset button to be access via mouse
                 int xM, yM;
                 SDL_GetMouseState(&xM, &yM);
-                SDL_Rect textLine = {3 * (gWindow.getWidth() / 4),5 * (gWindow.getHeight() / 6), gWindow.getWidth() / 8, gWindow.getHeight() / 10};
-                if(checkMouseBoxCollision(xM, yM, textLine)){
+                SDL_Rect backLine = {3 * (gWindow.getWidth() / 4),5 * (gWindow.getHeight() / 6), gWindow.getWidth() / 8, gWindow.getHeight() / 10};
+                SDL_Rect resetLine = {backLine.x - (2 * backLine.w), backLine.y, backLine.w, backLine.h};
+                if(checkMouseBoxCollision(xM, yM, backLine)){
                     //we are over the back button
+                    buttonIndex = 0;
                     if(!renderBox){
                         Mix_PlayChannel(-1, gClickSound, 0);
                     }
@@ -96,7 +106,20 @@ void displayLeaderboardScreen(bool* globalQuit){
                         done = true;
                         Mix_PlayChannel(-1, gSelectSound, 0);
                     }
-                }else{
+                }
+                else if(checkMouseBoxCollision(xM, yM, resetLine)){
+                    //we are over the reset button
+                    buttonIndex = 1;
+                    if(!renderBox){
+                        Mix_PlayChannel(-1, gClickSound, 0);
+                    }
+                    renderBox = true;
+                    if(e.type == SDL_MOUSEBUTTONDOWN){
+                        resetLeaderboard();
+                        Mix_PlayChannel(-1, gSelectSound, 0);
+                    }
+                }
+                else{
                     renderBox = false;
                 }
             }
@@ -113,6 +136,8 @@ void displayLeaderboardScreen(bool* globalQuit){
         }
         textLine.w = textLine.w / 4;
         lBackButton.render(textLine.x, textLine.y, NULL, &textLine);
+        lResetButton.render(textLine.x - (textLine.w * 2), textLine.y, NULL, &textLine);
+        textLine.x = textLine.x - (2 * textLine.w * buttonIndex);//set the highlight over the correct button
         //render the highlight box
         if(renderBox){
             SDL_SetRenderDrawColor(gWindow.getRenderer(), 150, 150, 150, 100);
@@ -121,6 +146,7 @@ void displayLeaderboardScreen(bool* globalQuit){
         SDL_RenderPresent(gWindow.getRenderer());
     }
     lBackButton.free();
+    lResetButton.free();
 }
 
 //check the finish time
@@ -239,6 +265,26 @@ void saveLeaderboard(string fileName){
         printf("Could not save leaderboard to file!\n");
     }
     file.close();
+}
+//reset the leaderboard
+void resetLeaderboard(){
+    //reset the leaderboard names and scores to defaults
+    for(int i = 0; i < LEADERBOARD_LINES; ++i){
+        leaderboardNames[i] = defaultNames[i];
+        leaderboardScores[i] = defaultStartingScore + (i * defaultStartingScore);
+        //rerender the leaderboard entries
+        char header [5];
+        char line [10];
+        int rank = i + 1;
+        sprintf(header, "%d. ", rank);
+        sprintf(line, "%.3f", leaderboardScores[i]);
+        string entry = header + leaderboardNames[i] + " " + line;
+        if(!gLeaderboardEntry[i].loadFromRenderedText(entry.c_str(), black)){
+            printf("Could not load leaderboard entry #: %d!\n", i);
+        }
+    }
+    //save reset
+    saveLeaderboard(leaderboardFile);
 }
 
 #endif /* lLeaderboardMethods_h */

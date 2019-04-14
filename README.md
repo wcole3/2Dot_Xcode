@@ -5,6 +5,11 @@ Code can be found in SDL_2dot_game/SDL_2dot_game and a UNIX executable is in SDL
 
 User Note: If you are using a mac keyboard dont use "J", "H", and "Space" simultaneously for  keybinds, there is a weird keyboard blocking issue
 
+## Version 2.0.3 Updates (4/14/2019)
+ 1.  Added a 'Reset' option to leaderboard screen
+ 2.  Increase deceleration of player dots slightly to add more control
+ 3. Updated globals
+
 ## Version 2.0.2 Updates (4/11/2019)
  
  1.  New larger map; original map still included in assets under "level_0.map" change the value of levelMapFile in globals

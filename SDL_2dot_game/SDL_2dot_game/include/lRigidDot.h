@@ -588,7 +588,7 @@ void lRigidDot::updateVelocity(float timeStep, lTile* tiles[]){
     xVelocity += ((xAccel)*timeStep)*xVeloMod;
     if(xdecel){
         //set the acceleration to the appropriate direction; which is the opposite of the current direction
-        xAccel = ((-1)*getSign(oldXVelocity)*(surfaceFriction * xVeloMod));//the rate of deceleration is controled by the surface the dot is on
+        xAccel = ((-2)*getSign(oldXVelocity)*(surfaceFriction * xVeloMod));//the rate of deceleration is controled by the surface the dot is on
         //dot is deccelerating and we need to stop it at 0
         //we want the dot to stop moving once it changes direction
         if(getSign(xVelocity) == getSign(xAccel)){
@@ -600,7 +600,7 @@ void lRigidDot::updateVelocity(float timeStep, lTile* tiles[]){
     float oldYVelocity = yVelocity;
     yVelocity += ((yAccel)*timeStep)*yVeloMod;
     if(ydecel){
-        yAccel = ((-1)*getSign(oldYVelocity) * (surfaceFriction * yVeloMod));
+        yAccel = ((-2)*getSign(oldYVelocity) * (surfaceFriction * yVeloMod));
         if(getSign(yVelocity) == getSign(yAccel)){
             yVelocity = 0;
             yAccel = 0;

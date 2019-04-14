@@ -19,6 +19,8 @@ const int SCREEN_HEIGHT = 480;
 int LEVEL_WIDTH;
 int LEVEL_HEIGHT;
 int TOTAL_TILES;
+//starting values for leaderboard
+constexpr float defaultStartingScore = 25;
 
 //Game window
 lWindow gWindow;
@@ -117,7 +119,8 @@ const int LEADERBOARD_LINES = 5;
 string leaderboardNames[LEADERBOARD_LINES];
 //leaderboard scores
 float leaderboardScores[LEADERBOARD_LINES];
-
+//default leaderboard names
+const string defaultNames[LEADERBOARD_LINES] = {"IBM", "FDR", "SAS", "JFK", "LOL"};
 
 //UI ELEMENTS
 //now we define the UI frames for startup
