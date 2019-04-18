@@ -48,6 +48,9 @@ void getNewName(SDL_Event e, SDL_Rect* letterBox , bool* globalQuit, int* index,
  */
 void saveLeaderboard(string fileName);
 //method to reset the leaderboard on command
+/**
+    Reset the leaderboard to default values
+ */
 void resetLeaderboard();
 
 

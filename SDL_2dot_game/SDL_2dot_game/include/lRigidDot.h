@@ -228,9 +228,9 @@ private:
     //method to shift the collision circle with dot movement
     void shiftCollider();
     //constant static for the maximum velocity
-    constexpr static const float DOT_MAX_VEL = 350; //PIXELS PER SECOND
+    constexpr static const float DOT_MAX_VEL = 400; //PIXELS PER SECOND
     //constant for dot acceleration in pixels/s*s
-    constexpr static const float DOT_ACCEL = 700;
+    constexpr static const float DOT_ACCEL = 800;
     //int multiplier for boosting
     int boost = 1;
     //once boost is added we want to kick it
@@ -588,7 +588,7 @@ void lRigidDot::updateVelocity(float timeStep, lTile* tiles[]){
     xVelocity += ((xAccel)*timeStep)*xVeloMod;
     if(xdecel){
         //set the acceleration to the appropriate direction; which is the opposite of the current direction
-        xAccel = ((-2)*getSign(oldXVelocity)*(surfaceFriction * xVeloMod));//the rate of deceleration is controled by the surface the dot is on
+        xAccel = ((-3)*getSign(oldXVelocity)*(surfaceFriction * xVeloMod));//the rate of deceleration is controled by the surface the dot is on
         //dot is deccelerating and we need to stop it at 0
         //we want the dot to stop moving once it changes direction
         if(getSign(xVelocity) == getSign(xAccel)){
@@ -600,7 +600,7 @@ void lRigidDot::updateVelocity(float timeStep, lTile* tiles[]){
     float oldYVelocity = yVelocity;
     yVelocity += ((yAccel)*timeStep)*yVeloMod;
     if(ydecel){
-        yAccel = ((-2)*getSign(oldYVelocity) * (surfaceFriction * yVeloMod));
+        yAccel = ((-3)*getSign(oldYVelocity) * (surfaceFriction * yVeloMod));
         if(getSign(yVelocity) == getSign(yAccel)){
             yVelocity = 0;
             yAccel = 0;
