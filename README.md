@@ -3,6 +3,8 @@ A simple two handed racing game I've been working on
 
 Code can be found in SDL_2dot_game/SDL_2dot_game and a UNIX executable is in SDL_2dot_game/Build/Product either Debug or Release should work
 
+If you want a version for Visual Studio with prebuilt windows exe files there is one in the 2Dot_VS repo
+
 User Note: If you are using a mac keyboard dont use "J", "H", and "Space" simultaneously for  keybinds, there is a weird keyboard blocking issue
 
 ## Version 2.0.3 Updates (4/14/2019)
