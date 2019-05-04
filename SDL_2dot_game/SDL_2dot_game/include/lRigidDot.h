@@ -598,7 +598,7 @@ void lRigidDot::updateVelocity(float timeStep, lTile* tiles[]){
     }
     //same thing for y velocity
     float oldYVelocity = yVelocity;
-    yVelocity += ((yAccel)*timeStep)*yVeloMod;
+    yVelocity += (((yAccel)*timeStep)*yVeloMod);
     if(ydecel){
         yAccel = ((-3)*getSign(oldYVelocity) * (surfaceFriction * yVeloMod));
         if(getSign(yVelocity) == getSign(yAccel)){
