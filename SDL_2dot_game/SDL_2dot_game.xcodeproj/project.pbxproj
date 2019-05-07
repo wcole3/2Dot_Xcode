@@ -28,8 +28,10 @@
 		AB193A72225AEC02000C2D00 /* Short_fanfare.wav in CopyFiles */ = {isa = PBXBuildFile; fileRef = AB193A68225AD866000C2D00 /* Short_fanfare.wav */; };
 		AB193A73225AEC02000C2D00 /* Sky_puzzle.mp3 in CopyFiles */ = {isa = PBXBuildFile; fileRef = AB193A6D225AD866000C2D00 /* Sky_puzzle.mp3 */; };
 		AB193A74225AEC02000C2D00 /* Techno_Caper.mp3 in CopyFiles */ = {isa = PBXBuildFile; fileRef = AB193A6C225AD866000C2D00 /* Techno_Caper.mp3 */; };
-		AB193A9222603A3C000C2D00 /* level_1.map in CopyFiles */ = {isa = PBXBuildFile; fileRef = AB193A9122603A27000C2D00 /* level_1.map */; };
 		AB193A9322603A3C000C2D00 /* pling.wav in CopyFiles */ = {isa = PBXBuildFile; fileRef = AB193A69225AD866000C2D00 /* pling.wav */; };
+		AB408676228112020088B81F /* level_1.map in CopyFiles */ = {isa = PBXBuildFile; fileRef = AB408674228111F20088B81F /* level_1.map */; };
+		AB408677228112020088B81F /* level_2.map in CopyFiles */ = {isa = PBXBuildFile; fileRef = AB408675228111F20088B81F /* level_2.map */; };
+		AB408678228112020088B81F /* level_3.map in CopyFiles */ = {isa = PBXBuildFile; fileRef = AB408673227F696C0088B81F /* level_3.map */; };
 		ABF20209221C9FE700923A85 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ABF20208221C9FE700923A85 /* main.cpp */; };
 /* End PBXBuildFile section */
 
@@ -40,7 +42,9 @@
 			dstPath = assets;
 			dstSubfolderSpec = 7;
 			files = (
-				AB193A9222603A3C000C2D00 /* level_1.map in CopyFiles */,
+				AB408676228112020088B81F /* level_1.map in CopyFiles */,
+				AB408677228112020088B81F /* level_2.map in CopyFiles */,
+				AB408678228112020088B81F /* level_3.map in CopyFiles */,
 				AB193A9322603A3C000C2D00 /* pling.wav in CopyFiles */,
 				AB193A6E225AEC02000C2D00 /* aww.wav in CopyFiles */,
 				AB193A6F225AEC02000C2D00 /* click.wav in CopyFiles */,
@@ -85,7 +89,6 @@
 		AB193A6C225AD866000C2D00 /* Techno_Caper.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Techno_Caper.mp3; sourceTree = "<group>"; };
 		AB193A6D225AD866000C2D00 /* Sky_puzzle.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Sky_puzzle.mp3; sourceTree = "<group>"; };
 		AB193A9022600709000C2D00 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../../README.md; sourceTree = "<group>"; };
-		AB193A9122603A27000C2D00 /* level_1.map */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = level_1.map; sourceTree = "<group>"; };
 		AB206793224B4667006D11B2 /* publish.bat */ = {isa = PBXFileReference; lastKnownFileType = text; path = publish.bat; sourceTree = "<group>"; };
 		AB206794224B4667006D11B2 /* exclude.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = exclude.txt; sourceTree = "<group>"; };
 		AB206795224B4667006D11B2 /* backup.bat */ = {isa = PBXFileReference; lastKnownFileType = text; path = backup.bat; sourceTree = "<group>"; };
@@ -246,6 +249,9 @@
 		AB206868224B4667006D11B2 /* portability.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = portability.cpp; sourceTree = "<group>"; };
 		AB206869224B4667006D11B2 /* utf8_codecvt_facet.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = utf8_codecvt_facet.cpp; sourceTree = "<group>"; };
 		AB20686A224B46D5006D11B2 /* filesystem.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = filesystem.hpp; path = ../../../libs/boost_1_66_0/boost/filesystem.hpp; sourceTree = "<group>"; };
+		AB408673227F696C0088B81F /* level_3.map */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = level_3.map; sourceTree = "<group>"; };
+		AB408674228111F20088B81F /* level_1.map */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = level_1.map; sourceTree = "<group>"; };
+		AB408675228111F20088B81F /* level_2.map */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = level_2.map; sourceTree = "<group>"; };
 		ABF20205221C9FE700923A85 /* SDL_2dot_game */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SDL_2dot_game; sourceTree = BUILT_PRODUCTS_DIR; };
 		ABF20208221C9FE700923A85 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		ABF20210221C9FFF00923A85 /* SDL2_ttf.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_ttf.framework; path = ../../../../../../Library/Frameworks/SDL2_ttf.framework; sourceTree = "<group>"; };
@@ -976,7 +982,9 @@
 		ABF2021A221CA0C100923A85 /* assets */ = {
 			isa = PBXGroup;
 			children = (
-				AB193A9122603A27000C2D00 /* level_1.map */,
+				AB408674228111F20088B81F /* level_1.map */,
+				AB408675228111F20088B81F /* level_2.map */,
+				AB408673227F696C0088B81F /* level_3.map */,
 				AB193A67225AD866000C2D00 /* aww.wav */,
 				AB193A6A225AD866000C2D00 /* click.wav */,
 				AB193A66225AD866000C2D00 /* jump.wav */,

@@ -39,13 +39,13 @@ bool playAgain(lTexture* splash, bool* globalQuit, float time);
     @param globalQuit true if the user wants to quit
  */
 void pregameSetup(bool* globalQuit);
-
+//method to load the level after restart or level change
+void loadLevel(int levelNumber);
 
 
 //the actual game loop
 void playingGame(bool* globalQuit){
-    player1.reset();
-    player2.reset();
+    loadLevel(currentLevel);
     if(*globalQuit != true){
         //the loop condition for playing the game
         bool played = true;
@@ -85,9 +85,9 @@ void playingGame(bool* globalQuit){
             //here we render stuff
             //first move dot
             float time = (frameTicker.getTime() / 1000.f);
-            player1.move(time, player2.getCollider(), gTiles);
+            player1.move(time, player2.getCollider(), player1.getLevelTiles());
             player1.setCamera(camera1);
-            player2.move(time, player1.getCollider(), gTiles);
+            player2.move(time, player1.getCollider(), player2.getLevelTiles());
             player2.setCamera(camera2);
             //restart time
             frameTicker.start();
@@ -95,9 +95,9 @@ void playingGame(bool* globalQuit){
             gWindow.render();
             SDL_RenderSetViewport(gWindow.getRenderer(), &player1Screen);
             //render background
-            for(int i = 0; i < TOTAL_TILES; ++i){
+            for(int i = 0; i < TOTAL_TILES[currentLevel]; ++i){
                 //render each tile
-                gTiles[i]->render(&gTileSpriteSheet, camera1);
+                player1.getLevelTiles()[i]->render(&gTileSpriteSheet, camera1);
             }
             //check if controls need to be rendered
             if(!player1.hasMoved()){
@@ -110,8 +110,8 @@ void playingGame(bool* globalQuit){
             player2.render(camera1);
             //render the second dots screen
             SDL_RenderSetViewport(gWindow.getRenderer(), &player2Screen);
-            for(int i = 0; i < TOTAL_TILES; ++i){
-                gTiles[i]->render(&gTileSpriteSheet, camera2);
+            for(int i = 0; i < TOTAL_TILES[currentLevel]; ++i){
+                player2.getLevelTiles()[i]->render(&gTileSpriteSheet, camera2);
             }
             //render player 2 controls
             if(!player2.hasMoved()){
@@ -144,9 +144,8 @@ void playingGame(bool* globalQuit){
                 endgameSplash = &gWinSplash;
                 finishTime = (countdownTicker.getTime() / 1000.f);
                 //regardless of end condition we reset the game
-                player1.reset();
+                loadLevel(currentLevel);
                 player1.setCamera(camera1);
-                player2.reset();
                 player2.setCamera(camera2);
                 countdownTicker.stop();
                 if(playAgain(endgameSplash, globalQuit, finishTime)){
@@ -383,6 +382,18 @@ void pregameSetup(bool* globalQuit){
     Mix_VolumeMusic(80);
     Mix_PlayMusic(gGameMusic, -1);
     Mix_SetMusicPosition(2.9);
+}
+void loadLevel(int levelNumber){
+    player1.reset();
+    player2.reset();
+    //set the level and starting positions
+    player1.setLevelSize(LEVEL_WIDTH[levelNumber], LEVEL_HEIGHT[levelNumber]);
+    player1.setStartingPos(0, 0);
+    player1.setLevel(levelNumber);
+    player2.setLevelSize(LEVEL_WIDTH[levelNumber], LEVEL_HEIGHT[levelNumber]);
+    player2.setStartingPos(LEVEL_WIDTH[levelNumber], LEVEL_HEIGHT[levelNumber]);
+    player2.setLevel(levelNumber);
+    
 }
 
 #endif /* lGameMethods_h */

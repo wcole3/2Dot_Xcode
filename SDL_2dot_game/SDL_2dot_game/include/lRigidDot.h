@@ -13,7 +13,9 @@
 #include "lTexture.h"
 #include "lTile.h"
 using namespace std;
-
+//need to have a ref to the tile array
+extern int TOTAL_TILES[];
+extern lTile** gTiles[];
 
 //wrapper class for a movable dot with circular collision 'boxes'
 class lRigidDot: public lTexture{
@@ -148,6 +150,12 @@ public:
         @param height the height of the level
      */
     void setLevelSize(int width, int height);
+    /**
+        Set the tiles for the level
+     
+        @param levelIndex the int index of the current level
+     */
+    void setLevel(int levelIndex);
     //method to set the wall bounce sound effect
     /**
         Set the dot's wall bounce sound effect
@@ -169,7 +177,10 @@ public:
         @return the circle defining the boundary of the dot
      */
     circle& getCollider(){return mCollisionCircle;};
-    
+    /**
+        @return  the level tiles
+     */
+    lTile** getLevelTiles(){return levelTiles;};
     //method to return true if the dot has moved from its starting location
     /**
         @return true if the dot has moved out of the starting area
@@ -225,6 +236,10 @@ private:
     circle mCollisionCircle;
     //screen/level size
     int screenW, screenH;
+    //the index of the current level
+    int level;
+    //the tiles that form the level
+    lTile** levelTiles;
     //method to shift the collision circle with dot movement
     void shiftCollider();
     //constant static for the maximum velocity
@@ -477,6 +492,7 @@ bool lRigidDot::detectCollision(circle& circleA, circle& circleB){
     //if test gets here there is not collision
     return false;
 }
+//method
 
 //method to check collision between circle and rect
 bool lRigidDot::detectCollision(circle& circle, SDL_Rect& box){
@@ -518,10 +534,12 @@ bool lRigidDot::detectCollision(circle& circle, SDL_Rect& box){
     //otherwise there is no collison
     return false;
 }
+
+
 //method to check collision between circle and tile object
 bool lRigidDot::touchingTileWall(circle& circleCollider, lTile* tiles[]){
     //need to loop through each tile
-    for(int i = 0; i < TOTAL_TILES; i++){
+    for(int i = 0; i < TOTAL_TILES[level]; i++){
         //need to check what type of tile an entry is, we only care about the tiles with walls
         if(tiles[i]->getType() >= TOP_CAP && tiles[i]->getType() < TOTAL_TILES_TYPES){
             //so if we know the tile is the correct type we want to check the collision
@@ -549,7 +567,7 @@ void lRigidDot::updateVelocity(float timeStep, lTile* tiles[]){
     //figure out what type of tile we are on and modify velocity accordingly
     float xVeloMod = 1;
     float yVeloMod = 1;
-    for(int i = 0; i < TOTAL_TILES; ++i){
+    for(int i = 0; i < TOTAL_TILES[level]; ++i){
         if(tiles[i]->getType() < TOP_CAP){
             if(detectCollision(getCollider(), tiles[i]->getBox())){
             //if the tiles is colored
@@ -772,9 +790,9 @@ void lRigidDot::move(float timeStep,circle& circle, lTile* tiles[]){
         //check if the collision comes from the top or bottom
         mCollisionCircle.y += 1;//move collider down
         if(touchingTileWall(getCollider(), tiles) || detectCollision(getCollider(), circle)){
-                yCenterPos -= 1;
+            yCenterPos -= 1;
         }else{
-                yCenterPos += 1;
+            yCenterPos += 1;
         }
         yVelocity = wallDamp * yVelocity;
         float mappedVelo = (abs((yVelocity / (DOT_MAX_VEL * boost))) * 60) + 10;
@@ -841,6 +859,11 @@ void lRigidDot::setLevelSize(int width, int height){
     screenW = width;
     screenH = height;
 }
+//set the tiles of the level
+void lRigidDot::setLevel(int levelIndex){
+    level = levelIndex;
+    levelTiles = gTiles[level];
+}
 //set the sound effect
 void lRigidDot::setSoundEffect(Mix_Chunk* wallChunk, Mix_Chunk* growthChunk){
     if(wallBounce == NULL && wallChunk != NULL){
@@ -877,7 +900,7 @@ void lRigidDot::reset(){
     yCenterPos = yStart + mCollisionCircle.r;
     shiftCollider();
     //get the endzone
-    endzone = findEndZone(gTiles);
+    endzone = findEndZone(levelTiles);
     //start big timer
     timeBig.start();
 }
@@ -903,7 +926,7 @@ SDL_Rect lRigidDot::findEndZone(lTile* tiles[]){
     //tiles that are endzone tiles
     int* index = NULL;
     int totalEndzoneTiles = 0;
-    for(int i = 0; i < TOTAL_TILES; ++i){
+    for(int i = 0; i < TOTAL_TILES[level]; ++i){
         if(tiles[i]->getType() == ENDZONE){
             //figure out how many endzone tiles there are
             ++totalEndzoneTiles;
@@ -912,7 +935,7 @@ SDL_Rect lRigidDot::findEndZone(lTile* tiles[]){
     index = new int[totalEndzoneTiles];
     //now get the indexs
     int current = 0;
-    for(int i = 0; i < TOTAL_TILES; ++i){
+    for(int i = 0; i < TOTAL_TILES[level]; ++i){
         if(tiles[i]->getType() == ENDZONE){
             //get the indexs of the endzone tiles
             index[current] = i;

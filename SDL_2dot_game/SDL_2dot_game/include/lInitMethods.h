@@ -71,6 +71,15 @@ void close();
     @param e the SDL_Event to handle
  */
 void resizeUI(SDL_Event* e);
+//method to setup the tiles subject to the map we will read in
+/**
+ Reads the map file and sets the associated tile map
+ 
+ @param levelNumber the index of the level to load
+ 
+ @return true if the tiles are set successfully
+ */
+bool setTiles(int levelNumber, string levelFileName);
 
 bool init(){
     bool successFlag = true;
@@ -227,15 +236,22 @@ bool loadMedia(){
         successFlag = false;
     }
     //now we need to set the tiles
-    if(!setTiles(gTiles)){
-        printf("Could not set tiles!\n");
-        successFlag = false;
-    }else{
-        //need to setup the player's level area and starting position
-        player1.setLevelSize(LEVEL_WIDTH, LEVEL_HEIGHT);
+    for(int i = 0; i < TOTAL_LEVELS; ++i){
+        string levelFileName = DEFAULT_ASSET_LOC + "level_" + to_string(i) + ".map";
+        if(!setTiles(i, levelFileName)){
+            printf("Could not load level: %d!\n", i);
+            successFlag = false;
+        }
+    }
+    //if all the levels were loaded successfully we can init the player dots
+    if(successFlag){
+        //need to setup the player's level area and starting position, always load level 0 to start
+        player1.setLevelSize(LEVEL_WIDTH[currentLevel], LEVEL_HEIGHT[currentLevel]);
         player1.setStartingPos(0, 0);
-        player2.setLevelSize(LEVEL_WIDTH, LEVEL_HEIGHT);
-        player2.setStartingPos(LEVEL_WIDTH, LEVEL_HEIGHT);
+        player1.setLevel(currentLevel);
+        player2.setLevelSize(LEVEL_WIDTH[currentLevel], LEVEL_HEIGHT[currentLevel]);
+        player2.setStartingPos(LEVEL_WIDTH[currentLevel], LEVEL_HEIGHT[currentLevel]);
+        player2.setLevel(currentLevel);
     }
     //load the player texture
     if(!player1.loadFromFile(dot1File, SDL_TRUE, white)){
@@ -477,9 +493,13 @@ void close(){
     for(int i = 0; i < (sizeof(gLetters)/sizeof(gLetters[0])); ++i){
         gLetters[i].free();
     }
-    for(int i = 0; i < TOTAL_TILES; ++i){
-        delete gTiles[i];
+    for(int i = 0; i < TOTAL_LEVELS; ++i){
+        for(int x = 0; x < TOTAL_TILES[i]; ++x){
+            delete gTiles[i][x];
+        }
     }
+    
+    
     
     //free chunks and music
     Mix_FreeChunk(gWinSound);
@@ -519,6 +539,146 @@ void resizeUI(SDL_Event* e){
         camera2.h = player2Screen.h;
     }
 }
+
+//method to setup the tiles subject to the map we will read in
+/**
+ Reads the map file and sets the associated tile map
+ 
+ @param tiles the to be set from the map file
+ 
+ @return true if the tiles are set successfully
+ */
+bool setTiles(int levelNumber, string levelFileName){
+    bool tilesSet = true;
+    //also set x and y offsets
+    int x = 0;
+    int y = 0;
+    //first need to read in the map file
+    ifstream map(levelFileName);
+    //first check if the file was openned
+    if(!map.is_open()){
+        printf("Could not open map file!\n");
+        tilesSet = false;
+        
+    }else{
+        //if the map is openned then we can begin looping to set the values
+        int width, height;
+        map >> width;
+        map >> height;
+        TOTAL_TILES[levelNumber] = width * height;
+        //now that total tiles is know allocate gTiles
+        gTiles[levelNumber] = new lTile*[TOTAL_TILES[levelNumber]];
+        LEVEL_WIDTH[levelNumber] = width * TILE_WIDTH;
+        LEVEL_HEIGHT[levelNumber] = height * TILE_HEIGHT;
+        for(int i = 0; i < TOTAL_TILES[levelNumber]; i++){
+            // the values from the file give the type of the tile
+            int tileType=-1;
+            map >> tileType;
+            //check if the read in type is valid
+            if(map.fail()){
+                printf("Could not read type!\n");
+                tilesSet = false;
+                break;
+            }
+            else{
+                //check if type is valid
+                if((tileType >= 0) && (tileType < TOTAL_TILES_TYPES)){
+                    //after the type has been set we can create the tile object
+                    gTiles[levelNumber][i] = new lTile(x, y, tileType);
+                }
+                else{
+                    printf("Tile type not valid for entry: %d\n", i);
+                    tilesSet = false;
+                    break;
+                }
+                //after we create the tile we move the offsets; the map file assumes we move from left to right
+                //and then down
+                x+=TILE_WIDTH;
+                if(x >= LEVEL_WIDTH[levelNumber]){
+                    //if we have moved acroos the level start moving down
+                    x = 0;
+                    y += TILE_HEIGHT;
+                }
+            }
+        }
+    }
+    //we might as well setup the sprite sheet here as well
+    if(tilesSet){
+        //set all of the widths and heights in for loop
+        for(int i = 0; i < TOTAL_TILES_TYPES; i++){
+            gTileSprite[i].w = TILE_WIDTH;
+            gTileSprite[i].h = TILE_HEIGHT;
+        }
+        //now manually set the clip x and y's for the clips
+        gTileSprite[RED_TILE].x = 0;
+        gTileSprite[RED_TILE].y = 0;
+        
+        gTileSprite[BLUE_TILE].x = 80;
+        gTileSprite[BLUE_TILE].y = 0;
+        
+        gTileSprite[TOP_LEFT].x = 160;
+        gTileSprite[TOP_LEFT].y = 0;
+        
+        gTileSprite[TOP].x = 240;
+        gTileSprite[TOP].y = 0;
+        
+        gTileSprite[TOP_RIGHT].x = 320;
+        gTileSprite[TOP_RIGHT].y = 0;
+        
+        gTileSprite[ALL_BORDER].x = 400;
+        gTileSprite[ALL_BORDER].y = 0;
+        
+        gTileSprite[RIGHT_CAP].x = 480;
+        gTileSprite[RIGHT_CAP].y = 0;
+        
+        gTileSprite[RED_CHECK].x = 0;
+        gTileSprite[RED_CHECK].y = 80;
+        
+        gTileSprite[GREEN_TILE].x = 80;
+        gTileSprite[GREEN_TILE].y = 80;
+        
+        gTileSprite[LEFT].x = 160;
+        gTileSprite[LEFT].y = 80;
+        
+        gTileSprite[CENTER].x = 240;
+        gTileSprite[CENTER].y = 80;
+        
+        gTileSprite[RIGHT].x = 320;
+        gTileSprite[RIGHT].y = 80;
+        
+        gTileSprite[VERT_BORDER].x = 400;
+        gTileSprite[VERT_BORDER].y = 80;
+        
+        gTileSprite[LEFT_CAP].x = 480;
+        gTileSprite[LEFT_CAP].y = 80;
+        
+        gTileSprite[ENDZONE].x = 0;
+        gTileSprite[ENDZONE].y = 160;
+        
+        gTileSprite[TOP_CAP].x = 80;
+        gTileSprite[TOP_CAP].y = 160;
+        
+        gTileSprite[BOTTOM_LEFT].x = 160;
+        gTileSprite[BOTTOM_LEFT].y = 160;
+        
+        gTileSprite[BOTTOM].x = 240;
+        gTileSprite[BOTTOM].y = 160;
+        
+        gTileSprite[BOTTOM_RIGHT].x = 320;
+        gTileSprite[BOTTOM_RIGHT].y = 160;
+        
+        gTileSprite[HORZ_BORDER].x = 400;
+        gTileSprite[HORZ_BORDER].y = 160;
+        
+        gTileSprite[BOT_CAP].x = 480;
+        gTileSprite[BOT_CAP].y = 160;
+        
+    }
+    
+    map.close();
+    return tilesSet;
+}
+
 
 
 #endif /* initMethods_h */

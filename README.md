@@ -1,4 +1,4 @@
-# 2Dot_Version2.0.3
+# 2Dot_Version2.1
 A simple two handed racing game I've been working on
 
 Code can be found in SDL_2dot_game/SDL_2dot_game and a UNIX executable is in SDL_2dot_game/Build/Product either Debug or Release should work
@@ -7,10 +7,17 @@ If you want a version for Visual Studio with prebuilt windows exe files there is
 
 User Note: If you are using a mac keyboard dont use "J", "H", and "Space" simultaneously for  keybinds, there is a weird keyboard blocking issue
 
+## Version 2.1 Updates (5/6/2019)
+Working in progress...
+Adding level progression
+Adding level selection
+Fixing several collision detection issues
+
+Older Changes
 ## Version 2.0.3 Updates (4/14/2019)
  1.  Added a 'Reset' option to leaderboard screen
  2.  Increase deceleration of player dots slightly to add more control
- 3. Updated globals
+ 3.  Updated globals
 
 ## Version 2.0.2 Updates (4/11/2019)
  

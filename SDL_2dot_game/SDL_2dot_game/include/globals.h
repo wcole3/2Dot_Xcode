@@ -16,11 +16,14 @@ using namespace std;
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
 //level information
-int LEVEL_WIDTH;
-int LEVEL_HEIGHT;
-int TOTAL_TILES;
+const int TOTAL_LEVELS = 4;
+int LEVEL_WIDTH[TOTAL_LEVELS];
+int LEVEL_HEIGHT[TOTAL_LEVELS];
+int TOTAL_TILES[TOTAL_LEVELS];
 //starting values for leaderboard
 constexpr float defaultStartingScore = 25;
+//the marker for the current level
+int currentLevel = 0;
 
 //Game window
 lWindow gWindow;
@@ -34,7 +37,7 @@ lRigidDot player2;
 //sprite sheet for background tiles
 lTexture gTileSpriteSheet;
 //the actual tile objects
-lTile** gTiles;
+lTile** gTiles[TOTAL_LEVELS];
 //winning game splash screen
 lTexture gWinSplash;
 //pregame instruction splash
@@ -110,7 +113,11 @@ const string selectSoundFile = DEFAULT_ASSET_LOC + "pop.wav";
 const string winSoundFile = DEFAULT_ASSET_LOC + "short_fanfare.wav";
 const string menuMusicFile = DEFAULT_ASSET_LOC + "Sky_puzzle.mp3";
 const string gameMusicFile = DEFAULT_ASSET_LOC + "Techno_Caper.mp3";
-const string levelMapFile = DEFAULT_ASSET_LOC + "level_1.map";
+//names of the level map files
+const string level0MapFile = DEFAULT_ASSET_LOC + "level_0.map";
+const string level1MapFile = DEFAULT_ASSET_LOC + "level_1.map";
+const string level2MapFile = DEFAULT_ASSET_LOC + "level_2.map";
+const string level3MapFile = DEFAULT_ASSET_LOC + "level_3.map";
 //all of the player controls
 string playerControls[TOTAL_CONTROLS];
 //number of leaderboard entries
