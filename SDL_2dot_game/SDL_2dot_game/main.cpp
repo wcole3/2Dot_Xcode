@@ -75,6 +75,7 @@ int main(int argc, const char * argv[]) {
                 SDL_SetRenderDrawColor(gWindow.getRenderer(), 100, 100, 200, 100);
                 SDL_RenderFillRect(gWindow.getRenderer(), &buttonBubble);
                 SDL_RenderPresent(gWindow.getRenderer());
+                 
             }
             Mix_HaltMusic();
         }

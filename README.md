@@ -12,6 +12,7 @@ Working in progress...
 Adding level progression
 Adding level selection
 Fixing several collision detection issues
+Dramatically improved performance
 
 Older Changes
 ## Version 2.0.3 Updates (4/14/2019)

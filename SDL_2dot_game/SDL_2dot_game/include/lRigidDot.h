@@ -863,6 +863,8 @@ void lRigidDot::setLevelSize(int width, int height){
 void lRigidDot::setLevel(int levelIndex){
     level = levelIndex;
     levelTiles = gTiles[level];
+    //find the endzone
+    endzone = findEndZone(levelTiles);
 }
 //set the sound effect
 void lRigidDot::setSoundEffect(Mix_Chunk* wallChunk, Mix_Chunk* growthChunk){
@@ -899,8 +901,6 @@ void lRigidDot::reset(){
     xCenterPos = xStart + mCollisionCircle.r;
     yCenterPos = yStart + mCollisionCircle.r;
     shiftCollider();
-    //get the endzone
-    endzone = findEndZone(levelTiles);
     //start big timer
     timeBig.start();
 }
@@ -949,7 +949,7 @@ SDL_Rect lRigidDot::findEndZone(lTile* tiles[]){
     int sideLength = sqrt(totalArea);
     endZone.w = sideLength - (getCollider().r * 4);
     endZone.h = endZone.w;
-    
+    delete [] index;
     return endZone;
 }
 

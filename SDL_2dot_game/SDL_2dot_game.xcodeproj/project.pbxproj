@@ -32,6 +32,7 @@
 		AB408676228112020088B81F /* level_1.map in CopyFiles */ = {isa = PBXBuildFile; fileRef = AB408674228111F20088B81F /* level_1.map */; };
 		AB408677228112020088B81F /* level_2.map in CopyFiles */ = {isa = PBXBuildFile; fileRef = AB408675228111F20088B81F /* level_2.map */; };
 		AB408678228112020088B81F /* level_3.map in CopyFiles */ = {isa = PBXBuildFile; fileRef = AB408673227F696C0088B81F /* level_3.map */; };
+		AB40867A2282820F0088B81F /* nextLevelScreen.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = AB408679228269E30088B81F /* nextLevelScreen.png */; };
 		ABF20209221C9FE700923A85 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ABF20208221C9FE700923A85 /* main.cpp */; };
 /* End PBXBuildFile section */
 
@@ -42,6 +43,7 @@
 			dstPath = assets;
 			dstSubfolderSpec = 7;
 			files = (
+				AB40867A2282820F0088B81F /* nextLevelScreen.png in CopyFiles */,
 				AB408676228112020088B81F /* level_1.map in CopyFiles */,
 				AB408677228112020088B81F /* level_2.map in CopyFiles */,
 				AB408678228112020088B81F /* level_3.map in CopyFiles */,
@@ -252,6 +254,7 @@
 		AB408673227F696C0088B81F /* level_3.map */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = level_3.map; sourceTree = "<group>"; };
 		AB408674228111F20088B81F /* level_1.map */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = level_1.map; sourceTree = "<group>"; };
 		AB408675228111F20088B81F /* level_2.map */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = level_2.map; sourceTree = "<group>"; };
+		AB408679228269E30088B81F /* nextLevelScreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nextLevelScreen.png; sourceTree = "<group>"; };
 		ABF20205221C9FE700923A85 /* SDL_2dot_game */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SDL_2dot_game; sourceTree = BUILT_PRODUCTS_DIR; };
 		ABF20208221C9FE700923A85 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		ABF20210221C9FFF00923A85 /* SDL2_ttf.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_ttf.framework; path = ../../../../../../Library/Frameworks/SDL2_ttf.framework; sourceTree = "<group>"; };
@@ -982,6 +985,7 @@
 		ABF2021A221CA0C100923A85 /* assets */ = {
 			isa = PBXGroup;
 			children = (
+				AB408679228269E30088B81F /* nextLevelScreen.png */,
 				AB408674228111F20088B81F /* level_1.map */,
 				AB408675228111F20088B81F /* level_2.map */,
 				AB408673227F696C0088B81F /* level_3.map */,

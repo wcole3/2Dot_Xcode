@@ -24,6 +24,8 @@ int TOTAL_TILES[TOTAL_LEVELS];
 constexpr float defaultStartingScore = 25;
 //the marker for the current level
 int currentLevel = 0;
+//running time of a current run
+float runTime = 0;
 
 //Game window
 lWindow gWindow;
@@ -40,6 +42,8 @@ lTexture gTileSpriteSheet;
 lTile** gTiles[TOTAL_LEVELS];
 //winning game splash screen
 lTexture gWinSplash;
+//next level screen
+lTexture gNextLevelSplash;
 //pregame instruction splash
 lTexture gPregameSplash;
 //menu screen
@@ -98,6 +102,7 @@ const string settingsFile = DEFAULT_ASSET_LOC + "settings.txt";
 const string leaderboardFile = DEFAULT_ASSET_LOC + "leaderboard.txt";
 const string textFontFile = DEFAULT_ASSET_LOC + "OpenSans-Regular.ttf";
 const string winScreenFile = DEFAULT_ASSET_LOC + "winScreen.png";
+const string nextLevelScreenFile = DEFAULT_ASSET_LOC + "nextLevelScreen.png";
 const string pregameScreen = DEFAULT_ASSET_LOC + "preGameInst.png";
 const string menuScreenFile = DEFAULT_ASSET_LOC + "menuScreen.png";
 const string settingsScreenFile = DEFAULT_ASSET_LOC + "settingsScreen.png";
