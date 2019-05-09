@@ -23,7 +23,7 @@ int TOTAL_TILES[TOTAL_LEVELS];
 //starting values for leaderboard
 constexpr float defaultStartingScore = 25;
 //the marker for the current level
-int currentLevel = 0;
+int currentLevel = 3;
 //running time of a current run
 float runTime = 0;
 

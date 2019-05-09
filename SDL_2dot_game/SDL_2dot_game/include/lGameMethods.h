@@ -470,6 +470,7 @@ bool playNextLevel(bool* globalQuit, float stageTime, float currentRunTime){
             if(e.type == SDL_QUIT){
                 //user wants to quit
                 selectionMade = true;
+                playNextLevel = false;
                 *globalQuit = true;
             }
             gWindow.handleEvent(e);

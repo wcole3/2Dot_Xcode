@@ -257,7 +257,7 @@ private:
     bool doGrow = false;
     bool doShrink = false;
     //the max time to stay big
-    float maxBigTime = 5000;//in ms
+    float maxBigTime = 2500;//in ms
     //growth step
     float growthStepTime = 50;//in ms
     //max size to grow to
@@ -434,8 +434,6 @@ void lRigidDot::handleEvent(SDL_Event& e){
 void lRigidDot::handleGrowth(){
     //check if dot should be growing or shrinking
     if(doGrow){
-        //since the dot is bigger we want, magically add mass
-        wallDamp = -0.3;
         //grow the dot
         if(growTimer.getTime() > growthStepTime){
             mCollisionCircle.r += 1;
@@ -445,6 +443,10 @@ void lRigidDot::handleGrowth(){
         if(mCollisionCircle.r >= maxRadius){
             mCollisionCircle.r = maxRadius;
             growTimer.stop();
+            doGrow = false;
+            timeBig.start();
+            //since the dot is bigger we want, magically add mass
+            wallDamp = -0.3;
         }
     }
     //handle end of growth
@@ -574,13 +576,12 @@ void lRigidDot::updateVelocity(float timeStep, lTile* tiles[]){
                 switch (tiles[i]->getType()) {
                     
                     case 2://red checker tile, grow the dot
-                        if(!doGrow && !doShrink && (timeBig.getTime() > 1000)){
+                        if(!doGrow && !doShrink && mCollisionCircle.r == orgRadius){
                             //play a pling growth sound
                             Mix_Volume(-1, 100);
                             Mix_PlayChannel(-1, growth, 0);
                             doGrow = true;
                             growTimer.start();
-                            timeBig.start();
                         }
                         break;
                     case 4://we are in the endzone, put the brakes on
@@ -721,14 +722,14 @@ void lRigidDot::move(float time, circle& circle){
 }
 
 void lRigidDot::move(float timeStep,circle& circle, lTile* tiles[]){
-    if((doGrow || doShrink) && !inEndZone){
+    if((doGrow || doShrink || mCollisionCircle.r == maxRadius) && !inEndZone){
         //handle grow events
         handleGrowth();
         shiftCollider();
     }
     //start with x direct; move the dot and shift colliders
     updateVelocity(timeStep, tiles);
-    xCenterPos += timeStep*xVelocity;
+    xCenterPos += timeStep * xVelocity;
     shiftCollider();
     //now check for level collision and wall collision
     if(xCenterPos - mCollisionCircle.r < 0){
@@ -750,14 +751,16 @@ void lRigidDot::move(float timeStep,circle& circle, lTile* tiles[]){
     //test wall and circle collision
     else if(touchingTileWall(getCollider(), tiles) || detectCollision(getCollider(), circle)){
         xCenterPos -= (timeStep * xVelocity);
+        shiftCollider();
         //need to figure out if collision is coming from the left or right
         //we can test by shifting the collider right and rechecking collision
-        mCollisionCircle.x += 1;
+        mCollisionCircle.x += 2;
         if(touchingTileWall(getCollider(), tiles) || detectCollision(getCollider(), circle)){
             xCenterPos -= 1;
         }else{
             xCenterPos += 1;
         }
+        
         //use velocity to set volume to max of 80
         float mappedVelo = (abs((xVelocity / (DOT_MAX_VEL * boost))) * 60) + 10;
         xVelocity = wallDamp * xVelocity;
@@ -766,7 +769,7 @@ void lRigidDot::move(float timeStep,circle& circle, lTile* tiles[]){
         Mix_PlayChannel(-1, wallBounce, 0);
     }
     //do the same for y direction
-    yCenterPos += timeStep*yVelocity;
+    yCenterPos += timeStep * yVelocity;
     shiftCollider();
     //check collisions
     if(yCenterPos - mCollisionCircle.r < 0){
@@ -787,8 +790,9 @@ void lRigidDot::move(float timeStep,circle& circle, lTile* tiles[]){
     }
     else if(touchingTileWall(getCollider(), tiles) || detectCollision(getCollider(), circle)){
         yCenterPos -= (timeStep * yVelocity);
+        shiftCollider();
         //check if the collision comes from the top or bottom
-        mCollisionCircle.y += 1;//move collider down
+        mCollisionCircle.y += 2;//move collider down
         if(touchingTileWall(getCollider(), tiles) || detectCollision(getCollider(), circle)){
             yCenterPos -= 1;
         }else{
@@ -943,11 +947,11 @@ SDL_Rect lRigidDot::findEndZone(lTile* tiles[]){
         }
     }
     //now build the endzone rect, we are assuming the endzone is a square
-    endZone.x = tiles[index[0]]->getBox().x + (getCollider().r * 2);
-    endZone.y = tiles[index[0]]->getBox().y + (getCollider().r * 2);
+    endZone.x = tiles[index[0]]->getBox().x + (orgRadius * 2);
+    endZone.y = tiles[index[0]]->getBox().y + (orgRadius * 2);
     int totalArea = current * (TILE_WIDTH * TILE_HEIGHT);//total area of the endzone
     int sideLength = sqrt(totalArea);
-    endZone.w = sideLength - (getCollider().r * 4);
+    endZone.w = sideLength - (orgRadius * 4);
     endZone.h = endZone.w;
     delete [] index;
     return endZone;
