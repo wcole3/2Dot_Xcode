@@ -123,6 +123,7 @@ bool init(){
             gChangeSettingPrompt = lTexture(gWindow.getRenderer());
             gTileSpriteSheet = lTexture(gWindow.getRenderer());
             gCountdownText = lTexture(gWindow.getRenderer());
+            gTest = lTexture(gWindow.getRenderer());
         }
     }
     //start sdl image
@@ -238,6 +239,10 @@ bool loadMedia(){
     //load tile sprite sheet
     if(!gTileSpriteSheet.loadFromFile(tileSpriteFile, SDL_FALSE)){
         printf("Could not load tile sprite sheet texture!\n");
+        successFlag = false;
+    }
+    if(!gTest.loadFromFile(level3MapImg, SDL_FALSE)){
+        printf("Could not load test texture!\n");
         successFlag = false;
     }
     //now we need to set the tiles
@@ -486,6 +491,7 @@ void close(){
     gChangeSettingPrompt.free();
     gTileSpriteSheet.free();
     gCountdownText.free();
+    gTest.free();
     //free all global text textures
     for(int i = 0; i < (sizeof(gPlayerPrompt)/sizeof(gPlayerPrompt[0])); ++i){
         gPlayerPrompt[i].free();

@@ -59,8 +59,7 @@ void handleMenuButtonEvents(SDL_Event e, int* offset, bool* globalQuit){
             switch (*offset) {
                 case 0://play game
                     Mix_PlayChannel(-1, gSelectSound, 0);
-                    pregameSetup(globalQuit);
-                    playingGame(globalQuit);
+                    showModeSelection(globalQuit);
                     break;
                 case 1://display settings screen
                     Mix_PlayChannel(-1, gSelectSound, 0);
@@ -108,8 +107,7 @@ void handleMenuMouseEvents(SDL_Event e, int* offset, bool* globalQuit){
                     switch (*offset) {
                         case 0://play game
                             Mix_PlayChannel(-1, gSelectSound, 0);
-                            pregameSetup(globalQuit);
-                            playingGame(globalQuit);
+                            showModeSelection(globalQuit);
                             break;
                         case 1://display settings screen
                             Mix_PlayChannel(-1, gSelectSound, 0);

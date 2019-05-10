@@ -750,7 +750,7 @@ void lRigidDot::move(float timeStep,circle& circle, lTile* tiles[]){
     }
     //test wall and circle collision
     else if(touchingTileWall(getCollider(), tiles) || detectCollision(getCollider(), circle)){
-        xCenterPos -= (timeStep * xVelocity);
+        xCenterPos -= (timeStep * xVelocity) + (getSign(xVelocity));
         shiftCollider();
         //need to figure out if collision is coming from the left or right
         //we can test by shifting the collider right and rechecking collision
@@ -789,7 +789,7 @@ void lRigidDot::move(float timeStep,circle& circle, lTile* tiles[]){
         Mix_PlayChannel(-1, wallBounce, 0);
     }
     else if(touchingTileWall(getCollider(), tiles) || detectCollision(getCollider(), circle)){
-        yCenterPos -= (timeStep * yVelocity);
+        yCenterPos -= (timeStep * yVelocity) + (getSign(yVelocity));
         shiftCollider();
         //check if the collision comes from the top or bottom
         mCollisionCircle.y += 2;//move collider down
@@ -905,8 +905,6 @@ void lRigidDot::reset(){
     xCenterPos = xStart + mCollisionCircle.r;
     yCenterPos = yStart + mCollisionCircle.r;
     shiftCollider();
-    //start big timer
-    timeBig.start();
 }
 
 //method to return the sdl scancode of a particular control

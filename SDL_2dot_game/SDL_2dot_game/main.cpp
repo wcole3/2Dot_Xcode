@@ -26,6 +26,8 @@
 #include "include/lSettingsMethods.h"
 #include "include/lLeaderboardMethods.h"
 #include "include/lGameMethods.h"
+#include "include/lLevelSelectMethods.h"
+#include "include/lModeSelectionMethods.h"
 #include "include/lMenuMethods.h"
 
 //sound and particles

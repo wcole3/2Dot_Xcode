@@ -255,6 +255,8 @@
 		AB408674228111F20088B81F /* level_1.map */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = level_1.map; sourceTree = "<group>"; };
 		AB408675228111F20088B81F /* level_2.map */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = level_2.map; sourceTree = "<group>"; };
 		AB408679228269E30088B81F /* nextLevelScreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nextLevelScreen.png; sourceTree = "<group>"; };
+		AB40867B2284C1D30088B81F /* lModeSelectionMethods.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lModeSelectionMethods.h; sourceTree = "<group>"; };
+		AB40867C2284E65E0088B81F /* lLevelSelectMethods.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lLevelSelectMethods.h; sourceTree = "<group>"; };
 		ABF20205221C9FE700923A85 /* SDL_2dot_game */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SDL_2dot_game; sourceTree = BUILT_PRODUCTS_DIR; };
 		ABF20208221C9FE700923A85 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		ABF20210221C9FFF00923A85 /* SDL2_ttf.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_ttf.framework; path = ../../../../../../Library/Frameworks/SDL2_ttf.framework; sourceTree = "<group>"; };
@@ -977,6 +979,8 @@
 				ABF2023422454EF500923A85 /* lSettingsMethods.h */,
 				ABF2023522454F0F00923A85 /* lLeaderboardMethods.h */,
 				ABF2022D224069ED00923A85 /* lGameMethods.h */,
+				AB40867C2284E65E0088B81F /* lLevelSelectMethods.h */,
+				AB40867B2284C1D30088B81F /* lModeSelectionMethods.h */,
 				ABF2023322454C8500923A85 /* lMenuMethods.h */,
 			);
 			path = include;

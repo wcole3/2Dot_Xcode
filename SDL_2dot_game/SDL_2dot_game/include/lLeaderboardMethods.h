@@ -143,7 +143,7 @@ void displayLeaderboardScreen(bool* globalQuit){
         textLine.x = textLine.x - (2 * textLine.w * buttonIndex);//set the highlight over the correct button
         //render the highlight box
         if(renderBox){
-            SDL_SetRenderDrawColor(gWindow.getRenderer(), 150, 150, 150, 100);
+            SDL_SetRenderDrawColor(gWindow.getRenderer(), highlighter.r, highlighter.g, highlighter.b, 100);
             SDL_RenderFillRect(gWindow.getRenderer(), &textLine);
         }
         SDL_RenderPresent(gWindow.getRenderer());

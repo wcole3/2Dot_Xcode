@@ -23,7 +23,7 @@ int TOTAL_TILES[TOTAL_LEVELS];
 //starting values for leaderboard
 constexpr float defaultStartingScore = 25;
 //the marker for the current level
-int currentLevel = 3;
+int currentLevel = 0;
 //running time of a current run
 float runTime = 0;
 
@@ -52,6 +52,9 @@ lTexture gMenu;
 lTexture gSettingsScreen;
 //leaderboard screen
 lTexture gLeaderboardScreen;
+
+//testing texture for mode selection
+lTexture gTest;
 
 //Text to use
 TTF_Font* gFont = NULL;
@@ -123,6 +126,8 @@ const string level0MapFile = DEFAULT_ASSET_LOC + "level_0.map";
 const string level1MapFile = DEFAULT_ASSET_LOC + "level_1.map";
 const string level2MapFile = DEFAULT_ASSET_LOC + "level_2.map";
 const string level3MapFile = DEFAULT_ASSET_LOC + "level_3.map";
+//also need the level picture reps
+const string level3MapImg = DEFAULT_ASSET_LOC + "level_3.png";
 //all of the player controls
 string playerControls[TOTAL_CONTROLS];
 //number of leaderboard entries
@@ -153,4 +158,5 @@ SDL_Color blue = {0, 0, 255};
 SDL_Color green = {0, 255, 0};
 SDL_Color white = {255, 255, 255};
 SDL_Color cyan = {0, 255, 255};
+SDL_Color highlighter = {100, 100, 200};
 #endif /* globals_h */
