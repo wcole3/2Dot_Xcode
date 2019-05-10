@@ -19,8 +19,9 @@
     Perform the game loop logic
  
     @param globalQuit true if the user wants to quit
+    @param fullRun true if the game mode is a full run
  */
-void playingGame(bool* globalQuit);
+void playGame(bool* globalQuit, bool fullRun);
 //method to check if user wants to play again
 /**
     Check if the user wants to play again
@@ -33,15 +34,15 @@ void playingGame(bool* globalQuit);
 bool playAgain(bool* globalQuit, float time);
 //method check if the player want to continue their run and to play next level
 /**
-    Check if user wants to play next level
+ Check if user wants to play next level or current level again; context is determined in playGame
  
     @param globalQuit true if the user want to quit
     @param stageTime the time the previous stage was completed in
     @param currentRunTime the current time elapsed in the run
  
-    @return true if the user wants to play the next level
+    @return true if the user wants to play the next level or this level again
  */
-bool playNextLevel(bool* globalQuit, float stageTime, float currentRunTime);
+bool playLevel(bool* globalQuit, float stageTime, float currentRunTime);
 //method to display the pregame instructions and ask for user to start the game
 /**
     Render the pregame screen and wait for user ready
@@ -59,7 +60,7 @@ void loadLevel(int levelNumber);
 
 
 //the actual game loop
-void playingGame(bool* globalQuit){
+void playGame(bool* globalQuit, bool fullRun){
     loadLevel(currentLevel);
     if(*globalQuit != true){
         //the loop condition for playing the game
@@ -94,6 +95,9 @@ void playingGame(bool* globalQuit){
                 gWindow.handleEvent(e);
                 //update the UI
                 resizeUI(&e);
+                if(e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE){
+                    played = false;
+                }
             }
             //here we render stuff
             //first move dot
@@ -156,53 +160,71 @@ void playingGame(bool* globalQuit){
                 //game was finished
                 finishTime = (countdownTicker.getTime() / 1000.f);
                 countdownTicker.stop();
-                //need to check if we have complete all stages or are continuing the run
-                if(currentLevel < TOTAL_LEVELS - 1){
-                    runTime += finishTime;
-                    //display the next level screen, stage finish time, and current run time
-                    if(playNextLevel(globalQuit, finishTime, runTime)){
+                if(fullRun){
+                    //need to check if we have complete all stages or are continuing the run
+                    if(currentLevel < TOTAL_LEVELS - 1){
+                        runTime += finishTime;
+                        //display the next level screen, stage finish time, and current run time
+                        if(playLevel(globalQuit, finishTime, runTime)){
+                            SDL_RenderClear(gWindow.getRenderer());
+                            //rewind the music
+                            Mix_FadeInMusic(gGameMusic, -1, 100);
+                            Mix_RewindMusic();
+                            Mix_SetMusicPosition(2.9);
+                            //update level info and reset players
+                            currentLevel += 1;
+                            loadLevel(currentLevel);
+                            player1.setCamera(camera1);
+                            player2.setCamera(camera2);
+                            countdownTicker.start();
+                        }else{
+                            //user doesnt want to play next level, quit to menu
+                            SDL_RenderClear(gWindow.getRenderer());
+                            currentLevel = 0;
+                            played = false;
+                        }
+                    }
+                    else if(currentLevel == TOTAL_LEVELS - 1){
+                        //all runs completed
+                        runTime += finishTime;
+                        if(playAgain(globalQuit, runTime)){
+                            countdownTicker.start();
+                            //clear out splash screen
+                            SDL_RenderClear(gWindow.getRenderer());
+                            //rewind the music
+                            Mix_FadeInMusic(gGameMusic, -1, 100);
+                            Mix_RewindMusic();
+                            Mix_SetMusicPosition(2.9);
+                            //reset run info
+                            runTime = 0;
+                            currentLevel = 0;
+                            loadLevel(currentLevel);
+                            player1.setCamera(camera1);
+                            player2.setCamera(camera2);
+                        }else{
+                            SDL_RenderClear(gWindow.getRenderer());
+                            played = false;
+                        }
+                    }
+                }else{
+                    //mode is single level, check user wants to play again
+                    //todo
+                    if(playLevel(globalQuit, finishTime, finishTime)){//this is a hack, might change in future
                         SDL_RenderClear(gWindow.getRenderer());
                         //rewind the music
                         Mix_FadeInMusic(gGameMusic, -1, 100);
                         Mix_RewindMusic();
                         Mix_SetMusicPosition(2.9);
-                        //update level info and reset players
-                        currentLevel += 1;
                         loadLevel(currentLevel);
                         player1.setCamera(camera1);
                         player2.setCamera(camera2);
-                        countdownTicker.start();
-                    }else{
-                        //user doesnt want to play next level, quit to menu
-                        SDL_RenderClear(gWindow.getRenderer());
-                        currentLevel = 0;
-                        played = false;
-                    }
-                    
-                }
-                else if(currentLevel == TOTAL_LEVELS - 1){
-                    //all runs completed
-                    runTime += finishTime;
-                    if(playAgain(globalQuit, runTime)){
-                        countdownTicker.start();
-                        //clear out splash screen
-                        SDL_RenderClear(gWindow.getRenderer());
-                        //rewind the music
-                        Mix_FadeInMusic(gGameMusic, -1, 100);
-                        Mix_RewindMusic();
-                        Mix_SetMusicPosition(2.9);
-                        //reset run info
                         runTime = 0;
-                        currentLevel = 0;
-                        loadLevel(currentLevel);
-                        player1.setCamera(camera1);
-                        player2.setCamera(camera2);
+                        countdownTicker.start();
                     }else{
                         SDL_RenderClear(gWindow.getRenderer());
                         played = false;
                     }
                 }
-                
             }
         }
         Mix_HaltMusic();
@@ -436,7 +458,7 @@ void loadLevel(int levelNumber){
     player2.reset();
 }
 
-bool playNextLevel(bool* globalQuit, float stageTime, float currentRunTime){
+bool playLevel(bool* globalQuit, float stageTime, float currentRunTime){
     //need to load the stage time, run time, and play again prompts
     lTexture lStageTime = lTexture(gWindow.getRenderer());
     lStageTime.setFont(gFont);

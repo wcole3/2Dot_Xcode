@@ -60,7 +60,7 @@ void selectLevel(bool* globalQuit){
     //the level has been select, play the level
     currentLevel = xOffset + (2 * yOffset);
     pregameSetup(globalQuit);
-    playingGame(globalQuit);
+    playGame(globalQuit, false);
 }
 
 void handleSelectKeyEvents(SDL_Event e, bool* levelSelected, int* xOffset, int* yOffset){

@@ -54,7 +54,7 @@ void showModeSelection(bool* globalQuit){
             case 0:
                 //play full run mode
                 pregameSetup(globalQuit);
-                playingGame(globalQuit);
+                playGame(globalQuit, true);
                 break;
             case 1:
                 //play a specific level

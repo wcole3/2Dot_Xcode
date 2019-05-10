@@ -9,10 +9,12 @@ User Note: If you are using a mac keyboard dont use "J", "H", and "Space" simult
 
 ## Version 2.1 Updates (5/6/2019)
 Working in progress...
+3 new levels
 Adding level progression
 Adding level selection
 Fixing several collision detection issues
 Dramatically improved performance
+You can now quit to main menu by hitting esc
 
 Older Changes
 ## Version 2.0.3 Updates (4/14/2019)
