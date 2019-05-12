@@ -41,8 +41,8 @@ void showModeSelection(bool* globalQuit){
         SDL_Rect highlightBox = {(selectionBox.x + (mode * 2 * selectionBox.w)) - 10, selectionBox.y - 10, selectionBox.w + 20, selectionBox.h + 20};
         //render screen
         gWindow.render();
-        gTest.render(selectionBox.x, selectionBox.y, NULL, &selectionBox);
-        gTest.render(gWindow.getWidth() - (selectionBox.x + selectionBox.w), selectionBox.y, NULL, &selectionBox);
+        gImageTextures[gTest]->render(selectionBox.x, selectionBox.y, NULL, &selectionBox);
+        gImageTextures[gTest]->render(gWindow.getWidth() - (selectionBox.x + selectionBox.w), selectionBox.y, NULL, &selectionBox);
         SDL_SetRenderDrawColor(gWindow.getRenderer(), highlighter.r, highlighter.g, highlighter.b, 100);
         SDL_RenderFillRect(gWindow.getRenderer(), &highlightBox);
         SDL_RenderPresent(gWindow.getRenderer());

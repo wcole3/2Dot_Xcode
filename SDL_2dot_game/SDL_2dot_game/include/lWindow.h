@@ -131,10 +131,10 @@ lWindow::~lWindow(){
 
 void lWindow::free(){
     //destroy the window
-    if(mRenderer!=NULL){
+    if(mRenderer != NULL){
         SDL_DestroyRenderer(mRenderer);
         mRenderer = NULL;
-        if(mWindow!=NULL){
+        if(mWindow != NULL){
             SDL_DestroyWindow(mWindow);
             mWindow = NULL;
             mWidth = 0;

@@ -123,7 +123,7 @@ void displaySettingsScreen(bool* globalQuit){
             //render the setting screen
             gWindow.render();
             SDL_Rect screen = {0,0,gWindow.getWidth(),gWindow.getHeight()};
-            gSettingsScreen.render(0, 0, NULL, &screen);
+            gImageTextures[gSettingsScreen]->render(0, 0, NULL, &screen);
             //TODO render settings and quit button
             //render the settings string constants
             SDL_Rect textLine = {0,0, gWindow.getWidth() / 7, gWindow.getHeight() / 10};
@@ -354,7 +354,7 @@ void changeSettingHotkey(SDL_Event e, int x, int y, bool* globalQuit){
         }
         //render to correct place
         SDL_Rect textLine = {0,0, gWindow.getWidth() / 4, gWindow.getHeight() / 7};
-        gChangeSettingPrompt.render((gWindow.getWidth() - textLine.w)/2, (6 * gWindow.getHeight()) / 7, NULL, &textLine);
+        gImageTextures[gChangeSettingsPrompt]->render((gWindow.getWidth() - textLine.w)/2, (6 * gWindow.getHeight()) / 7, NULL, &textLine);
         SDL_RenderPresent(gWindow.getRenderer());
     }
     SDL_StopTextInput();

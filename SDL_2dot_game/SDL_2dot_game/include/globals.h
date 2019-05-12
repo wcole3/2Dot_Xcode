@@ -34,27 +34,24 @@ lRigidDot player1;
 lRigidDot player2;
 
 
-
+enum imageTextures {
+    gTileSpriteSheet = 0,
+    gWinSplash = 1,
+    gNextLevelSplash = 2,
+    gPregameSplash = 3,
+    gMenu = 4,
+    gSettingsScreen = 5,
+    gLeaderboardScreen = 6,
+    gTest = 7,
+    gCountdownText = 8,
+    gChangeSettingsPrompt = 9,
+    TOTAL_IMAGE_TEXTURES = 10
+};
 //ALL TEXTURES
-//sprite sheet for background tiles
-lTexture gTileSpriteSheet;
+lTexture* gImageTextures[TOTAL_IMAGE_TEXTURES];
 //the actual tile objects
 lTile** gTiles[TOTAL_LEVELS];
-//winning game splash screen
-lTexture gWinSplash;
-//next level screen
-lTexture gNextLevelSplash;
-//pregame instruction splash
-lTexture gPregameSplash;
-//menu screen
-lTexture gMenu;
-//settings screen
-lTexture gSettingsScreen;
-//leaderboard screen
-lTexture gLeaderboardScreen;
 
-//testing texture for mode selection
-lTexture gTest;
 
 //Text to use
 TTF_Font* gFont = NULL;
@@ -66,16 +63,12 @@ const string controlButton[4] = {"Up   : ", "Down : ", "Left : ", "Right: "};
 const int TOTAL_CONTROLS = 9;
 //player control prompt textures
 lTexture gPlayerPrompt[TOTAL_CONTROLS];
-//texture for the countdown texture
-lTexture gCountdownText;
 //the menu commands
 lTexture gMenuPrompts[4];
 //the actual menu button names
 string menuButtons[4] = {"Play", "Settings", "Leaderboard", "Quit"};
 //the prompt for when user wants to change a setting
 string changeSetting = "Press new key";
-//the texture for the change setting prompt
-lTexture gChangeSettingPrompt;
 //the textures of the leaderboard names and scores
 lTexture gLeaderboardEntry[5];
 //max number of character in leaderbaord name
@@ -99,10 +92,8 @@ Mix_Music* gGameMusic = NULL;
 
 //FILE_LOCATIONS
 const string DEFAULT_ASSET_LOC = "assets/";
-//need the name of the settings file
-const string settingsFile = DEFAULT_ASSET_LOC + "settings.txt";
-//name of the leaderboard file
-const string leaderboardFile = DEFAULT_ASSET_LOC + "leaderboard.txt";
+const string settingsFile = DEFAULT_ASSET_LOC + "settings.txt";//need the name of the settings file
+const string leaderboardFile = DEFAULT_ASSET_LOC + "leaderboard.txt";//name of the leaderboard file
 const string textFontFile = DEFAULT_ASSET_LOC + "OpenSans-Regular.ttf";
 const string winScreenFile = DEFAULT_ASSET_LOC + "winScreen.png";
 const string nextLevelScreenFile = DEFAULT_ASSET_LOC + "nextLevelScreen.png";
@@ -121,13 +112,11 @@ const string selectSoundFile = DEFAULT_ASSET_LOC + "pop.wav";
 const string winSoundFile = DEFAULT_ASSET_LOC + "short_fanfare.wav";
 const string menuMusicFile = DEFAULT_ASSET_LOC + "Sky_puzzle.mp3";
 const string gameMusicFile = DEFAULT_ASSET_LOC + "Techno_Caper.mp3";
-//names of the level map files
-const string level0MapFile = DEFAULT_ASSET_LOC + "level_0.map";
+const string level0MapFile = DEFAULT_ASSET_LOC + "level_0.map";//names of the level map files
 const string level1MapFile = DEFAULT_ASSET_LOC + "level_1.map";
 const string level2MapFile = DEFAULT_ASSET_LOC + "level_2.map";
 const string level3MapFile = DEFAULT_ASSET_LOC + "level_3.map";
-//also need the level picture reps
-const string level3MapImg = DEFAULT_ASSET_LOC + "level_3.png";
+const string level3MapImg = DEFAULT_ASSET_LOC + "level_3.png";//also need the level picture reps
 //all of the player controls
 string playerControls[TOTAL_CONTROLS];
 //number of leaderboard entries

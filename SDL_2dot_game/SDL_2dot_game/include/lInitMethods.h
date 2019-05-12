@@ -111,19 +111,12 @@ bool init(){
             for(int i = 0; i < (sizeof(gLetters)/sizeof(gLetters[0])); ++i){
                 gLetters[i] = lTexture(gWindow.getRenderer());
             }
+            //setup textures
+            for(int i = 0; i < TOTAL_IMAGE_TEXTURES; ++i){
+                gImageTextures[i] = new lTexture(gWindow.getRenderer());
+            }
             //set render clear color
             SDL_SetRenderDrawColor(gWindow.getRenderer(), 255, 255, 255, 255);
-            //setup textures; there is probabaly a good way to do this as a batch
-            gWinSplash = lTexture(gWindow.getRenderer());
-            gNextLevelSplash = lTexture(gWindow.getRenderer());
-            gPregameSplash = lTexture(gWindow.getRenderer());
-            gMenu = lTexture(gWindow.getRenderer());
-            gSettingsScreen = lTexture(gWindow.getRenderer());
-            gLeaderboardScreen = lTexture(gWindow.getRenderer());
-            gChangeSettingPrompt = lTexture(gWindow.getRenderer());
-            gTileSpriteSheet = lTexture(gWindow.getRenderer());
-            gCountdownText = lTexture(gWindow.getRenderer());
-            gTest = lTexture(gWindow.getRenderer());
         }
     }
     //start sdl image
@@ -162,8 +155,8 @@ bool loadMedia(){
         //set letter fonts
         setFonts(gLetters, gFont, (sizeof(gLetters)/sizeof(gLetters[0])));
         //setup text prompt
-        gCountdownText.setFont(gFont);
-        gChangeSettingPrompt.setFont(gFont);
+        gImageTextures[gCountdownText]->setFont(gFont);
+        gImageTextures[gChangeSettingsPrompt]->setFont(gFont);
     }
     if(!loadSettings(&player1,&player2, settingsFile, playerControls)){
         printf("Could not load settings!\n");
@@ -200,28 +193,37 @@ bool loadMedia(){
         }
     }
     //load splash screens
-    if(!gWinSplash.loadFromFile(winScreenFile, SDL_FALSE)){
+    if(!gImageTextures[gWinSplash]->loadFromFile(winScreenFile, SDL_FALSE)){
         printf("Could not load win splash screen!\n");
         successFlag = false;
     }
-    if(!gNextLevelSplash.loadFromFile(nextLevelScreenFile, SDL_FALSE)){
+    if(!gImageTextures[gNextLevelSplash]->loadFromFile(nextLevelScreenFile, SDL_FALSE)){
         printf("Could not load next level splash!\n");
         successFlag = false;
     }
-    if(!gPregameSplash.loadFromFile(pregameScreen, SDL_FALSE)){
+    if(!gImageTextures[gPregameSplash]->loadFromFile(pregameScreen, SDL_FALSE)){
         printf("Could not load pregame splash!\n");
         successFlag = false;
     }
-    if(!gMenu.loadFromFile(menuScreenFile, SDL_FALSE)){
+    if(!gImageTextures[gMenu]->loadFromFile(menuScreenFile, SDL_FALSE)){
         printf("Could not load menu texture!\n");
         successFlag = false;
     }
-    if(!gSettingsScreen.loadFromFile(settingsScreenFile, SDL_FALSE)){
+    if(!gImageTextures[gSettingsScreen]->loadFromFile(settingsScreenFile, SDL_FALSE)){
         printf("Could not load setting texture!\n");
         successFlag = false;
     }
-    if(!gLeaderboardScreen.loadFromFile(leaderboardScreenFile, SDL_FALSE)){
+    if(!gImageTextures[gLeaderboardScreen]->loadFromFile(leaderboardScreenFile, SDL_FALSE)){
         printf("Could not load leaderboard screen!\n");
+        successFlag = false;
+    }
+    //load tile sprite sheet
+    if(!gImageTextures[gTileSpriteSheet]->loadFromFile(tileSpriteFile, SDL_FALSE)){
+        printf("Could not load tile sprite sheet texture!\n");
+        successFlag = false;
+    }
+    if(!gImageTextures[gTest]->loadFromFile(level3MapImg, SDL_FALSE)){
+        printf("Could not load test texture!\n");
         successFlag = false;
     }
     //load menu button textures
@@ -232,17 +234,8 @@ bool loadMedia(){
         }
     }
     //load the change setting prompt
-    if(!gChangeSettingPrompt.loadFromRenderedText(changeSetting.c_str(), red)){
+    if(!gImageTextures[gChangeSettingsPrompt]->loadFromRenderedText(changeSetting.c_str(), red)){
         printf("Could not load change settings prompt texture!\n");
-        successFlag = false;
-    }
-    //load tile sprite sheet
-    if(!gTileSpriteSheet.loadFromFile(tileSpriteFile, SDL_FALSE)){
-        printf("Could not load tile sprite sheet texture!\n");
-        successFlag = false;
-    }
-    if(!gTest.loadFromFile(level3MapImg, SDL_FALSE)){
-        printf("Could not load test texture!\n");
         successFlag = false;
     }
     //now we need to set the tiles
@@ -482,16 +475,10 @@ void close(){
     player1.free();
     player2.free();
     //free all textures
-    gWinSplash.free();
-    gNextLevelSplash.free();
-    gPregameSplash.free();
-    gMenu.free();
-    gSettingsScreen.free();
-    gLeaderboardScreen.free();
-    gChangeSettingPrompt.free();
-    gTileSpriteSheet.free();
-    gCountdownText.free();
-    gTest.free();
+    for(int i = 0; i < TOTAL_IMAGE_TEXTURES; i++){
+        gImageTextures[i]->free();
+        gImageTextures[i] = NULL;
+    }
     //free all global text textures
     for(int i = 0; i < (sizeof(gPlayerPrompt)/sizeof(gPlayerPrompt[0])); ++i){
         gPlayerPrompt[i].free();
@@ -510,9 +497,6 @@ void close(){
             delete gTiles[i][x];
         }
     }
-    
-    
-    
     //free chunks and music
     Mix_FreeChunk(gWinSound);
     Mix_FreeChunk(gLoseSound);

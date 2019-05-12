@@ -47,10 +47,10 @@ void selectLevel(bool* globalQuit){
         gWindow.render();
         for(int i = 0; i < TOTAL_LEVELS; ++i){
             if(i < 2){
-                gTest.render(selectionBox.x + ((i % 2) * 2 * selectionBox.w), selectionBox.y, NULL, &selectionBox);
+                gImageTextures[gTest]->render(selectionBox.x + ((i % 2) * 2 * selectionBox.w), selectionBox.y, NULL, &selectionBox);
             }
             else{
-                gTest.render(selectionBox.x + ((i % 2) * 2 * selectionBox.w), selectionBox.y + (2 * selectionBox.h), NULL, &selectionBox);
+                gImageTextures[gTest]->render(selectionBox.x + ((i % 2) * 2 * selectionBox.w), selectionBox.y + (2 * selectionBox.h), NULL, &selectionBox);
             }
         }
         SDL_SetRenderDrawColor(gWindow.getRenderer(), highlighter.r, highlighter.g, highlighter.b, 100);

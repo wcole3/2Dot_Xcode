@@ -66,7 +66,7 @@ int main(int argc, const char * argv[]) {
                 gWindow.render();
                 //render the menu background
                 SDL_Rect screen = {0,0, gWindow.getWidth(), gWindow.getHeight()};
-                gMenu.render(0, 0, NULL, &screen);
+                gImageTextures[gMenu]->render(0, 0, NULL, &screen);
                 //want a box to highlight the current choice and to help scale the button text
                 SDL_Rect buttonBubble ={(3*gWindow.getWidth())/4,(gWindow.getHeight()/3)+(offset*(gWindow.getHeight()/6)),gWindow.getWidth()/5, gWindow.getHeight()/6};
                 //render the menu buttons
@@ -77,7 +77,6 @@ int main(int argc, const char * argv[]) {
                 SDL_SetRenderDrawColor(gWindow.getRenderer(), 100, 100, 200, 100);
                 SDL_RenderFillRect(gWindow.getRenderer(), &buttonBubble);
                 SDL_RenderPresent(gWindow.getRenderer());
-                 
             }
             Mix_HaltMusic();
         }

@@ -75,7 +75,7 @@ void playGame(bool* globalQuit, bool fullRun){
         float startTime = 0;
         string startString = "Time: ";
         SDL_Color countdownColor = {0,0,0};
-        gCountdownText.loadFromRenderedText(startString + std::to_string(startTime), countdownColor);
+        gImageTextures[gCountdownText]->loadFromRenderedText(startString + std::to_string(startTime), countdownColor);
         countdownTicker.start();
         while(played){
             while(SDL_PollEvent(&e) != 0){
@@ -114,7 +114,7 @@ void playGame(bool* globalQuit, bool fullRun){
             //render background
             for(int i = 0; i < TOTAL_TILES[currentLevel]; ++i){
                 //render each tile
-                player1.getLevelTiles()[i]->render(&gTileSpriteSheet, camera1);
+                player1.getLevelTiles()[i]->render(gImageTextures[gTileSpriteSheet], camera1);
             }
             //check if controls need to be rendered
             if(!player1.hasMoved()){
@@ -128,7 +128,7 @@ void playGame(bool* globalQuit, bool fullRun){
             //render the second dots screen
             SDL_RenderSetViewport(gWindow.getRenderer(), &player2Screen);
             for(int i = 0; i < TOTAL_TILES[currentLevel]; ++i){
-                player2.getLevelTiles()[i]->render(&gTileSpriteSheet, camera2);
+                player2.getLevelTiles()[i]->render(gImageTextures[gTileSpriteSheet], camera2);
             }
             //render player 2 controls
             if(!player2.hasMoved()){
@@ -146,8 +146,8 @@ void playGame(bool* globalQuit, bool fullRun){
             char timeBuffer [10];
             sprintf(timeBuffer, "%.3f", runningTime);
             //now rerender the countdown text
-            gCountdownText.loadFromRenderedText(startString + timeBuffer, countdownColor);
-            gCountdownText.render((gWindow.getWidth() - gCountdownText.getWidth())/2, 0);
+            gImageTextures[gCountdownText]->loadFromRenderedText(startString + timeBuffer, countdownColor);
+            gImageTextures[gCountdownText]->render((gWindow.getWidth() - gImageTextures[gCountdownText]->getWidth())/2, 0);
             SDL_RenderPresent(gWindow.getRenderer());
             //or if the limit has passed or both players are done
             if((player1.isFinished() && player2.isFinished())){
@@ -342,7 +342,7 @@ bool playAgain(bool* globalQuit, float time){
         SDL_RenderClear(gWindow.getRenderer());
         SDL_Rect currentScreen = {0,0,gWindow.getWidth(), gWindow.getHeight()};
         SDL_Rect textLine = {gWindow.getWidth()/4, gWindow.getHeight() / 7 , gWindow.getWidth() / 2 ,gWindow.getHeight() / 10};
-        gWinSplash.render(0, 0, NULL, &currentScreen);
+        gImageTextures[gWinSplash]->render(0, 0, NULL, &currentScreen);
         //render the leaderboard
         lLeaderboardHeader.render(textLine.x, textLine.y, NULL, &textLine);
         for(int i = 0; i < (sizeof(gLeaderboardEntry)/sizeof(gLeaderboardEntry[0])); ++i){
@@ -431,7 +431,7 @@ void pregameSetup(bool* globalQuit){
         //in the meantime display the pregame splash
         gWindow.render();
         SDL_Rect screen = {0,0,gWindow.getWidth(), gWindow.getHeight()};
-        gPregameSplash.render(0, 0, NULL, &screen);
+        gImageTextures[gPregameSplash]->render(0, 0, NULL, &screen);
         //render the prompt
         //scale the text up slightly
         SDL_Rect textBox = {0,0,(4*gWindow.getWidth()/5), (gWindow.getHeight()/8)};
@@ -517,7 +517,7 @@ bool playLevel(bool* globalQuit, float stageTime, float currentRunTime){
         SDL_Rect screen = {0,0,gWindow.getWidth(), gWindow.getHeight()};
         gWindow.render();
         SDL_Rect textLine = {(gWindow.getWidth() - (8 * (gWindow.getWidth() / 10))) / 2, (gWindow.getHeight() - (gWindow.getHeight() / 10))/ 2, 8 * (gWindow.getWidth() / 10), gWindow.getHeight() / 10};
-        gNextLevelSplash.render(0, 0, NULL, &screen);
+        gImageTextures[gNextLevelSplash]->render(0, 0, NULL, &screen);
         //render prompts
         lStageTime.render(textLine.x, textLine.y, NULL, &textLine);
         lRunTime.render(textLine.x, textLine.y + textLine.h, NULL, &textLine);
