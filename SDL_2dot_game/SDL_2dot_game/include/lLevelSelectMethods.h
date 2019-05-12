@@ -19,7 +19,18 @@ void handleSelectKeyEvents(SDL_Event e, bool* levelSelected, int* xOffset, int* 
 void handleSelectMouseEvents(SDL_Event e, bool* levelSelected, int* xOffset, int* yOffset);
 
 void selectLevel(bool* globalQuit){
-    
+    //need labels for each level and the level size
+    lTexture lLevelNameLabels[TOTAL_LEVELS];
+    lTexture lLevelSizeLabels[TOTAL_LEVELS];
+    for(int i = 0; i < TOTAL_LEVELS; ++i){
+        lLevelNameLabels[i] = lTexture(gWindow.getRenderer());
+        lLevelSizeLabels[i] = lTexture(gWindow.getRenderer());
+        lLevelSizeLabels[i].setFont(gFont);
+        lLevelNameLabels[i].setFont(gFont);
+        if(!lLevelNameLabels[i].loadFromRenderedText("Level " + to_string(i), black) || !lLevelSizeLabels[i].loadFromRenderedText(to_string(LEVEL_WIDTH[i] / TILE_WIDTH) + " x " + to_string(LEVEL_HEIGHT[i] / TILE_HEIGHT), black)){
+            printf("Could not load level label textures!\n");
+        }
+    }
     bool levelSelected = false;
     SDL_Event e;
     int xOffset = 0;
@@ -43,14 +54,20 @@ void selectLevel(bool* globalQuit){
                                     selectionBox.w + 20,
                                     selectionBox.h + 20
                                 };
+        SDL_Rect textLine = {selectionBox.x, selectionBox.y - 10, selectionBox.w, gWindow.getHeight() / 12};
         //render level imgs
         gWindow.render();
         for(int i = 0; i < TOTAL_LEVELS; ++i){
+            int index = gLevel0Img + i;
             if(i < 2){
-                gImageTextures[gTest]->render(selectionBox.x + ((i % 2) * 2 * selectionBox.w), selectionBox.y, NULL, &selectionBox);
+                gImageTextures[index]->render(selectionBox.x + ((i % 2) * 2 * selectionBox.w), selectionBox.y, NULL, &selectionBox);
+                lLevelNameLabels[i].render(textLine.x + ((i % 2) * 2 * textLine.w), textLine.y - textLine.h, NULL, &textLine);
+                lLevelSizeLabels[i].render(textLine.x + ((i % 2) * 2 * textLine.w), textLine.y + 20 + selectionBox.h, NULL, &textLine);
             }
             else{
-                gImageTextures[gTest]->render(selectionBox.x + ((i % 2) * 2 * selectionBox.w), selectionBox.y + (2 * selectionBox.h), NULL, &selectionBox);
+                gImageTextures[index]->render(selectionBox.x + ((i % 2) * 2 * selectionBox.w), selectionBox.y + (2 * selectionBox.h), NULL, &selectionBox);
+                lLevelNameLabels[i].render(textLine.x + ((i % 2) * 2 * textLine.w), (textLine.y - textLine.h) + (2* selectionBox.h), NULL, &textLine);
+                lLevelSizeLabels[i].render(textLine.x + ((i % 2) * 2 * textLine.w), (textLine.y + 20 + selectionBox.h) + (2 * selectionBox.h), NULL, &textLine);
             }
         }
         SDL_SetRenderDrawColor(gWindow.getRenderer(), highlighter.r, highlighter.g, highlighter.b, 100);
@@ -58,9 +75,16 @@ void selectLevel(bool* globalQuit){
         SDL_RenderPresent(gWindow.getRenderer());
     }
     //the level has been select, play the level
-    currentLevel = xOffset + (2 * yOffset);
-    pregameSetup(globalQuit);
-    playGame(globalQuit, false);
+    if(!*globalQuit){
+        currentLevel = xOffset + (2 * yOffset);
+        pregameSetup(globalQuit);
+        playGame(globalQuit, false);
+    }
+    //free allocated label textures
+    for(int i = 0; i < TOTAL_LEVELS; ++i){
+        lLevelNameLabels[i].free();
+        lLevelSizeLabels[i].free();
+    }
 }
 
 void handleSelectKeyEvents(SDL_Event e, bool* levelSelected, int* xOffset, int* yOffset){

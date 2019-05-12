@@ -15,7 +15,7 @@ Adding level selection
 Fixing several collision detection issues
 Dramatically improved performance
 You can now quit to main menu by hitting esc
-Cleaned up the initializization loops to make them more readable
+Cleaned up the initialization loops to make them more readable
 
 Older Changes
 ## Version 2.0.3 Updates (4/14/2019)

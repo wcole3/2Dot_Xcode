@@ -33,6 +33,12 @@
 		AB408677228112020088B81F /* level_2.map in CopyFiles */ = {isa = PBXBuildFile; fileRef = AB408675228111F20088B81F /* level_2.map */; };
 		AB408678228112020088B81F /* level_3.map in CopyFiles */ = {isa = PBXBuildFile; fileRef = AB408673227F696C0088B81F /* level_3.map */; };
 		AB40867A2282820F0088B81F /* nextLevelScreen.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = AB408679228269E30088B81F /* nextLevelScreen.png */; };
+		AB6E7B8D2288987500429736 /* fullRunText.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = AB6E7B8A2288973A00429736 /* fullRunText.png */; };
+		AB6E7B8E2288987500429736 /* level_0.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = AB6E7B8B2288973A00429736 /* level_0.png */; };
+		AB6E7B8F2288987500429736 /* level_1.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = AB6E7B8C2288973A00429736 /* level_1.png */; };
+		AB6E7B902288987500429736 /* level_2.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = AB6E7B882288973900429736 /* level_2.png */; };
+		AB6E7B912288987500429736 /* level_3.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = AB6E7B892288973900429736 /* level_3.png */; };
+		AB6E7B922288987500429736 /* singleLevelText.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = AB6E7B872288973900429736 /* singleLevelText.png */; };
 		ABF20209221C9FE700923A85 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ABF20208221C9FE700923A85 /* main.cpp */; };
 /* End PBXBuildFile section */
 
@@ -43,6 +49,12 @@
 			dstPath = assets;
 			dstSubfolderSpec = 7;
 			files = (
+				AB6E7B8D2288987500429736 /* fullRunText.png in CopyFiles */,
+				AB6E7B8E2288987500429736 /* level_0.png in CopyFiles */,
+				AB6E7B8F2288987500429736 /* level_1.png in CopyFiles */,
+				AB6E7B902288987500429736 /* level_2.png in CopyFiles */,
+				AB6E7B912288987500429736 /* level_3.png in CopyFiles */,
+				AB6E7B922288987500429736 /* singleLevelText.png in CopyFiles */,
 				AB40867A2282820F0088B81F /* nextLevelScreen.png in CopyFiles */,
 				AB408676228112020088B81F /* level_1.map in CopyFiles */,
 				AB408677228112020088B81F /* level_2.map in CopyFiles */,
@@ -257,6 +269,12 @@
 		AB408679228269E30088B81F /* nextLevelScreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nextLevelScreen.png; sourceTree = "<group>"; };
 		AB40867B2284C1D30088B81F /* lModeSelectionMethods.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lModeSelectionMethods.h; sourceTree = "<group>"; };
 		AB40867C2284E65E0088B81F /* lLevelSelectMethods.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lLevelSelectMethods.h; sourceTree = "<group>"; };
+		AB6E7B872288973900429736 /* singleLevelText.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = singleLevelText.png; sourceTree = "<group>"; };
+		AB6E7B882288973900429736 /* level_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = level_2.png; sourceTree = "<group>"; };
+		AB6E7B892288973900429736 /* level_3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = level_3.png; sourceTree = "<group>"; };
+		AB6E7B8A2288973A00429736 /* fullRunText.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fullRunText.png; sourceTree = "<group>"; };
+		AB6E7B8B2288973A00429736 /* level_0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = level_0.png; sourceTree = "<group>"; };
+		AB6E7B8C2288973A00429736 /* level_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = level_1.png; sourceTree = "<group>"; };
 		ABF20205221C9FE700923A85 /* SDL_2dot_game */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SDL_2dot_game; sourceTree = BUILT_PRODUCTS_DIR; };
 		ABF20208221C9FE700923A85 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		ABF20210221C9FFF00923A85 /* SDL2_ttf.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_ttf.framework; path = ../../../../../../Library/Frameworks/SDL2_ttf.framework; sourceTree = "<group>"; };
@@ -989,6 +1007,12 @@
 		ABF2021A221CA0C100923A85 /* assets */ = {
 			isa = PBXGroup;
 			children = (
+				AB6E7B8A2288973A00429736 /* fullRunText.png */,
+				AB6E7B8B2288973A00429736 /* level_0.png */,
+				AB6E7B8C2288973A00429736 /* level_1.png */,
+				AB6E7B882288973900429736 /* level_2.png */,
+				AB6E7B892288973900429736 /* level_3.png */,
+				AB6E7B872288973900429736 /* singleLevelText.png */,
 				AB408679228269E30088B81F /* nextLevelScreen.png */,
 				AB408674228111F20088B81F /* level_1.map */,
 				AB408675228111F20088B81F /* level_2.map */,

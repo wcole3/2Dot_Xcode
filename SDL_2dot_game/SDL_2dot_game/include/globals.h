@@ -21,7 +21,7 @@ int LEVEL_WIDTH[TOTAL_LEVELS];
 int LEVEL_HEIGHT[TOTAL_LEVELS];
 int TOTAL_TILES[TOTAL_LEVELS];
 //starting values for leaderboard
-constexpr float defaultStartingScore = 25;
+constexpr float defaultStartingScore = 50;
 //the marker for the current level
 int currentLevel = 0;
 //running time of a current run
@@ -42,10 +42,15 @@ enum imageTextures {
     gMenu = 4,
     gSettingsScreen = 5,
     gLeaderboardScreen = 6,
-    gTest = 7,
-    gCountdownText = 8,
-    gChangeSettingsPrompt = 9,
-    TOTAL_IMAGE_TEXTURES = 10
+    gCountdownText = 7,
+    gChangeSettingsPrompt = 8,
+    gLevel0Img = 9,
+    gLevel1Img = 10,
+    gLevel2Img = 11,
+    gLevel3Img = 12,
+    gFullRunTextImg = 13,
+    gSingleLevelTextImg = 14,
+    TOTAL_IMAGE_TEXTURES = 15
 };
 //ALL TEXTURES
 lTexture* gImageTextures[TOTAL_IMAGE_TEXTURES];
@@ -92,16 +97,27 @@ Mix_Music* gGameMusic = NULL;
 
 //FILE_LOCATIONS
 const string DEFAULT_ASSET_LOC = "assets/";
+//using an aray for image texture to make initialization easier; make sure order is same as imageTextures
+const string imageTextureFiles[TOTAL_IMAGE_TEXTURES] = {
+    DEFAULT_ASSET_LOC + "tile_sprites.png",
+    DEFAULT_ASSET_LOC + "winScreen.png",
+    DEFAULT_ASSET_LOC + "nextLevelScreen.png",
+    DEFAULT_ASSET_LOC + "preGameInst.png",
+    DEFAULT_ASSET_LOC + "menuScreen.png",
+    DEFAULT_ASSET_LOC + "settingsScreen.png",
+    DEFAULT_ASSET_LOC + "leaderboardScreen.png",
+    "",//text texture are blanks
+    "",
+    DEFAULT_ASSET_LOC + "level_0.png",
+    DEFAULT_ASSET_LOC + "level_1.png",
+    DEFAULT_ASSET_LOC + "level_2.png",
+    DEFAULT_ASSET_LOC + "level_3.png",
+    DEFAULT_ASSET_LOC + "fullRunText.png",
+    DEFAULT_ASSET_LOC + "singleLevelText.png"
+};
 const string settingsFile = DEFAULT_ASSET_LOC + "settings.txt";//need the name of the settings file
 const string leaderboardFile = DEFAULT_ASSET_LOC + "leaderboard.txt";//name of the leaderboard file
 const string textFontFile = DEFAULT_ASSET_LOC + "OpenSans-Regular.ttf";
-const string winScreenFile = DEFAULT_ASSET_LOC + "winScreen.png";
-const string nextLevelScreenFile = DEFAULT_ASSET_LOC + "nextLevelScreen.png";
-const string pregameScreen = DEFAULT_ASSET_LOC + "preGameInst.png";
-const string menuScreenFile = DEFAULT_ASSET_LOC + "menuScreen.png";
-const string settingsScreenFile = DEFAULT_ASSET_LOC + "settingsScreen.png";
-const string leaderboardScreenFile = DEFAULT_ASSET_LOC + "leaderboardScreen.png";
-const string tileSpriteFile = DEFAULT_ASSET_LOC + "tile_sprites.png";
 const string dot1File = DEFAULT_ASSET_LOC + "dot1.png";
 const string dot2File = DEFAULT_ASSET_LOC + "dot2.png";
 const string loseSoundFile = DEFAULT_ASSET_LOC + "aww.wav";
@@ -116,7 +132,7 @@ const string level0MapFile = DEFAULT_ASSET_LOC + "level_0.map";//names of the le
 const string level1MapFile = DEFAULT_ASSET_LOC + "level_1.map";
 const string level2MapFile = DEFAULT_ASSET_LOC + "level_2.map";
 const string level3MapFile = DEFAULT_ASSET_LOC + "level_3.map";
-const string level3MapImg = DEFAULT_ASSET_LOC + "level_3.png";//also need the level picture reps
+
 //all of the player controls
 string playerControls[TOTAL_CONTROLS];
 //number of leaderboard entries

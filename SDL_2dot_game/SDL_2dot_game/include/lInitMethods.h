@@ -192,39 +192,14 @@ bool loadMedia(){
             }
         }
     }
-    //load splash screens
-    if(!gImageTextures[gWinSplash]->loadFromFile(winScreenFile, SDL_FALSE)){
-        printf("Could not load win splash screen!\n");
-        successFlag = false;
-    }
-    if(!gImageTextures[gNextLevelSplash]->loadFromFile(nextLevelScreenFile, SDL_FALSE)){
-        printf("Could not load next level splash!\n");
-        successFlag = false;
-    }
-    if(!gImageTextures[gPregameSplash]->loadFromFile(pregameScreen, SDL_FALSE)){
-        printf("Could not load pregame splash!\n");
-        successFlag = false;
-    }
-    if(!gImageTextures[gMenu]->loadFromFile(menuScreenFile, SDL_FALSE)){
-        printf("Could not load menu texture!\n");
-        successFlag = false;
-    }
-    if(!gImageTextures[gSettingsScreen]->loadFromFile(settingsScreenFile, SDL_FALSE)){
-        printf("Could not load setting texture!\n");
-        successFlag = false;
-    }
-    if(!gImageTextures[gLeaderboardScreen]->loadFromFile(leaderboardScreenFile, SDL_FALSE)){
-        printf("Could not load leaderboard screen!\n");
-        successFlag = false;
-    }
-    //load tile sprite sheet
-    if(!gImageTextures[gTileSpriteSheet]->loadFromFile(tileSpriteFile, SDL_FALSE)){
-        printf("Could not load tile sprite sheet texture!\n");
-        successFlag = false;
-    }
-    if(!gImageTextures[gTest]->loadFromFile(level3MapImg, SDL_FALSE)){
-        printf("Could not load test texture!\n");
-        successFlag = false;
+    //load all image textures
+    for(int i = 0; i < TOTAL_IMAGE_TEXTURES; ++i){
+        if(imageTextureFiles[i] != ""){//check if the file exists
+            if(!gImageTextures[i]->loadFromFile(imageTextureFiles[i], SDL_FALSE)){
+                printf("Could not load texture at path: %s\n", imageTextureFiles[i].c_str());
+                successFlag = false;
+            }
+        }
     }
     //load menu button textures
     for(int i = 0; i < (sizeof(gMenuPrompts)/sizeof(gMenuPrompts[0])); ++i){
