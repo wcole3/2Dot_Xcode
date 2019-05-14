@@ -7,23 +7,24 @@ If you want a version for Visual Studio with prebuilt windows exe files there is
 
 User Note: If you are using a mac keyboard dont use "J", "H", and "Space" simultaneously for  keybinds, there is a weird keyboard blocking issue
 
-## Version 2.1 Updates (5/6/2019)
-Working in progress...
-3 new levels
-Adding level progression
-Adding level selection
-Fixing several collision detection issues
-Dramatically improved performance
-You can now quit to main menu by hitting esc
-Cleaned up the initialization loops to make them more readable
+## Version 2.1 Updates (5/14/2019)
+Changed the main game loop arc to involve a progression through 4 different levels
+1. Added four new levels to the game; low level representation of them are show in the level selection screen
+2. Adding level progression, the main game loop now consists of progressing through 4 seperate levels.  The leaderboard now displays
+    total run time across all levels.
+3. Adding level selection sceen with each level show in png rep.
+4. Fixing several collision detection issues, Dot now rarely teleport through the level
+5. Dramatically improved performance, fixed a stuttuer inssue causes by VSync
+6. You can now quit to main menu by hitting esc while playing the game
+7. Cleaned up the initialization loops to make them more readable. 
 
 Older Changes
-## Version 2.0.3 Updates (4/14/2019)
+### Version 2.0.3 Updates (4/14/2019)
  1.  Added a 'Reset' option to leaderboard screen
  2.  Increase deceleration of player dots slightly to add more control
  3.  Updated globals
 
-## Version 2.0.2 Updates (4/11/2019)
+### Version 2.0.2 Updates (4/11/2019)
  
  1.  New larger map; original map still included in assets under "level_0.map" change the value of levelMapFile in globals
  2.  Fixed dot  (-)y axis collision bug that would sometimes cause the dot to get stuck in the wall
@@ -37,10 +38,7 @@ Older Changes
  8.  Added capability to handle different endzone sizes (they still have to be square)
  9.  You can now generate your own maps in the repo wcole/2Dot_map_gen (see readme there)
 
-
-
-
-## Version 2.0.1 Updates (4/9/2019)
+### Version 2.0.1 Updates (4/9/2019)
 
 1) Added speed boost to control scheme (default key = 'Space')
 2) Changed dot velocity and decel values to make movement more responsive
@@ -73,4 +71,5 @@ There is leaderboard functionaility along with variable controls set by the user
 ##Textures
  - All textures created in Paintbrush for mac; no expense was spared
 
+Known Bugs:
 4/2/19: There is a stuttering issue if you have USB peripherals plugged in.  It is a bug in SDL caused by USB devices (any device besides mouse and keyboard).  It causes a stutter every 3000ms
