@@ -195,7 +195,7 @@ lTexture::~lTexture(){
 }
 //deallocation of variables
 void lTexture::free(){
-    if(mTexture!=NULL){
+    if(mTexture != NULL){
         SDL_DestroyTexture(mTexture);
         mTexture=NULL;
         textW=0;

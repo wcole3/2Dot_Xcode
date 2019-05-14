@@ -131,7 +131,7 @@ void displayLeaderboardScreen(bool* globalQuit){
         gWindow.render();
         SDL_Rect screen = { 0, 0, gWindow.getWidth(), gWindow.getHeight() };
         SDL_Rect textLine = {3 * (gWindow.getWidth() / 4),5 * (gWindow.getHeight() / 6), gWindow.getWidth() / 2, gWindow.getHeight() / 10};
-        gLeaderboardScreen.render(0, 0, NULL, &screen);
+        gImageTextures[gLeaderboardScreen]->render(0, 0, NULL, &screen);
         //render the leaderboard
         
         for(int i = 0; i < (sizeof(gLeaderboardEntry)/sizeof(gLeaderboardEntry[0])); ++i){
@@ -143,7 +143,7 @@ void displayLeaderboardScreen(bool* globalQuit){
         textLine.x = textLine.x - (2 * textLine.w * buttonIndex);//set the highlight over the correct button
         //render the highlight box
         if(renderBox){
-            SDL_SetRenderDrawColor(gWindow.getRenderer(), 150, 150, 150, 100);
+            SDL_SetRenderDrawColor(gWindow.getRenderer(), highlighter.r, highlighter.g, highlighter.b, 100);
             SDL_RenderFillRect(gWindow.getRenderer(), &textLine);
         }
         SDL_RenderPresent(gWindow.getRenderer());

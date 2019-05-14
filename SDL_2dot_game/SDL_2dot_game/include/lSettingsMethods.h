@@ -38,7 +38,7 @@ void setHighlightBox(SDL_Rect* box, int x, int y);
     @param goBack true if the user wants to go back to the menu
     @param globalQuit true if user wants to quit the program
  */
-void handleKeyPress(SDL_Event e, int* xOffset, int* yOffset, bool* goBack, bool* globalQuit);
+void handleSettingKeyPress(SDL_Event e, int* xOffset, int* yOffset, bool* goBack, bool* globalQuit);
 //method to handle mouse motion events
 /**
     Handle mouse events
@@ -49,7 +49,7 @@ void handleKeyPress(SDL_Event e, int* xOffset, int* yOffset, bool* goBack, bool*
      @param goBack true if the user wants to go back to the menu
      @param globalQuit true if user wants to quit the program
  */
-void handleMouseEvent(SDL_Event e, int* xOffset, int* yOffset, bool* goBack, bool* globalQuit);
+void handleSettingMouseEvent(SDL_Event e, int* xOffset, int* yOffset, bool* goBack, bool* globalQuit);
 //method to change the settings of the selected keybind
 /**
     Change the selected setting
@@ -117,13 +117,13 @@ void displaySettingsScreen(bool* globalQuit){
                 gWindow.handleEvent(e);
                 resizeUI(&e);
                 //TODO handle settings menu events
-                handleKeyPress(e, &xOffset, &yOffset, &done, globalQuit);
-                handleMouseEvent(e, &xOffset, &yOffset, &done, globalQuit);
+                handleSettingKeyPress(e, &xOffset, &yOffset, &done, globalQuit);
+                handleSettingMouseEvent(e, &xOffset, &yOffset, &done, globalQuit);
             }
             //render the setting screen
             gWindow.render();
             SDL_Rect screen = {0,0,gWindow.getWidth(),gWindow.getHeight()};
-            gSettingsScreen.render(0, 0, NULL, &screen);
+            gImageTextures[gSettingsScreen]->render(0, 0, NULL, &screen);
             //TODO render settings and quit button
             //render the settings string constants
             SDL_Rect textLine = {0,0, gWindow.getWidth() / 7, gWindow.getHeight() / 10};
@@ -140,7 +140,7 @@ void displaySettingsScreen(bool* globalQuit){
             gPlayerPrompt[8].render((gWindow.getWidth() / 2) - (textLine.w / 2), 2 * (gWindow.getHeight() / 3), NULL, &textLine);
             //set the highlighter box
             setHighlightBox(&textLine, xOffset, yOffset);
-            SDL_SetRenderDrawColor(gWindow.getRenderer(), 100, 200, 100, 100);
+            SDL_SetRenderDrawColor(gWindow.getRenderer(), highlighter.r, highlighter.g, highlighter.b, 100);
             SDL_RenderFillRect(gWindow.getRenderer(), &textLine);
             SDL_RenderPresent(gWindow.getRenderer());
         }else{
@@ -178,7 +178,7 @@ void setHighlightBox(SDL_Rect* box, int x, int y){
 }
 
 //handle button events for settings page
-void handleKeyPress(SDL_Event e, int* xOffset, int* yOffset, bool* goBack, bool* globalQuit){
+void handleSettingKeyPress(SDL_Event e, int* xOffset, int* yOffset, bool* goBack, bool* globalQuit){
     if(e.type == SDL_KEYUP){
         //check for up and down motion
         if(e.key.keysym.sym == SDLK_UP){
@@ -239,7 +239,7 @@ void handleKeyPress(SDL_Event e, int* xOffset, int* yOffset, bool* goBack, bool*
 }
 
 //method to handle mouse motion events
-void handleMouseEvent(SDL_Event e, int* xOffset, int *yOffset, bool* goBack, bool* globalQuit){
+void handleSettingMouseEvent(SDL_Event e, int* xOffset, int *yOffset, bool* goBack, bool* globalQuit){
     if(e.type == SDL_MOUSEMOTION || e.type == SDL_MOUSEBUTTONDOWN){
         //get the mouse position
         int xM, yM;
@@ -354,7 +354,7 @@ void changeSettingHotkey(SDL_Event e, int x, int y, bool* globalQuit){
         }
         //render to correct place
         SDL_Rect textLine = {0,0, gWindow.getWidth() / 4, gWindow.getHeight() / 7};
-        gChangeSettingPrompt.render((gWindow.getWidth() - textLine.w)/2, (6 * gWindow.getHeight()) / 7, NULL, &textLine);
+        gImageTextures[gChangeSettingsPrompt]->render((gWindow.getWidth() - textLine.w)/2, (6 * gWindow.getHeight()) / 7, NULL, &textLine);
         SDL_RenderPresent(gWindow.getRenderer());
     }
     SDL_StopTextInput();

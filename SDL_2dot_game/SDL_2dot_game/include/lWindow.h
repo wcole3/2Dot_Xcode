@@ -131,10 +131,10 @@ lWindow::~lWindow(){
 
 void lWindow::free(){
     //destroy the window
-    if(mRenderer!=NULL){
+    if(mRenderer != NULL){
         SDL_DestroyRenderer(mRenderer);
         mRenderer = NULL;
-        if(mWindow!=NULL){
+        if(mWindow != NULL){
             SDL_DestroyWindow(mWindow);
             mWindow = NULL;
             mWidth = 0;
@@ -162,7 +162,7 @@ bool lWindow::init(int width, int height, string title){
             printf("Only one display connected!\n");
         }
         //create renderer
-        mRenderer = SDL_CreateRenderer(mWindow, -1, SDL_RENDERER_ACCELERATED);
+        mRenderer = SDL_CreateRenderer(mWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
         if(mRenderer == NULL){
             printf("Could not create renderer for window %s! SDL error: %s\n", to_string(getWindowID()).c_str(), SDL_GetError());
             successFlag = false;

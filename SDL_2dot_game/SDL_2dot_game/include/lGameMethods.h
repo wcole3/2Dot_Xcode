@@ -19,19 +19,30 @@
     Perform the game loop logic
  
     @param globalQuit true if the user wants to quit
+    @param fullRun true if the game mode is a full run
  */
-void playingGame(bool* globalQuit);
+void playGame(bool* globalQuit, bool fullRun);
 //method to check if user wants to play again
 /**
     Check if the user wants to play again
  
-    @param splash the texture to render
     @param globalQuit true if the user wants to quit
     @param time the finishing time
  
     @return true if the user wants to play again
  */
-bool playAgain(lTexture* splash, bool* globalQuit, float time);
+bool playAgain(bool* globalQuit, float time);
+//method check if the player want to continue their run and to play next level
+/**
+ Check if user wants to play next level or current level again; context is determined in playGame
+ 
+    @param globalQuit true if the user want to quit
+    @param stageTime the time the previous stage was completed in
+    @param currentRunTime the current time elapsed in the run
+ 
+    @return true if the user wants to play the next level or this level again
+ */
+bool playLevel(bool* globalQuit, float stageTime, float currentRunTime);
 //method to display the pregame instructions and ask for user to start the game
 /**
     Render the pregame screen and wait for user ready
@@ -39,20 +50,23 @@ bool playAgain(lTexture* splash, bool* globalQuit, float time);
     @param globalQuit true if the user wants to quit
  */
 void pregameSetup(bool* globalQuit);
-
+//method to load the level after restart or level change
+/**
+    Load the level tiles and reset the player positions
+ 
+    @param levelNumber the index of the level to setup
+ */
+void loadLevel(int levelNumber);
 
 
 //the actual game loop
-void playingGame(bool* globalQuit){
-    player1.reset();
-    player2.reset();
+void playGame(bool* globalQuit, bool fullRun){
+    loadLevel(currentLevel);
     if(*globalQuit != true){
         //the loop condition for playing the game
         bool played = true;
         //event to get user inputs
         SDL_Event e;
-        //reference to endgame splash screen
-        lTexture* endgameSplash = NULL;
         //setup timer for physics
         lTimer frameTicker = lTimer();
         //need a seperate timer for countdown
@@ -61,7 +75,7 @@ void playingGame(bool* globalQuit){
         float startTime = 0;
         string startString = "Time: ";
         SDL_Color countdownColor = {0,0,0};
-        gCountdownText.loadFromRenderedText(startString + std::to_string(startTime), countdownColor);
+        gImageTextures[gCountdownText]->loadFromRenderedText(startString + std::to_string(startTime), countdownColor);
         countdownTicker.start();
         while(played){
             while(SDL_PollEvent(&e) != 0){
@@ -81,13 +95,16 @@ void playingGame(bool* globalQuit){
                 gWindow.handleEvent(e);
                 //update the UI
                 resizeUI(&e);
+                if(e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE){
+                    played = false;
+                }
             }
             //here we render stuff
             //first move dot
             float time = (frameTicker.getTime() / 1000.f);
-            player1.move(time, player2.getCollider(), gTiles);
+            player1.move(time, player2.getCollider(), player1.getLevelTiles());
             player1.setCamera(camera1);
-            player2.move(time, player1.getCollider(), gTiles);
+            player2.move(time, player1.getCollider(), player2.getLevelTiles());
             player2.setCamera(camera2);
             //restart time
             frameTicker.start();
@@ -95,9 +112,9 @@ void playingGame(bool* globalQuit){
             gWindow.render();
             SDL_RenderSetViewport(gWindow.getRenderer(), &player1Screen);
             //render background
-            for(int i = 0; i < TOTAL_TILES; ++i){
+            for(int i = 0; i < TOTAL_TILES[currentLevel]; ++i){
                 //render each tile
-                gTiles[i]->render(&gTileSpriteSheet, camera1);
+                player1.getLevelTiles()[i]->render(gImageTextures[gTileSpriteSheet], camera1);
             }
             //check if controls need to be rendered
             if(!player1.hasMoved()){
@@ -110,8 +127,8 @@ void playingGame(bool* globalQuit){
             player2.render(camera1);
             //render the second dots screen
             SDL_RenderSetViewport(gWindow.getRenderer(), &player2Screen);
-            for(int i = 0; i < TOTAL_TILES; ++i){
-                gTiles[i]->render(&gTileSpriteSheet, camera2);
+            for(int i = 0; i < TOTAL_TILES[currentLevel]; ++i){
+                player2.getLevelTiles()[i]->render(gImageTextures[gTileSpriteSheet], camera2);
             }
             //render player 2 controls
             if(!player2.hasMoved()){
@@ -129,8 +146,8 @@ void playingGame(bool* globalQuit){
             char timeBuffer [10];
             sprintf(timeBuffer, "%.3f", runningTime);
             //now rerender the countdown text
-            gCountdownText.loadFromRenderedText(startString + timeBuffer, countdownColor);
-            gCountdownText.render((gWindow.getWidth() - gCountdownText.getWidth())/2, 0);
+            gImageTextures[gCountdownText]->loadFromRenderedText(startString + timeBuffer, countdownColor);
+            gImageTextures[gCountdownText]->render((gWindow.getWidth() - gImageTextures[gCountdownText]->getWidth())/2, 0);
             SDL_RenderPresent(gWindow.getRenderer());
             //or if the limit has passed or both players are done
             if((player1.isFinished() && player2.isFinished())){
@@ -141,27 +158,72 @@ void playingGame(bool* globalQuit){
                 countdownTicker.pause();
                 //check if game was one or lost
                 //game was finished
-                endgameSplash = &gWinSplash;
                 finishTime = (countdownTicker.getTime() / 1000.f);
-                //regardless of end condition we reset the game
-                player1.reset();
-                player1.setCamera(camera1);
-                player2.reset();
-                player2.setCamera(camera2);
                 countdownTicker.stop();
-                if(playAgain(endgameSplash, globalQuit, finishTime)){
-                    countdownTicker.start();
-                    //clear out splash screen
-                    SDL_RenderClear(gWindow.getRenderer());
-                    endgameSplash = NULL;
-                    //rewind the music
-                    Mix_FadeInMusic(gGameMusic, -1, 100);
-                    Mix_RewindMusic();
-                    Mix_SetMusicPosition(2.9);
+                if(fullRun){
+                    //need to check if we have complete all stages or are continuing the run
+                    if(currentLevel < TOTAL_LEVELS - 1){
+                        runTime += finishTime;
+                        //display the next level screen, stage finish time, and current run time
+                        if(playLevel(globalQuit, finishTime, runTime)){
+                            SDL_RenderClear(gWindow.getRenderer());
+                            //rewind the music
+                            Mix_FadeInMusic(gGameMusic, -1, 100);
+                            Mix_RewindMusic();
+                            Mix_SetMusicPosition(2.9);
+                            //update level info and reset players
+                            currentLevel += 1;
+                            loadLevel(currentLevel);
+                            player1.setCamera(camera1);
+                            player2.setCamera(camera2);
+                            countdownTicker.start();
+                        }else{
+                            //user doesnt want to play next level, quit to menu
+                            SDL_RenderClear(gWindow.getRenderer());
+                            currentLevel = 0;
+                            played = false;
+                        }
+                    }
+                    else if(currentLevel == TOTAL_LEVELS - 1){
+                        //all runs completed
+                        runTime += finishTime;
+                        if(playAgain(globalQuit, runTime)){
+                            countdownTicker.start();
+                            //clear out splash screen
+                            SDL_RenderClear(gWindow.getRenderer());
+                            //rewind the music
+                            Mix_FadeInMusic(gGameMusic, -1, 100);
+                            Mix_RewindMusic();
+                            Mix_SetMusicPosition(2.9);
+                            //reset run info
+                            runTime = 0;
+                            currentLevel = 0;
+                            loadLevel(currentLevel);
+                            player1.setCamera(camera1);
+                            player2.setCamera(camera2);
+                        }else{
+                            SDL_RenderClear(gWindow.getRenderer());
+                            played = false;
+                        }
+                    }
                 }else{
-                    SDL_RenderClear(gWindow.getRenderer());
-                    endgameSplash = NULL;
-                    played = false;
+                    //mode is single level, check user wants to play again
+                    //todo
+                    if(playLevel(globalQuit, finishTime, finishTime)){//this is a hack, might change in future
+                        SDL_RenderClear(gWindow.getRenderer());
+                        //rewind the music
+                        Mix_FadeInMusic(gGameMusic, -1, 100);
+                        Mix_RewindMusic();
+                        Mix_SetMusicPosition(2.9);
+                        loadLevel(currentLevel);
+                        player1.setCamera(camera1);
+                        player2.setCamera(camera2);
+                        runTime = 0;
+                        countdownTicker.start();
+                    }else{
+                        SDL_RenderClear(gWindow.getRenderer());
+                        played = false;
+                    }
                 }
             }
         }
@@ -173,7 +235,7 @@ void playingGame(bool* globalQuit){
 }
 
 //method to check if the user wants to play again, this got a lot bigger than I intended (TODO chop this up)
-bool playAgain(lTexture* splashScreen, bool* globalQuit, float time){
+bool playAgain(bool* globalQuit, float time){
     //reset the letter textures
     lTimer delayTimer = lTimer();
     delayTimer.start();
@@ -280,9 +342,8 @@ bool playAgain(lTexture* splashScreen, bool* globalQuit, float time){
         SDL_RenderClear(gWindow.getRenderer());
         SDL_Rect currentScreen = {0,0,gWindow.getWidth(), gWindow.getHeight()};
         SDL_Rect textLine = {gWindow.getWidth()/4, gWindow.getHeight() / 7 , gWindow.getWidth() / 2 ,gWindow.getHeight() / 10};
-        splashScreen->render(0, 0, NULL, &currentScreen);
+        gImageTextures[gWinSplash]->render(0, 0, NULL, &currentScreen);
         //render the leaderboard
-        
         lLeaderboardHeader.render(textLine.x, textLine.y, NULL, &textLine);
         for(int i = 0; i < (sizeof(gLeaderboardEntry)/sizeof(gLeaderboardEntry[0])); ++i){
             gLeaderboardEntry[i].render(textLine.x, textLine.y + ((i + 1) * textLine.h), NULL, &textLine);
@@ -368,9 +429,9 @@ void pregameSetup(bool* globalQuit){
             }
         }
         //in the meantime display the pregame splash
-        SDL_RenderClear(gWindow.getRenderer());
+        gWindow.render();
         SDL_Rect screen = {0,0,gWindow.getWidth(), gWindow.getHeight()};
-        gPregameSplash.render(0, 0, NULL, &screen);
+        gImageTextures[gPregameSplash]->render(0, 0, NULL, &screen);
         //render the prompt
         //scale the text up slightly
         SDL_Rect textBox = {0,0,(4*gWindow.getWidth()/5), (gWindow.getHeight()/8)};
@@ -384,5 +445,89 @@ void pregameSetup(bool* globalQuit){
     Mix_PlayMusic(gGameMusic, -1);
     Mix_SetMusicPosition(2.9);
 }
+void loadLevel(int levelNumber){
+    //set the level and starting positions
+    player1.setLevelSize(LEVEL_WIDTH[levelNumber], LEVEL_HEIGHT[levelNumber]);
+    player1.setStartingPos(0, 0);
+    player1.setLevel(levelNumber);
+    player2.setLevelSize(LEVEL_WIDTH[levelNumber], LEVEL_HEIGHT[levelNumber]);
+    player2.setStartingPos(LEVEL_WIDTH[levelNumber], LEVEL_HEIGHT[levelNumber]);
+    player2.setLevel(levelNumber);
+    //reset the players
+    player1.reset();
+    player2.reset();
+}
 
+bool playLevel(bool* globalQuit, float stageTime, float currentRunTime){
+    //need to load the stage time, run time, and play again prompts
+    lTexture lStageTime = lTexture(gWindow.getRenderer());
+    lStageTime.setFont(gFont);
+    char sT [10];
+    sprintf(sT, "%.3f", stageTime);
+    string stageTimeLine = "Stage completed in: ";
+    stageTimeLine += sT;
+    if(!lStageTime.loadFromRenderedText(stageTimeLine, black)){
+        printf("Could not load stage time text!\n");
+    }
+    lTexture lRunTime = lTexture(gWindow.getRenderer());
+    lRunTime.setFont(gFont);
+    char rT [10];
+    sprintf(rT, "%.3f", currentRunTime);
+    string lRunTimeLine = "Current run time: ";
+    lRunTimeLine += rT;
+    if(!lRunTime.loadFromRenderedText(lRunTimeLine, black)){
+        printf("Could not load run time text!\n");
+    }
+    lTexture lNextLevelPrompt = lTexture(gWindow.getRenderer());
+    lNextLevelPrompt.setFont(gFont);
+    string nextLevelPrompt = "Play next level? (y/n)";
+    if(!lNextLevelPrompt.loadFromRenderedText(nextLevelPrompt, black)){
+        printf("Could not load next level prompt text!\n");
+    }
+    bool playNextLevel = true;
+    bool selectionMade = false;
+    SDL_Event e;
+    while(!selectionMade){
+        while(SDL_PollEvent(&e) != 0){
+            if(e.type == SDL_QUIT){
+                //user wants to quit
+                selectionMade = true;
+                playNextLevel = false;
+                *globalQuit = true;
+            }
+            gWindow.handleEvent(e);
+            //handle UI resizing
+            resizeUI(&e);
+            if(e.type == SDL_KEYDOWN){
+                //check if user wants to play next level
+                switch (e.key.keysym.sym) {
+                    case SDLK_y:
+                        selectionMade = true;
+                        playNextLevel = true;
+                        break;
+                    case SDLK_n:
+                        selectionMade = true;
+                        playNextLevel = false;
+                    default:
+                        break;
+                }
+            }
+        }
+        //render here
+        SDL_Rect screen = {0,0,gWindow.getWidth(), gWindow.getHeight()};
+        gWindow.render();
+        SDL_Rect textLine = {(gWindow.getWidth() - (8 * (gWindow.getWidth() / 10))) / 2, (gWindow.getHeight() - (gWindow.getHeight() / 10))/ 2, 8 * (gWindow.getWidth() / 10), gWindow.getHeight() / 10};
+        gImageTextures[gNextLevelSplash]->render(0, 0, NULL, &screen);
+        //render prompts
+        lStageTime.render(textLine.x, textLine.y, NULL, &textLine);
+        lRunTime.render(textLine.x, textLine.y + textLine.h, NULL, &textLine);
+        lNextLevelPrompt.render(textLine.x, gWindow.getHeight() - textLine.h, NULL, &textLine);
+        SDL_RenderPresent(gWindow.getRenderer());
+    }
+    //free textures
+    lStageTime.free();
+    lRunTime.free();
+    lNextLevelPrompt.free();
+    return playNextLevel;
+}
 #endif /* lGameMethods_h */

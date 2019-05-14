@@ -16,11 +16,16 @@ using namespace std;
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
 //level information
-int LEVEL_WIDTH;
-int LEVEL_HEIGHT;
-int TOTAL_TILES;
+const int TOTAL_LEVELS = 4;
+int LEVEL_WIDTH[TOTAL_LEVELS];
+int LEVEL_HEIGHT[TOTAL_LEVELS];
+int TOTAL_TILES[TOTAL_LEVELS];
 //starting values for leaderboard
-constexpr float defaultStartingScore = 25;
+constexpr float defaultStartingScore = 50;
+//the marker for the current level
+int currentLevel = 0;
+//running time of a current run
+float runTime = 0;
 
 //Game window
 lWindow gWindow;
@@ -29,22 +34,29 @@ lRigidDot player1;
 lRigidDot player2;
 
 
-
+enum imageTextures {
+    gTileSpriteSheet = 0,
+    gWinSplash = 1,
+    gNextLevelSplash = 2,
+    gPregameSplash = 3,
+    gMenu = 4,
+    gSettingsScreen = 5,
+    gLeaderboardScreen = 6,
+    gCountdownText = 7,
+    gChangeSettingsPrompt = 8,
+    gLevel0Img = 9,
+    gLevel1Img = 10,
+    gLevel2Img = 11,
+    gLevel3Img = 12,
+    gFullRunTextImg = 13,
+    gSingleLevelTextImg = 14,
+    TOTAL_IMAGE_TEXTURES = 15
+};
 //ALL TEXTURES
-//sprite sheet for background tiles
-lTexture gTileSpriteSheet;
+lTexture* gImageTextures[TOTAL_IMAGE_TEXTURES];
 //the actual tile objects
-lTile** gTiles;
-//winning game splash screen
-lTexture gWinSplash;
-//pregame instruction splash
-lTexture gPregameSplash;
-//menu screen
-lTexture gMenu;
-//settings screen
-lTexture gSettingsScreen;
-//leaderboard screen
-lTexture gLeaderboardScreen;
+lTile** gTiles[TOTAL_LEVELS];
+
 
 //Text to use
 TTF_Font* gFont = NULL;
@@ -56,16 +68,12 @@ const string controlButton[4] = {"Up   : ", "Down : ", "Left : ", "Right: "};
 const int TOTAL_CONTROLS = 9;
 //player control prompt textures
 lTexture gPlayerPrompt[TOTAL_CONTROLS];
-//texture for the countdown texture
-lTexture gCountdownText;
 //the menu commands
 lTexture gMenuPrompts[4];
 //the actual menu button names
 string menuButtons[4] = {"Play", "Settings", "Leaderboard", "Quit"};
 //the prompt for when user wants to change a setting
 string changeSetting = "Press new key";
-//the texture for the change setting prompt
-lTexture gChangeSettingPrompt;
 //the textures of the leaderboard names and scores
 lTexture gLeaderboardEntry[5];
 //max number of character in leaderbaord name
@@ -89,17 +97,27 @@ Mix_Music* gGameMusic = NULL;
 
 //FILE_LOCATIONS
 const string DEFAULT_ASSET_LOC = "assets/";
-//need the name of the settings file
-const string settingsFile = DEFAULT_ASSET_LOC + "settings.txt";
-//name of the leaderboard file
-const string leaderboardFile = DEFAULT_ASSET_LOC + "leaderboard.txt";
+//using an aray for image texture to make initialization easier; make sure order is same as imageTextures
+const string imageTextureFiles[TOTAL_IMAGE_TEXTURES] = {
+    DEFAULT_ASSET_LOC + "tile_sprites.png",
+    DEFAULT_ASSET_LOC + "winScreen.png",
+    DEFAULT_ASSET_LOC + "nextLevelScreen.png",
+    DEFAULT_ASSET_LOC + "preGameInst.png",
+    DEFAULT_ASSET_LOC + "menuScreen.png",
+    DEFAULT_ASSET_LOC + "settingsScreen.png",
+    DEFAULT_ASSET_LOC + "leaderboardScreen.png",
+    "",//text texture are blanks
+    "",
+    DEFAULT_ASSET_LOC + "level_0.png",
+    DEFAULT_ASSET_LOC + "level_1.png",
+    DEFAULT_ASSET_LOC + "level_2.png",
+    DEFAULT_ASSET_LOC + "level_3.png",
+    DEFAULT_ASSET_LOC + "fullRunText.png",
+    DEFAULT_ASSET_LOC + "singleLevelText.png"
+};
+const string settingsFile = DEFAULT_ASSET_LOC + "settings.txt";//need the name of the settings file
+const string leaderboardFile = DEFAULT_ASSET_LOC + "leaderboard.txt";//name of the leaderboard file
 const string textFontFile = DEFAULT_ASSET_LOC + "OpenSans-Regular.ttf";
-const string winScreenFile = DEFAULT_ASSET_LOC + "winScreen.png";
-const string pregameScreen = DEFAULT_ASSET_LOC + "preGameInst.png";
-const string menuScreenFile = DEFAULT_ASSET_LOC + "menuScreen.png";
-const string settingsScreenFile = DEFAULT_ASSET_LOC + "settingsScreen.png";
-const string leaderboardScreenFile = DEFAULT_ASSET_LOC + "leaderboardScreen.png";
-const string tileSpriteFile = DEFAULT_ASSET_LOC + "tile_sprites.png";
 const string dot1File = DEFAULT_ASSET_LOC + "dot1.png";
 const string dot2File = DEFAULT_ASSET_LOC + "dot2.png";
 const string loseSoundFile = DEFAULT_ASSET_LOC + "aww.wav";
@@ -110,7 +128,11 @@ const string selectSoundFile = DEFAULT_ASSET_LOC + "pop.wav";
 const string winSoundFile = DEFAULT_ASSET_LOC + "short_fanfare.wav";
 const string menuMusicFile = DEFAULT_ASSET_LOC + "Sky_puzzle.mp3";
 const string gameMusicFile = DEFAULT_ASSET_LOC + "Techno_Caper.mp3";
-const string levelMapFile = DEFAULT_ASSET_LOC + "level_1.map";
+const string level0MapFile = DEFAULT_ASSET_LOC + "level_0.map";//names of the level map files
+const string level1MapFile = DEFAULT_ASSET_LOC + "level_1.map";
+const string level2MapFile = DEFAULT_ASSET_LOC + "level_2.map";
+const string level3MapFile = DEFAULT_ASSET_LOC + "level_3.map";
+
 //all of the player controls
 string playerControls[TOTAL_CONTROLS];
 //number of leaderboard entries
@@ -141,4 +163,5 @@ SDL_Color blue = {0, 0, 255};
 SDL_Color green = {0, 255, 0};
 SDL_Color white = {255, 255, 255};
 SDL_Color cyan = {0, 255, 255};
+SDL_Color highlighter = {100, 100, 200};
 #endif /* globals_h */

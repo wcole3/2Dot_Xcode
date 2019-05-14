@@ -60,4 +60,6 @@ dependencies: \
   /Users/wcole/Desktop/SDL_2dot/SDL_2dot_game/SDL_2dot_game/include/lSettingsMethods.h \
   /Users/wcole/Desktop/SDL_2dot/SDL_2dot_game/SDL_2dot_game/include/lLeaderboardMethods.h \
   /Users/wcole/Desktop/SDL_2dot/SDL_2dot_game/SDL_2dot_game/include/lGameMethods.h \
+  /Users/wcole/Desktop/SDL_2dot/SDL_2dot_game/SDL_2dot_game/include/lLevelSelectMethods.h \
+  /Users/wcole/Desktop/SDL_2dot/SDL_2dot_game/SDL_2dot_game/include/lModeSelectionMethods.h \
   /Users/wcole/Desktop/SDL_2dot/SDL_2dot_game/SDL_2dot_game/include/lMenuMethods.h
